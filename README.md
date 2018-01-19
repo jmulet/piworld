@@ -1,9 +1,9 @@
-# piWorld.es [logo](/screenshots/logo.png)
+# piWorld.es ![logo](/screenshots/logo.png)
 
 Main repository for the project piworld.es
 
 ### About
-
+πWorld is a learning project for interactive mathematics and other scientific subjects. It has been, in part, inspired by ExerMath, Khan Academy, Matematico.es, Educanon, Kahoot
 
 # Installation
 1. Install latest node and npm.
@@ -16,7 +16,7 @@ Main repository for the project piworld.es
 1. Execute `npm run-script compile`
 
 # Configure
-1. 
+1. Rename the file server/server-config.js to server/server.config.js and edit your site configuration there.
 
 # Run
 1. Run the server `node server.js`
