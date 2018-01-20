@@ -46,7 +46,9 @@
     "domain": "^0.0.1"
   },
   "devDependencies": {
-    "uglify": "^0.1.5"
+    "uglify-js": "^3.3.7",
+    "uglifycss": "^0.0.27",
+    "buildify": "^0.4.0"
   },
   "author": "Josep Mulet (pep.mulet@gmail.com)",
   "license": "MIT",
