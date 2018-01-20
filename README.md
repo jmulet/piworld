@@ -1,3 +1,5 @@
+> __Important__: This project is being improved and converted into typescript. See repository [jmulet/piworld-ts-server](https://github.com/jmulet/piworld-ts-server)
+
 # ![logo](/screenshots/logo.png) piWorld.es 
 
 Main repository for the project piworld.es
