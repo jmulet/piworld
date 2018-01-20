@@ -1,1 +1,4 @@
 server/server.config.js
+server/activities/*
+files/*
+node_modules/

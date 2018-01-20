@@ -1,0 +1,303 @@
+[
+    {
+        "eqn": "a^2 = b^2 + c^2",
+        "title": "Pythagora's theorem",
+        "title_ca": "Teorema de Pitàgores",
+        "title_es": "Teorema de Pitágoras",
+        "url": "",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "E=m c^2",
+        "title": "Einstein's Energy-Mass conversion relationship",
+        "title_ca": "Relació de conversió Energia-Massa d'Einstein",
+        "title_es": "Relación de conversión Energía-Masa de Einstein",
+        "url": "",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "e^{i\\pi} + 1 = 0",
+        "title": "Euler's formula",
+        "title_ca": "Formula d'Euler",
+        "title_es": "Formula d'Euler",
+        "url": "",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "-\\frac{\\hbar}{2m} \\nabla^2 \\psi + V \\psi = E \\psi",
+        "title": "Quantum mechanical Schrödinger wave-equation",
+        "title_ca": "Equació d'ones d'Schrödinger de la mecànica quàntica",
+        "title_es": "Ecuación de ondas de Schrödinger de la mecánica cúantica",
+        "url": "http://es.wikipedia.org/wiki/Ecuaci%C3%B3n_de_Schr%C3%B6dinger",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "\\Delta x \\Delta p \\ge \\hbar",
+        "title": "Heisenberg's uncertainty principle",
+        "title_ca": "Principi d'incertesa de Heisenberg",
+        "title_es": "Principio de incertidumbre de Heisenberg",
+        "url": "https://es.wikipedia.org/wiki/Relaci%C3%B3n_de_indeterminaci%C3%B3n_de_Heisenberg",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "m \\frac{d^2\\vec{r}}{dt^2} = \\vec{F}",
+        "title": "Newton's second law",
+        "title_ca": "Segona llei de Newton",
+        "title_es": "Segunda ley de Newton",
+        "url": "https://es.wikipedia.org/wiki/Leyes_de_Newton",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "H_2 O",
+        "title": "Water, substance in the quest of life",
+        "title_ca": "Aigua, subtància en la cerca de vida",
+        "title_es": "Agua, substancia en la búsqueda de vida",
+        "url": "https://en.wikipedia.org/wiki/Water",
+        "url_ca":"https://ca.wikipedia.org/wiki/Aigua",
+        "url_es":"https://es.wikipedia.org/wiki/Agua"
+    },
+    {
+        "eqn": "\\frac{L}{D}=\\pi",
+        "title": "Relationship circumference length to diameter",
+        "title_ca": "Relació longitud del cercle i el seu diametre",
+        "title_es": "Relación longitud del círculo y su diámetro",
+        "url": "https://es.wikipedia.org/wiki/N%C3%BAmero_%CF%80",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "\\sin^2 x+ \\cos^2 x = 1",
+        "title": "Fundamental relationship of trigonometry",
+        "title_ca": "Relació fonamental de la trigonometria",
+        "title_es": "Relación fundamental de la trigonometria",
+        "url": "http://e-ducativa.catedu.es/44700165/aula/archivos/repositorio/1750/1980/html/21_relaciones_fundamentales_entre_razones_trigonomtricas.html",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "\\sqrt{-1} = i",
+        "title": "Imaginary unit",
+        "title_ca": "Unitat imaginària",
+        "title_es": "Unidad imaginaria",
+        "url": "https://es.wikipedia.org/wiki/N%C3%BAmero_imaginario",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "C+V=A+2",
+        "title": "Euler's relationship for polyhedra",
+        "title_ca": "Relació d'Euler per als poliedres",
+        "title_es": "Relación de Euler para los poliedros",
+        "url": "https://es.wikipedia.org/wiki/Teorema_de_poliedros_de_Euler",
+        "url_ca":"",
+        "url_es":""
+    },
+     {
+        "eqn": "x=\\frac{-b \\pm \\sqrt{b^2-4 a c}}{2 a}",
+        "title": "Second degree equation formula",
+        "title_ca": "Fórmula per a l'equació de segon grau",
+        "title_es": "Fórmula para la ecuación de segundo grado",
+        "url": "https://es.wikipedia.org/wiki/Ecuaci%C3%B3n_de_segundo_grado",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "f(x)=\\frac{1}{\\sigma\\sqrt{2\\pi}} \\, e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}",
+        "title": "Normal probability density function",
+        "title_ca": "Funció de distribució de probabilitat Normal",
+        "title_es": "Función de distribución de probabilidad Normal",
+        "url": "https://es.wikipedia.org/wiki/Distribuci%C3%B3n_normal",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "x_{n+1} = \\left\\{ \\begin{array}{ll} 3 x_n + 1 &, x_n \\,\\, impar \\\\ \\frac{x_n}{2} &, x_n \\,\\, par \\end{array}  \\right.",
+        "title": "Collatz problem 3n+1",
+        "title_ca": "Conjectura de Collatz o problema del 3n+1",
+        "title_es": "Conjectura de Collatz o problema del 3n+1",
+        "url": "https://es.wikipedia.org/wiki/Conjetura_de_Collatz",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "\\int_a^b f(x) dx = F(b) - F(a)",
+        "title": "Barrow's rule",
+        "title_ca": "Regla de Barrow per a la integral definida",
+        "title_es": "Relga de Barrow para la integral definida",
+        "url": "https://es.wikipedia.org/wiki/Teorema_fundamental_del_c%C3%A1lculo",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "F = G \\frac{M m}{R^2}",
+        "title": "Newton's universal gravitation law",
+        "title_ca": "Llei de la gravitació universal de Newton",
+        "title_es": "Ley de la gravitación universal de Newton",
+        "url": "https://es.wikipedia.org/wiki/Ley_de_gravitaci%C3%B3n_universal",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "\\frac{d f}{dx} = \\lim_{h\\rightarrow 0} \\frac{f(x+h)-f(x)}{h}",
+        "title": "Definition of the derivative of a function",
+        "title_ca": "Definició de la derivada d'una funció",
+        "title_es": "Definición de la derivada de una función",
+        "url": "https://es.wikipedia.org/wiki/Derivada",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "\\log_b (x\\cdot y) = \\log_b (x) + \\log_b(y)",
+        "title": "Napier's relationship of logarithms",
+        "title_ca": "Relació de Napier dels logarítmes",
+        "title_es": "Relación de Napier de los logarítmos",
+        "url": "https://es.wikipedia.org/wiki/Logaritmo",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "dS \\ge 0",
+        "title": "Second principle of thermodynamics. Boltzman's relationship about entropy",
+        "title_ca": "Segon principi de la termodinàmica. Relació de Boltzman sobre l'entropia",
+        "title_es": "Segundo principio de la termodinámica. Relación de Boltzman sobre la entropia",
+        "url": "https://es.wikipedia.org/wiki/Segundo_principio_de_la_termodin%C3%A1mica",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "G_{\\mu \\nu} = \\frac{8\\pi G}{c^4} T_{\\mu \\nu}",
+        "title": "General theory of relativity by Einstein",
+        "title_ca": "Teoria general de la relativitat d'Einstein",
+        "title_es": "Teoria general de la relatividad de Einstein",
+        "url": "https://es.wikipedia.org/wiki/Ecuaciones_del_campo_de_Einstein",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "x^n = a \\,\\,\\, \\rightarrow \\,\\,\\, x = \\sqrt[n]{a}",
+        "title": "Definition of n-th root",
+        "title_ca": "Definició de radical",
+        "title_es": "Definición de radical",
+        "url": "https://es.wikipedia.org/wiki/Radicaci%C3%B3n",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "b^x = a  \\,\\,\\, \\rightarrow \\,\\,\\, x = \\log_b{a}",
+        "title": "Logarithm definition",
+        "title_ca": "Definició de logarítme",
+        "title_es": "Definición de logaritmo",
+        "url": "https://es.wikipedia.org/wiki/Logaritmo",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "\\alpha + \\beta + \\gamma = 180^\\circ",
+        "title": "Relationship of the angles of a plane triangle",
+        "title_ca": "Relació dels angles d'un triangle pla",
+        "title_es": "Relación de los ángulos de un triangulo plano",
+        "url": "https://es.wikipedia.org/wiki/Tri%C3%A1ngulo",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "\\frac{a}{\\sin \\alpha} = \\frac{b}{\\sin \\beta} = \\frac{c}{\\sin \\gamma}",
+        "title": "Sine theorem",
+        "title_ca": "Teorema del sinus",
+        "title_es": "Teorema del seno",
+        "url": "https://es.wikipedia.org/wiki/Teorema_de_los_senos",
+        "url_ca":"",
+        "url_es":""
+    },    
+    {
+        "eqn": "a^2 = b^2+c^2 - 2 b c \\cos \\alpha",
+        "title": "Cosine theorem",
+        "title_ca": "Teorema del cosinus",
+        "title_es": "Teorema del coseno",
+        "url": "https://es.wikipedia.org/wiki/Teorema_del_coseno",
+        "url_ca":"",
+        "url_es":""
+    },    
+    {
+        "eqn": "360^\\circ \\,\\,\\, \\leftrightarrow \\,\\,\\, 2\\pi \\, rad",
+        "title": "Radian",
+        "title_ca": "Radiants",
+        "title_es": "Radián",
+        "url": "https://es.wikipedia.org/wiki/Radi%C3%A1n",
+        "url_ca":"",
+        "url_es":""
+    },    
+    {
+        "eqn": "y=ax^2+bx+c",
+        "title": "Quadratic function or Parabola",
+        "title_ca": "Funció quadràtica o Paràbola",
+        "title_es": "Función cuadrática o Parábola",
+        "url": "https://es.wikipedia.org/wiki/Funci%C3%B3n_cuadr%C3%A1tica",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "e = \\lim_{n\\rightarrow \\infty} \\left( 1 + \\frac{1}{n} \\right)^n",
+        "title": "Euler's constant",
+        "title_ca": "Número e",
+        "title_es": "Número e",
+        "url": "https://es.wikipedia.org/wiki/N%C3%BAmero_e",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "\\pi = \\frac{L}{D}",
+        "title": "Number pi",
+        "title_ca": "Número pi",
+        "title_es": "Número pi",
+        "url": "https://es.wikipedia.org/wiki/N%C3%BAmero_%CF%80",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "\\begin{array}{l} \\vec \\nabla \\cdot \\vec E = \\frac{\\rho}{\\epsilon_0}   \\\\ \\vec \\nabla \\cdot \\vec B = 0  \\\\ \\vec \\nabla \\times \\vec E = - \\frac{\\partial \\vec B}{\\partial t}  \\\\ \\vec \\nabla \\times \\vec B = \\mu_0 \\vec J + \\mu_0 \\epsilon_0  \\frac{\\partial \\vec E}{\\partial t} \\end{array}",
+        "title": "Maxwell's equations",
+        "title_ca": "Equacions de Maxwell",
+        "title_es": "Ecuaciones de Maxwell",
+        "url": "https://es.wikipedia.org/wiki/Ecuaciones_de_Maxwell",
+        "url_ca":"",
+        "url_es":""
+    },
+    {
+        "eqn": "(a+b)^2 = a^2 + 2 a b + b^2",
+        "title": "Remarkable product",
+        "title_ca": "Productes notables",
+        "title_es": "Productos notables",
+        "url": "ttps://es.wikipedia.org/wiki/Productos_notables",
+        "url_ca":"",
+        "url_es":""
+    }
+    ,
+    {
+        "eqn": "(a-b)^2 = a^2 - 2 a b + b^2",
+        "title": "Remarkable product",
+        "title_ca": "Productes notables",
+        "title_es": "Productos notables",
+        "url": "ttps://es.wikipedia.org/wiki/Productos_notables",
+        "url_ca":"",
+        "url_es":""
+    }
+    ,
+    {
+        "eqn": "(a+b)\\cdot (a-b) = a^2 - b^2",
+        "title": "Remarkable product",
+        "title_ca": "Productes notables",
+        "title_es": "Productos notables",
+        "url": "ttps://es.wikipedia.org/wiki/Productos_notables",
+        "url_ca":"",
+        "url_es":""
+    }
+    
+]
+        

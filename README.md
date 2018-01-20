@@ -5,7 +5,7 @@
 Main repository for the project piworld.es
 
 ### About
-πWorld is a learning project for interactive mathematics and other scientific subjects. It has been, in part, inspired by ExerMath, Khan Academy, Matematico.es, Educanon, Kahoot
+πWorld is a learning platform for interactive mathematics and other scientific subjects. It has been, in part, inspired by ExerMath, Khan Academy, Matematico.es, Educanon, Kahoot
 
 # Installation
 1. Install latest node and npm.
