@@ -1,0 +1,30 @@
+
+<div class="container-fluid" style="padding:10px">
+  
+    <div class="row">
+        
+        <div class="col-sm-3">
+            <h5>Alumnos</h5>
+          
+            <div ng-if="user.idRole<USER_ROLES.student">
+            <h5>Profesores</h5>
+            <ul style="list-style: none">
+                <li><a ng-href="" ng-click="contentURL='app/components/misc/help/first-steps.html'">Primeros pasos</a></li>
+                <li><a ng-href="" ng-click="contentURL='app/components/misc/help/activity-creation.html'">Creación de actividades</a></li>
+                <li><a ng-href="" ng-click="contentURL='app/components/misc/help/random-func.html'">Funciones aleatorias</a></li>
+                <li><a ng-href="" ng-click="contentURL='app/components/misc/help/activity-types.html'">Tipo de actividades</a></li>
+            </ul>
+            </div>
+        </div> <!--end left column-->
+        
+       
+        <div class="col-sm-9">
+            <div ng-include="contentURL"></div>
+        
+            
+        </div> <!--end right column-->
+        
+        
+    </div>  <!--end row-->
+
+</div>

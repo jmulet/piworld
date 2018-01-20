@@ -1,0 +1,39 @@
+<div>
+    <div class="row">
+        <div class="col-md-2">
+            <h3>Kahoots on assignment #{{idAssignment}}</h3>
+            <ul class="list list-unstyled">
+                <li ng-repeat="k in kahootList">
+                    <button ng-click="delKahoot(k)" class="btn btn-xs btn-danger glyphicon glyphicon-remove"></button>
+                    <a href="" ng-click="onSelect(k)">
+                         ID {{k.id}} | {{k.start | date: 'dd-MM-yyyy HH:mm'}}
+                    </a>
+                </li>
+            </ul> 
+        </div>
+            
+        <div class="col-md-10" ng-if="selectedKahoot" style="overflow-x: scroll">
+            <h3>Report on kahoot-id #{{selectedKahoot.id}}</h3>
+            
+            <table class="table-bordered">
+                
+                <tr ng-repeat="r in kahootReport track by $index">
+                    <td style="max-width: 300px;min-width: 300px;">
+                        {{r.fullname}} <div ng-if="$index>0" class="picoin pull-right">{{r.score}}</div>
+                    </td>
+                    <td style="min-width:200px; max-width:350px; padding: 5px" ng-repeat="x in r.questionList" ng-style="{'background': $parent.$index>0? (x.valid?'lightgreen':'lightcoral'): 'lightblue'}" title="{{r.fullname}}">
+                        <div ng-if="$parent.$index>0" compile="x.answer"></div>
+                        <div ng-if="$parent.$index===0">
+                            <div compile="x.step"></div>
+                            A: <span compile="x.rightAnswer"></span>
+                            <div> <katex>\bar T</katex>: {{x.meanTime}} s</div>
+                        </div>
+                    </td>
+                </tr>
+                
+            </table>
+            
+            
+        </div>
+    </div>
+</div>

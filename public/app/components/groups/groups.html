@@ -1,0 +1,118 @@
+<div growl></div>
+ 
+<div class="container-fluid" style="padding: 20px 40px">
+<div class="row">
+<h4>GRUPS</h4>
+
+ <button id="split-button" type="button" class="btn btn-success glyphicon glyphicon-plus" ng-click="createGroupDlg()">New group</button>
+ 
+
+  
+    
+      <table class="table table-hover table-responsive">
+          <thead>
+              <tr>
+                    <th ng-click="tableParams.sortBy('idGroup')" class="cursor-hand"> id <b ng-class="tableParams.params.classes.id"></b></th>
+                    <th ng-click="tableParams.sortBy('groupName')" class="cursor-hand"> Group name <b ng-class="tableParams.params.classes.groupName"></b></th>
+                    <th>Enroll Password</th>
+                    <th>Actions</th>
+              </tr>
+                  
+          </thead>  
+        <tbody>
+            <tr ng-repeat="g in tableParams.$data" ng-click="selectGroup(g)">
+                                
+            <td>                
+                <span>{{g.idGroup}}</span>
+                <img ng-if="g.gopts.isGhost" src="/assets/img/ghost.png" style="height: 25px"/> 
+                <img ng-if="g.gopts.sendParentsReport" src="/assets/img/iconParents.png" style="height: 25px"/>
+            </td>
+            <td>
+                <button class='glyphicon glyphicon-search' ng-click='onClick(g)'> </button>
+                 <span  ng-style="{'background-color': g.groupYear===currentYear?'lightgreen':'lightsalmon'}">
+                                            {{g.groupYear +"/"+ (g.groupYear+1)}} </span>{{": "+ g.groupName +" ~ "+g.name}}</a>
+               
+                <div ng-if="g.idUserCreator!==user.id" title="Owned by {{g.ownerFullname}}" class="glyphicon glyphicon-king pull-right" style="background: lightgray">  {{g.owner}} </div>
+            </td>
+            <td>
+                <span style="min-height: 15px; min-width: 100px; " ng-mouseenter="g.displaypassword=g.enrollPassword;" 
+                      ng-mouseleave="g.enrollPassword? g.displaypassword='******' : g.displaypassword=''">{{g.displaypassword}}</span>
+                     
+            </td>
+            <td>
+                   <div><button  ng-if="user.id===g.idUserCreator" class='btn btn-xs btn-danger glyphicon glyphicon-trash' title="delete" ng-click='confirmDlg(g)'> </button> 
+                        <button  ng-if="g.eidRole<USER_ROLES.teacherNonEditing" class='btn btn-xs btn-info glyphicon glyphicon-pencil' title="edit" ng-click='openDlg(g)'> </button>
+                    
+                        
+                   <div class="btn-group" uib-dropdown ng-if="!g.gopts.isGhost">
+                     <button type="button" class="btn btn-xs btn-primary glyphicon glyphicon-export" uib-dropdown-toggle>
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                      <li role="menuitem"><a href ng-click="exportGroup(g)">Export group to file</a></li>
+                      <li role="menuitem" ng-if="g.eidRole<USER_ROLES.teacherNonEditing"><a href ngf-select="importGroup($file, g)"> Import group from file</a></li>        
+                      <li role="separator"></li>
+                      <li role="menuitem" ng-if="g.eidRole<USER_ROLES.teacherNonEditing"><a href ng-click="forcePassword(g)"> Require new password to all members</a></li>        
+                    </ul>
+                   </div>
+                   
+                   </div> 
+            </td>
+          </tr>
+        </tbody>
+      </table>
+ 
+ 
+<ul class="pull-left" uib-pagination items-per-page="tableParams.params.count" total-items="tableParams.params.total" ng-model="tableParams.params.page" max-size="tableParams.params.maxSize" 
+    class="pagination-sm" boundary-links="true" force-ellipses="true" ng-change="tableParams.paginate()"></ul>
+<div class="btn-group pull-right">
+        <button ng-repeat="b in tableParams.params.counts" type="button" class="btn" ng-class="b===tableParams.params.count?'btn-primary':'btn-default'" ng-click="tableParams.setCount(b)">{{b}}</button>
+</div>
+ 
+</div>
+   
+
+
+<div class="row" ng-if="groupSelection">
+    <h4>UNITATS EN EL GRUP <span style="background:lightblue">{{groupSelection.groupYear+'/'+(groupSelection.groupYear+1)+": "+ groupSelection.groupName +" ~ "+groupSelection.name}}</span> </h4>
+<button ng-if="groupSelection.eidRole<=USER_ROLES.teacher" type="button" class="btn btn-success glyphicon glyphicon-plus" ng-click="createUnit()">
+       Crear unitat
+</button>
+
+      <ul show-filter="false" class="list list-unstyled" sv-root  sv-on-sort="onSort($item, $partFrom, $partTo, $indexFrom, $indexTo)">
+          <div sv-part="units" class="list-group">
+          <li ng-repeat="g in units" sv-element>
+              <div class="list-group-item">
+                <span class="glyphicon glyphicon-move cursor-hand" sv-handle></span>                                 
+                <span ng-if="!g.edit">{{g.unit}} </span>
+                <span ng-if="g.edit"><input type="text" ng-model="g.unit" style="width:60%"/> </span>
+               
+                <div class="pull-right">
+                    <span ng-if="!g.edit" class=" glyphicon glyphicon-eye-open">{{g.visible | visibilityName}} </span>
+                     
+                    <div ng-if="g.edit" class="btn-group" uib-dropdown> 
+                        <button type="button" class="btn btn-xs btn-default dropdown-toggle" uib-dropdown-toggle>
+                            <span class="glyphicon glyphicon-menu-hamburger">{{g.visible | visibilityName}} </span>
+                        </button>
+                        <ul class="dropdown-menu"  uib-dropdown-menu role="menu">
+
+                            <li><a   href="" ng-click="toggleVisibility(g, 0)"><span ng-if="g.visible===0" class="glyphicon glyphicon-ok"></span> 0=Hidden</a></li>
+                            <li><a   href="" ng-click="toggleVisibility(g, 1)"><span ng-if="g.visible===1" class="glyphicon glyphicon-ok"></span> 1=Collapsed</a></li>
+                            <li><a   href="" ng-click="toggleVisibility(g, 2)"><span ng-if="g.visible===2" class="glyphicon glyphicon-ok"></span> 2=Auto</a></li>
+                            <li><a   href="" ng-click="toggleVisibility(g, 3)"><span ng-if="g.visible===3" class="glyphicon glyphicon-ok"></span> 3=Expanded</a></li>
+
+                        </ul>
+                    </div>   
+                    <button ng-if="!g.edit && groupSelection.eidRole<USER_ROLES.teacherNonEditing" class='btn btn-xs btn-danger glyphicon glyphicon-trash' title="Delete"  ng-if="!g.edit" ng-click='confirmDlg2(g)'> </button> 
+                        <button ng-if="!g.edit && groupSelection.eidRole<USER_ROLES.teacherNonEditing" class='btn btn-xs btn-info glyphicon glyphicon-pencil' title="Edit" ng-if="!g.edit" ng-click='startEdit(g)'> </button>
+                        <button class='btn btn-xs btn-warning glyphicon glyphicon-stop' title="Cancel" ng-if="g.edit" ng-click='cancelEdit(g)'> </button>
+                        <button class='btn btn-xs btn-success glyphicon glyphicon-save' title="Save" ng-if="g.edit" ng-click='saveUnit(g)'> </button>
+                </div> 
+              </div>
+          </li>
+          <div>
+      </ul>
+</div>
+          
+</div>         
+ 

@@ -1,0 +1,180 @@
+<lazy-style href="assets/libs/multiple-select/multiple-select.min.css"></lazy-style>
+
+<div class="container-fluid" style="padding: 20px;margin-left:15px">
+<h4>{{title}}
+<button ng-if="id" class="btn btn-xs btn-warning" ng-click="goIDE();">ADVANCED</button>
+<nz-toggle tri-toggle ng-model="a.share" val-true="2" val-false="0" val-null="1"></nz-toggle>  <small>{{a.share===0?'Private':(a.share===1?'Registered users only':'Public')}}</small>
+</h4>
+   
+    <div class="row">
+    <div class="col-xs-3">
+    <label for="techbox">Tech: {{a.tech}}</label>
+    <select id="techbox" ng-model="a.tech" ng-change="techChanged()">  
+        <option value="YT">Youtube</option>
+        <option value="VM">Vimeo</option>
+        <option value="FI">File</option>
+    </select>
+    </div>
+    <div class="col-xs-9">
+    <label for="inputbox">Video ID/URL: </label>
+    
+    <input id="inputbox"  ng-disabled="yt.loading" class="form-control" style="display:inline-block; width:60%" placeholder="Paste url or video id" type='text' ng-model="yt.ytid" ng-blur="loadPreview()"/>
+    <img  ng-if="yt.loading" src="assets/img/ajax-loader-squares.gif"/>
+    </div>    
+    </div>
+
+
+    <div class='row' ng-if='a.ytid'>
+        <div class='col-sm-5' style="border: 1px solid gray; border-radius: 10px">
+             <video-embed video-id="a.ytid" video-url="yt.url" questions="yt.list" notes="yt.notelist" player-vars="playerVars"></video-embed>
+             <br>
+             <div class="row">
+                 <button class="btn btn-default btn-sm pull-left" ng-click="setIntervalStart()" ng-dblclick="resetInterval(0);">Inici <span class="lcd">{{a.interval.start | timeHMS}}</span></button>
+                 <button class="btn btn-default btn-sm pull-right" ng-click="setIntervalEnd()" ng-dblclick="resetInterval(1);">Final <span class="lcd">{{a.interval.end | timeHMS}}</span></button>
+             </div>
+        </div>
+    
+        <div class="col-sm-7">
+            
+            <uib-tabset>
+            <uib-tab heading="Preguntes">
+            
+            <div class="btn-group" uib-dropdown>
+                <button type="button" class="btn btn-xs btn-success glyphicon glyphicon-plus-sign" uib-dropdown-toggle>
+                    Afegeix pregunta
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+                    <li>
+                        <a href="" ng-click="addQuestionMultipleQuizz()"> Multiple choice</a>
+                    </li>
+                    <li>
+                        <a href="" ng-click="addQuestionInputQuizz()"> Input box </a>
+                    </li>
+                </ul>
+            </div>   
+    
+             
+            
+            <uib-tabset>
+                <uib-tab ng-repeat="q in yt.list | orderBy: 'time' track by $index" heading="{{q.time}}" index="q.$index">
+                    <div>
+
+                        <span class="badge">{{$index+1}}</span> Time <input type="text" ng-model="q.time" placeholder="mm:ss"/>
+                        <button class="btn btn-xs btn-danger glyphicon glyphicon-remove pull-right" ng-click="removeQuestionQuizz(q)">Remove</button>
+                        <br>
+
+                        Formulation <br>                            
+                        <br><textarea ng-if="q.edit" ng-blur="evaluateScope(q); q.edit=false;" ng-model="q.formulation" style="width:80%" rows="4"  ></textarea>
+                        <div class="pw-editable-box" compile="q.formulation_eval" ng-click="q.edit=true;" ng-if="!q.edit"></div>
+                                
+                            <br>
+                        Hint  <input type="text" ng-model="q.hints" style="width: 70%"/><br>
+                        <!--Scope  <input type="text" ng-model="q.scope" style="width: 70%" /><br>-->
+
+                        <br>
+                        <div ng-if="q.type==='input'">
+                            Right answer <input type="text" ng-model="q.answer" style="width: 60%"/>
+                        </div>
+
+                        <div ng-if="q.type==='multiple'" style="margin-left: 30px">
+                            <!--decide which display to use-->
+                            Display <select ng-model="q.format"><option value="kahoot">Kahoot like</option><option value="radio">Radio boxes</option></select>   
+
+                            <button class="btn btn-xs btn-success glyphicon glyphicon-plus-sign" ng-click="addOptionQuizz(q)">Add option</button><br>
+                            <ul class="list list-unstyled list-group" sv-root="quizz-level1" sv-part="q.options">
+                                <li class="list-item" ng-repeat="o in q.options">
+                                    <div sv-element>
+                                        <span class="glyphicon glyphicon-move" sv-handle></span>    
+                                        <button class="btn btn-xs btn-danger glyphicon glyphicon-remove" ng-click="removeOptionQuizz(q, o)"></button>
+                                        
+                                        Valid <input type="checkbox" ng-model="o.valid"/>    
+                                        <div ng-if="o.edit">
+                                        <input ng-blur="evaluateScope(q); o.edit=false;" type="text" class="form-control-static" style="width: 85%" ng-model="o.title"  />
+                                        </div>
+                                        <div ng-if="!o.edit" class="pw-editable-box" compile="o.title_eval" ng-click="o.edit=true;"></div>
+                            
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </uib-tab>
+            </uib-tabset>
+            </uib-tab>
+                
+            <uib-tab heading="Notes">
+                <button type="button" class="btn btn-xs btn-success glyphicon glyphicon-plus-sign" ng-click="addNote()">
+                    Afegeix nota                    
+                </button>
+                 
+                <uib-tabset>
+                <uib-tab ng-repeat="q in yt.notelist | orderBy: 'time' track by $index" heading="{{q.time}}">
+                    <div>
+                        <span class="badge">{{$index+1}}</span> Time <input type="text" ng-model="q.time" placeholder="mm:ss"/>
+                        <button class="btn btn-xs btn-danger glyphicon glyphicon-remove" ng-click="removeQuestionNote(q)"></button>
+                        <br>Text <br><textarea ng-model="q.text" style="width:80%" rows="4"></textarea>
+                    </div>
+                </uib-tab>
+                </uib-tabset>
+            </div>   
+     
+            
+            </uib-tab>
+                
+            </uib-tabset>
+    
+        </div>
+
+    
+    <br>
+    
+<uib-tabset>
+    <uib-tab ng-repeat="lang in langs" index="$index"> 
+        <uib-tab-heading>
+            <span class="flag flag-{{lang}}"></span>
+        </uib-tab-heading>
+        <h5>Títol:</h5>
+        <input class="form-control" type="text" ng-model="a.title[lang]" ng-blur="onTitleBlur(lang)"/>
+        <h5>Descripcció:</h5>
+        <textarea class="form-control" ng-model="a.description[lang]" rows='4' cols='70' ng-blur="onDescBlur(lang)"></textarea>
+    </uib-tab>    
+</uib-tabset>
+<hr>
+    
+<div class='row'>
+<div class='col-sm-6'>
+    <h5>Nivells on està destinada:</h5>
+     <multiple-autocomplete  name="pklevels" ng-model="a.levels" suggestions-arr="groupsAvail"></multiple-autocomplete>
+    
+</div>
+<div class='col-sm-6'>
+<p>Categories:</p>
+    <multiple-autocomplete  name="pkcatg" ng-model="a.categories" suggestions-arr="categories" allow-new-items="true"></multiple-autocomplete>
+</div>
+</div>
+
+<br>
+
+<table>
+    <tr>
+        <td><h5>URL d'icona: </h5></td>
+        <td><input type='text' ng-model="a.icon"/></td>
+    </tr> 
+</table>
+
+<!--===============================================================================================================================-->
+<div>
+    <h4>Edit theory section</h4>
+    <textarea ui-tinymce="tinymceOpts" ng-model="a.theory"></textarea>
+</div>
+
+ 
+<br><br>
+<div>
+    <button ng-click="cancel()" class="btn btn-warning">Cancel·la</button>
+    <button ng-click="accept()" class="btn btn-success" ng-disabled="block"><img ng-if="block" src="assets/img/ajax-loader-squares.gif" />Accepta</button>
+</div>
+
+    </div>

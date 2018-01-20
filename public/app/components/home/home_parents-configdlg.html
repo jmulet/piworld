@@ -1,0 +1,20 @@
+ <div class="modal-header">
+    <h3 class="modal-title"> {{i18n.CONFIGFAMILIES}}</h3>
+</div>
+<div class="modal-body">
+    <h5>{{i18n.EMAILS}}:</h5>
+    <input type="text" ng-model="config.email" class="form-control"/>
+    
+    <h5>{{i18n.FREQTEXT}}:</h5>
+    <select required ng-model="config.freq" class="form-control-static"  style="width:250px"  ng-options="freq.label for freq in freqOptions track by freq.value">       
+    </select>
+    
+    <h5>{{i18n.PREFERREDLANG}}:</h5>
+    <select required ng-model="config.lang" class="form-control-static" style="width:250px" ng-options="lang.label for lang in langOptions track by lang.value">       
+    </select>
+</div>
+ 
+<div class="modal-footer">
+    <button class="btn btn-warning glyphicon glyphicon-remove" ng-click="cancel()"><span translate="CANCEL"></span></button>
+    <button class="btn btn-primary glyphicon glyphicon-ok" ng-click="ok()"><span translate="ACCEPT"></span></button>    
+</div>

@@ -1,0 +1,130 @@
+<lazy-style href="assets/libs/multiple-select/multiple-select.min.css"></lazy-style>
+<div class="container-fluid" style="padding: 20px">
+<h4>{{title}}
+ <button ng-if="id" class="btn btn-xs btn-warning" ng-click="goIDE();">ADVANCED</button>
+<nz-toggle tri-toggle ng-model="a.share" val-true="2" val-false="0" val-null="1"></nz-toggle>  <small>{{a.share===0?'Private':(a.share===1?'Registered users only':'Public')}}</small>
+</h4>
+ 
+    
+<uib-tabset>
+    <uib-tab ng-repeat="lang in langs" index="$index"> 
+        <uib-tab-heading>
+            <span class="flag flag-{{lang}}"></span>
+        </uib-tab-heading>
+        <h5>Títol:</h5>
+        <input class="form-control" type="text" ng-model="a.title[lang]" ng-blur="onTitleBlur(lang)"/>
+        <h5>Descripcció:</h5>
+        <textarea class="form-control" ng-model="a.description[lang]" rows='4' cols='70' ng-blur="onDescBlur(lang)"></textarea>
+    </uib-tab>    
+</uib-tabset>
+<hr>
+ 
+    
+<div class='row'>
+<div class='col-sm-6'>
+    <h5>Nivells on està destinada:</h5>
+     <multiple-autocomplete  name="pklevels" ng-model="a.levels" suggestions-arr="groupsAvail"></multiple-autocomplete>
+    
+</div>
+<div class='col-sm-6'>
+<p>Categories:</p>
+    <multiple-autocomplete  name="pkcatg" ng-model="a.categories" suggestions-arr="categories" allow-new-items="true"></multiple-autocomplete>
+</div>
+</div>
+
+<br>
+
+<table> 
+    <tr>
+        <td><h5>URL d'icona: </h5></td>
+        <td><input type='text' ng-model="a.icon"/></td>
+    </tr>
+</table>
+
+<!--===============================================================================================================================-->
+<h4>Edit theory section</h4>
+<textarea ui-tinymce="tinymceOpts" ng-model="a.theory"></textarea>
+
+
+
+<!--===============================================================================================================================-->
+
+    <h4>Quizz configuration</h4>
+    Shuffle questions <nz-toggle ng-model="quizz.shuffleQ"></nz-toggle>
+    Shuffle options <nz-toggle ng-model="quizz.shuffleO"></nz-toggle> 
+    
+    <div class="btn-group" uib-dropdown>
+        <button type="button" class="btn btn-xs btn-success glyphicon glyphicon-plus-sign" uib-dropdown-toggle>
+            Add Question
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+            <li>
+                <a href="" ng-click="addQuestionMultipleQuizz()"> Multiple choice</a>
+            </li>
+             <li>
+                <a href="" ng-click="addQuestionInputQuizz()"> Input box </a>
+            </li>
+        </ul>
+    </div>   
+    
+    
+    
+    <uib-tabset>
+    <uib-tab ng-repeat="q in quizz.list" index="q.$index">  
+        <uib-tab-heading>                        
+             <span class="badge">{{q.$index+1}}</span> {{q.type==='input'?'IN':"MC"}}
+        </uib-tab-heading>
+        <button class="pull-right btn btn-xs btn-danger glyphicon glyphicon-remove" ng-click="removeQuestionQuizz(q)">Remove question</button>
+        <div style="background: lightblue; border: lightslategray; padding: 5px;">
+            Formulation 
+            <br><textarea ng-if="q.edit" ng-blur="evaluateScope(q); q.edit=false;" ng-model="q.formulation" style="width:80%" rows="4"  ></textarea>
+            <div class="pw-editable-box" compile="q.formulation_eval" ng-click="q.edit=true;" ng-if="!q.edit"></div>
+            <br>
+            <table style="width: 90%;">
+                <tr><td>Timeout(s) </td><td> <input type="number" ng-model="q.timeout" style="width: 100%" min="0"/></td></tr>
+                <tr><td>Hint       </td><td><input type="text" ng-model="q.hints" style="width: 100%" /></td></tr>
+                <tr><td>Scope vars <button class="btn btn-xs glyphicon glyphicon-refresh" ng-click="evaluateScope(q);"></button>
+                    </td><td><textarea type="text" ng-model="q.scope" style="width: 100%" rows="3" ng-blur="evaluateScope(q);"></textarea></td></tr>
+            </table> 
+            <br>
+            <div ng-if="q.type==='input'">
+                Right answer <input ng-if="q.answer_edit" ng-blur="evaluateScope(q); q.answer_edit=false;" type="text" ng-model="q.answer" style="width: 60%"  />
+                <div ng-if="!q.answer_edit" class="pw-editable-box" compile="q.answer_eval" ng-click="q.answer_edit=true;"></div>
+            </div>
+            
+            <div ng-if="q.type==='multiple'" style="margin-left: 30px">
+                   <!--decide which display to use-->
+                   Display <select ng-model="q.format"><option value="kahoot">Kahoot like</option><option value="radio">Radio boxes</option></select>   
+                
+                    <button class="btn btn-xs btn-success glyphicon glyphicon-plus-sign" ng-click="addOptionQuizz(q)">Add option</button><br>
+                    <ul class="list list-unstyled list-group" sv-root="quizz-level1" sv-part="q.options">
+                        <li class="list-item" ng-repeat="o in q.options">
+                            <div sv-element>
+                            <span class="glyphicon glyphicon-move" sv-handle></span>    
+                            <button class="btn btn-xs btn-danger glyphicon glyphicon-remove" ng-click="removeOptionQuizz(q, o)"></button>
+                             Valid <input type="checkbox" ng-model="o.valid"/>   
+                            <div ng-if="o.edit">
+                            <input ng-blur="evaluateScope(q); o.edit=false;" type="text" class="form-control-static" style="width: 85%" ng-model="o.text"  />
+                            </div>
+                            <div ng-if="!o.edit" class="pw-editable-box" compile="o.text_eval" ng-click="o.edit=true;"></div>
+                            
+                            </div>
+                        </li>
+                    </ul>
+            </div>
+            
+            </div>
+        
+        
+        
+    </uib-tab>   
+       
+    </uib-tabset>
+    
+    
+<br><br>
+<div>
+    <button ng-click="cancel()" class="btn btn-warning">Cancel·la</button>
+    <button ng-click="accept()" class="btn btn-success" ng-disabled="block"><img ng-if="block" src="assets/img/ajax-loader-squares.gif" />Accepta</button>
+</div>

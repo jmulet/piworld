@@ -1,0 +1,52 @@
+<div class="modal-header">
+    <h3 class="modal-title">Manage Group Challenges</h3>
+</div>
+<div style="overflow-y: auto; max-height: 500px; padding: 5px">
+    <table class="table table-responsive table-hover" ng-if="!selected">
+        <thead>
+            <tr>
+                <th>Week</th><th>Level</th><th>Formulation</th><th>Answer</th><th>Score</th><th>Answers</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="c in list track by c.id" ng-click="show(c)">
+                <td>{{c.w}}</td>
+                <td>{{c.level===0?"1-2 ESO": c.level===1?"3-4 ESO": "BAT"}}</td>
+                <td> <span compile='c.formulation'></span></td>
+                <td> 
+                    <span compile='c.ranswer'></span>
+                    <span ng-if="!c.ranswer"><em>Manual</em></span>   
+                </td>
+                <td> {{c.score}}</td>
+                <td><span class="badge" compile="c.pending" ng-class="c.pending>0?'btn-warning':'btn-success'"></span>/<span class="badge" compile="c.total"></span></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div ng-if="selected">
+    <button ng-click="back()" class="pull-left btn btn-default glyphicon glyphicon-arrow-left"></button>
+    <b>Week</b> {{selected.w}} : <span compile='selected.formulation'></span> : <b>Answer</b> <span compile='selected.ranswer'></span>
+    
+    <table class="table table-responsive table-hover">
+        <thead>
+            <tr>
+                <th>User</th><th>When</th><th>Answer</th><th>Valid</th> 
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="d in detail">
+                <td>{{d.fullname}}</td>
+                <td>{{d.when | date: 'dd-MM-yyyy HH:mm'}}</td>
+                <td>{{d.answer}}</td>
+                <td><nz-toggle tri-toggle ng-model="d.valid" val-true="1" val-false="0" on-toggle="changeCorrect(d)"></nz-toggle></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    
+    
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary glyphicon glyphicon-ok pull-right" ng-click="ok()"><span translate="ACCEPT"></span></button>
+</div>

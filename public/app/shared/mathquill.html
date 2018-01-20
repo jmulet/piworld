@@ -1,0 +1,82 @@
+<div>
+    <div ng-if="keypad" id="{{kpid}}" style="margin:0px; padding:0px; position: fixed; left: 0; bottom: 0; width: 100%; z-index: 10000; background:whitesmoke">
+        
+        <button class='btn btn-warning btn-sm' ng-click="clear()" title="Clear">Clear</button>
+        <button class='btn btn-info btn-sm' ng-click="show.kyb=!show.kyb" title="Keyboard">Keyb.</button>
+        <button class='btn btn-info btn-sm' ng-click="setView('fun')" title="Functions" ng-if="FUN">Func.</button>
+        <button class='btn btn-info btn-sm' ng-click="setView('sym')" title="Symbols" ng-if="SYM">Symbol</button>
+        <button class='btn btn-info btn-sm' ng-click="setView('trig')" title="Trigonometry" ng-if="TRIG">Trig.</button>
+        
+        <button class="btn btn-danger btn-sm pull-right" ng-click="closePad()">x</button>
+        
+        <div ng-if='view.fun'>
+            <button class='btn btn-sm' ng-click="insert('EXP')"><katex>x^n</katex></button>
+            <button class='btn btn-sm' ng-click="insert('EXCLUSIVE_DIVISION')"><katex>\frac{a}{b}</katex></button>
+            <button class='btn btn-sm' ng-click="insert('SQRT')"><katex>\sqrt{a}</katex></button>
+            <button class='btn btn-sm' ng-click="insert('SQRT_3')"><katex>\sqrt[n]{a}</katex></button>
+
+            <button class='btn btn-sm' ng-click="insert('LOG')" ng-if='tbs === 1'><katex>\log\left(x\right)</katex></button>
+            <button class='btn btn-sm' ng-click="insert('LOG_N')" ng-if='tbs === 1'><katex>\ln\left(x\right)</katex></button>
+            <button class='btn btn-sm' ng-click="insert('\\log_b\\left(x\\right)')" ng-if='tbs === 1'><katex>\log_b\left(x\right)</katex></button>
+        </div>
+
+        <div ng-if='view.sym'>
+            <button class='btn btn-sm' ng-click="insert('\\pi')"><katex>\pi</katex></button>
+            <button class='btn btn-sm' ng-click="insert('e')"><katex>e</katex></button>
+            <button class='btn btn-sm' ng-click="insert('\\infty')"><katex>\infty</katex></button>
+            <button class='btn btn-sm' ng-click="insert('i')"><katex>i</katex></button>
+        </div>
+
+
+        <div ng-if='view.trig'>
+            <button class='btn btn-sm' ng-click="insert('SIN')"><katex>\sin\left(x\right)</katex></button>
+            <button class='btn btn-sm' ng-click="insert('COS')"><katex>\cos\left(x\right)</katex></button>
+            <button class='btn btn-sm' ng-click="insert('TAN')"><katex>\tan\left(x\right)</katex></button>
+            <button class='btn btn-sm' ng-click="insert('ARCSIN')"><katex>\arcsin\left(x\right)</katex></button>
+            <button class='btn btn-sm' ng-click="insert('ARCCOS')"><katex>\arccos\left(x\right)</katex></button>
+            <button class='btn btn-sm' ng-click="insert('ARCTAN')"><katex>\arctan\left(x\right)</katex></button>
+        </div>
+ 
+        <div ng-if='show.kyb'>
+            <button class='btn btn-sm' ng-click="insert('0')">0</button>
+            <button class='btn btn-sm' ng-click="insert('1')">1</button>
+            <button class='btn btn-sm' ng-click="insert('2')">2</button>
+            <button class='btn btn-sm' ng-click="insert('3')">3</button>
+            <button class='btn btn-sm' ng-click="insert('4')">4</button>
+            <button class='btn btn-sm' ng-click="insert('5')">5</button>
+            <button class='btn btn-sm' ng-click="insert('6')">6</button>
+            <button class='btn btn-sm' ng-click="insert('7')">7</button>
+            <button class='btn btn-sm' ng-click="insert('8')">8</button>
+            <button class='btn btn-sm' ng-click="insert('9')">9</button>
+            <button class='btn btn-sm' ng-click="insert('.')">.</button>
+            <button class='btn btn-sm' ng-click="insert('+')">+</button>
+            <button class='btn btn-sm' ng-click="insert('-')">-</button>
+            <button class='btn btn-sm' ng-click="insert('\\cdot')">*</button>
+            <button class='btn btn-sm' ng-click="insertCmd('/')">/</button>
+            <button class='btn btn-sm' ng-click="insertCmd('^')">^</button>
+            <button class='btn btn-sm' ng-click="insertCmd(' ')">SPACE</button>
+            <button class='btn btn-sm' ng-click="insert('BRACKETS')">( )</button>  
+            
+            <button class='btn btn-sm glyphicon glyphicon-chevron-left' ng-click="insert('BACKSPACE')"></button>  
+            <button class='btn btn-sm glyphicon glyphicon-arrow-left' ng-click="insert('LEFT')"></button>  
+            <button class='btn btn-sm glyphicon glyphicon-arrow-right' ng-click="insert('RIGHT')"></button>  
+            <button class='btn btn-sm glyphicon glyphicon-arrow-up' ng-click="insert('JUMP_OUT')"></button>  
+            <button class='btn btn-sm glyphicon glyphicon-arrow-down' ng-click="insert('JUMP_OUT')"></button>  
+            
+            <button class='btn btn-sm' ng-click="insert('x')">x</button>
+            <button class='btn btn-sm' ng-click="insert('y')">y</button>
+            <button class='btn btn-sm' ng-click="insert('z')">z</button>
+            <button class='btn btn-sm' ng-click="insert('t')">t</button>
+            <button class='btn btn-sm' ng-click="insert('a')">a</button>
+            <button class='btn btn-sm' ng-click="insert('b')">b</button>
+            <button class='btn btn-sm' ng-click="insert('c')">c</button>
+        </div>
+    </div>       
+ 
+    <!--this is where mathquill is injected-->
+    <div>        
+        <span id="{{id}}" ng-style="{'background':ngModel.parseErr?'red':''}"></span>
+    </div>        
+        
+ 
+</div>

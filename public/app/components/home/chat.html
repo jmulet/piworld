@@ -1,0 +1,31 @@
+<div class="container-fluid" style="padding:10px">
+<h4>CHAT</h4>
+
+<div class="row">    
+
+    <div class="col-md-4">
+        <h5>PRIVAT</h5>
+        <div ng-repeat="user in onlineusers">
+            {{user.fullname}}
+        </div>
+
+        <h5>ROOMS</h5>
+        <div ng-repeat="room in onlinerooms">
+            <button ng-click="joinRoom(room)">{{room}}</button>
+        </div>
+        <button ng-click="createRoom()">Create</button>
+        
+    </div>
+
+    <div class="col-md-8">
+        
+        <div>
+            
+        </div>
+        
+        <div>
+            <input type="text" ng-model="input" style="width: 80%"/><button class="btn btn-primary glyphicon glyphicon-send" ng-click="send()"></button>
+        </div>
+        
+    </div>
+</div>

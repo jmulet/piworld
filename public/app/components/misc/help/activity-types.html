@@ -1,0 +1,466 @@
+<h3>Tipo de actividades</h3>
+
+ARITMETICA:
+<ul>    
+    <li><a ng-href="" ng-click="scrollTo('integer.divisors')">integer.divisors</a></li>    
+    <li><a ng-href="" ng-click="scrollTo('integer.gcd')">integer.gcd</a></li> 
+    <li><a ng-href="" ng-click="scrollTo('integer.lcm')">integer.lcm</a></li> 
+    <li><a ng-href="" ng-click="scrollTo('integer.primes')">integer.primes</a></li> 
+    <li><a ng-href="" ng-click="scrollTo('integer.divisibility')">integer.divisibility</a></li> 
+    <li><a ng-href="" ng-click="scrollTo('integer.operations')">integer.operations</a></li> 
+    <li><a ng-href="" ng-click="scrollTo('fraction.operations')">fraction.operations</a></li> 
+</ul>
+
+ALGEBRA:
+<ul>    
+    <li><a ng-href="" ng-click="scrollTo('equation')">equation</a></li>    
+    <li><a ng-href="" ng-click="scrollTo('polynomial.operations')">polynomial.operations</a></li>    
+</ul>
+
+FUNCIONES:
+<ul>    
+    <li><a ng-href="" ng-click="scrollTo('function.elemental.type')">function.elemental.type</a></li>    
+    <li><a ng-href="" ng-click="scrollTo('function.derivative')">function.derivative</a></li>    
+</ul>
+
+TIPO LIBRE:
+<ul>    
+    <li><a ng-href="" ng-click="scrollTo('free.multiplechoice')">free.multiplechoice</a></li>    
+    <li><a ng-href="" ng-click="scrollTo('free.fillgaps')">free.fillgaps</a></li>    
+</ul>
+
+<hr>
+
+<!-- ************************************************************************ -->
+<h4>integer.divisors</h4>
+<div id="integer.divisors" style="padding-left: 15px">
+    Actividad de cálculo de los divisores de un número.
+    <table class="table-bordered">
+        <tr >
+            <td style="font-weight: bold; padding: 15px;">Parámetros</td>
+            <td>
+                <table>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">num</td>
+                        <td>Número del que debe hallarse los divisores</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+         <tr>
+            <td style="font-weight: bold; padding: 15px;">Método de entrada</td>
+            <td>Lista con botones +, -</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold; padding: 15px;">Ejemplo</td>
+            <td>
+<div hljs hljs-language="json">
+{
+    "title": "Cálculo de divisores de un número",
+    "parameters": {
+         "num": "Math.irandom(2, 30)"
+     },
+     "repeat": 10,
+     "type": "integer.divisors"
+}
+</div>
+
+                <p> O un código equivalente, excepto que permite la configuración
+                    del parámetro <em>maxValue</em>:
+                
+<div hljs hljs-language="json">
+    "config": {
+        "maxValue": 30
+    },
+    "questions": [
+        {
+        "title": "Cálculo de divisores de un número",
+        "parameters": {
+             "num": "Math.irandom(2, config.maxValue)"
+         },
+         "repeat": 10,
+         "type": "integer.divisors"
+        }
+    ]
+</div>                
+            </td>
+        </tr>
+    </table>
+    
+</div>
+
+
+<!-- ************************************************************************ -->
+<h4>integer.gcd</h4>
+<div id="integer.gcd" style="padding-left: 15px">
+    Actividad de el máximo común divisor de una lista de números.
+    
+    <table class="table-bordered">
+        <tr >
+            <td style="font-weight: bold; padding: 15px;">Parámetros</td>
+            <td>
+                <table>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">list</td>
+                        <td>Lista de números de los cúales debe hallarse el max.c.d</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+         <tr>
+            <td style="font-weight: bold; padding: 15px;">Método de entrada</td>
+            <td>Campo de texto</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold; padding: 15px;">Ejemplo</td>
+            <td>
+<div hljs hljs-language="json">
+{
+    "title": "Cálculo del max.c.d",
+    "parameters": {
+         "x1": "Math.irandom(2, 30)",
+         "x2": "Math.irandom(2, 30)",
+         "list": "[this.x1, this.x2]"
+     },
+     "repeat": 10,
+     "type": "integer.gcd"
+}
+</div>
+            </td>
+        </tr>
+    </table>
+    
+</div>
+
+
+<!-- ************************************************************************ -->
+<h4>integer.lcm</h4>
+<div id="integer.lcm" style="padding-left: 15px">
+    Actividad de el mínimo común múltiplo de una lista números.
+    
+    <table class="table-bordered">
+        <tr >
+            <td style="font-weight: bold; padding: 15px;">Parámetros</td>
+            <td>
+                <table>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">list</td>
+                        <td>Lista de números de los cúales debe hallarse el min.c.m</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+         <tr>
+            <td style="font-weight: bold; padding: 15px;">Método de entrada</td>
+            <td>Campo de texto</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold; padding: 15px;">Ejemplo</td>
+            <td>
+<div hljs hljs-language="json">
+{
+    "title": "Cálculo del min.c.m",
+    "parameters": {
+         "x1": "Math.irandom(2, 30)",
+         "x2": "Math.irandom(2, 30)",
+         "list": "[this.x1, this.x2]"
+     },
+     "repeat": 10,
+     "type": "integer.lcm"
+}
+</div>
+            </td>
+        </tr>
+    </table>
+    
+</div>
+
+
+<!-- ************************************************************************ -->
+<h4>integer.primes</h4>
+<div id="integer.primes" style="padding-left: 15px">
+    Actividad de seleccionar los números primos de una lista.
+    
+    <table class="table-bordered">
+        <tr >
+            <td style="font-weight: bold; padding: 15px;">Parámetros</td>
+            <td>
+                <table>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">list</td>
+                        <td>Lista de números de los cuáles se deben seleccionar los primos</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+         <tr>
+            <td style="font-weight: bold; padding: 15px;">Método de entrada</td>
+            <td>Botones de selección</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold; padding: 15px;">Ejemplo</td>
+            <td>
+<div hljs hljs-language="json">
+{
+    "title": "Números primos",
+    "parameters": {
+        "list": "list(10, rent1(0,50,false,false))"
+     },
+     "repeat": 10,
+     "type": "integer.primes"
+}
+</div>
+            </td>
+        </tr>
+    </table>
+    
+</div>
+
+
+<!-- ************************************************************************ -->
+<h4>integer.divisibility</h4>
+<div id="integer.divisibility" style="padding-left: 15px">
+    Actividad de seleccionar los números divisibles por uno dado de una lista.
+    
+    <table class="table-bordered">
+        <tr >
+            <td style="font-weight: bold; padding: 15px;">Parámetros</td>
+            <td>
+                <table>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">list</td>
+                        <td>Lista de números de los cuáles se deben seleccionar cúales son divisibles</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">num</td>
+                        <td>Número por el cúal se debe comprobar la divisibilidad</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+         <tr>
+            <td style="font-weight: bold; padding: 15px;">Método de entrada</td>
+            <td>Botones de selección</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold; padding: 15px;">Ejemplo</td>
+            <td>
+<div hljs hljs-language="json">
+{
+    "title": "Criterios de divisibilidad por 2, 3 y 5",
+    "parameters": {
+        "num": "[2, 3, 5].random()",
+        "list": "list(10, rent1(0,50,false,false))"
+     },
+     "repeat": 10,
+     "type": "integer.divisibility"
+}
+</div>
+            </td>
+        </tr>
+    </table>
+    
+</div>
+
+
+<!-- ************************************************************************ -->
+<h4>integer.operations</h4>
+<div id="integer.operations" style="padding-left: 15px">
+    Esta tipo de actividad genera operaciones combinadas com números enteros.
+    
+    <table class="table-bordered">
+        <tr >
+            <td style="font-weight: bold; padding: 15px;">Parámetros</td>
+            <td>
+                Uno de los dos parámetros:
+                <table>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">template</td>
+                        <td>Plantilla de operación.</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">expr</td>
+                        <td>Expresión matemática</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+         <tr>
+            <td style="font-weight: bold; padding: 15px;">Método de entrada</td>
+            <td>Campo de texto</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold; padding: 15px;">Ejemplo</td>
+            <td>
+<div hljs hljs-language="json">
+{
+    "title": "Realiza la siguiente operación",
+    "parameters": {
+        "template": "['N+Z0*(Z+Z-N)', 'Z0+Z0+Z0'].random()"        
+     },
+     "repeat": 10,
+     "type": "integer.operations"
+}
+</div>
+     o mediante el uso del parámetro expr
+<div hljs hljs-language="json">
+{
+    "title": "Realiza la siguiente operación",
+    "parameters": {
+        "expr": "RG1.rent1(2, 20, true, true)"        
+     },
+     "repeat": 10,
+     "type": "integer.operations"
+}
+</div>     
+            </td>
+        </tr>
+    </table>
+    
+</div>
+
+
+<!-- ************************************************************************ -->
+<h4>equation</h4>
+<div id="equation" style="padding-left: 15px">
+    Esta tipo de actividad genera ecuaciones.
+    
+    <table class="table-bordered">
+        <tr >
+            <td style="font-weight: bold; padding: 15px;">Parámetros</td>
+            <td>
+                Uno de los dos parámetros:
+                <table>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">template</td>
+                        <td>Plantilla de la ecuación (procesada como un template).</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">range</td>
+                        <td>Rango para los valores aleatorios de la template</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">eq</td>
+                        <td>Expresión matemática de la ecuación</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">bar</td>
+                        <td>Nombre de la variable (por defecto x)</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+         <tr>
+            <td style="font-weight: bold; padding: 15px;">Método de entrada</td>
+            <td>Lista de campos de texto con botones +/-</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold; padding: 15px;">Ejemplo</td>
+            <td>
+<div hljs hljs-language="json">
+{
+    "title": "Ecuaciones de segundo grado incompletas",
+    "parameters": {
+        "template": "['Z0*x^2+Z*x=0', 'Z0*x^2=Z0*Z_1*Z_1'].random()",
+        "range": 10
+     },
+     "repeat": 10,
+     "type": "equation"
+}
+</div>
+     o mediante el uso del parámetro eq
+<div hljs hljs-language="json">
+{
+    "title": "Ecuaciones de segundo grado incompletas",
+    "parameters": {
+        "a": "Math.irandom(1,10)",
+        "b": "Math.irandom(-10,10)",
+        "eq": "this.a+'*z^2'+this.b+'*z=0'",
+        "bar": "z"
+     },
+     "repeat": 10,
+     "type": "equation"
+}
+</div>     
+            </td>
+        </tr>
+    </table>
+   
+    Alternativamente, tambien se pueden utilizar las funciones aleatorias del paquete
+    RGALG. Por ejemplo,
+    
+    RGALG.rpolz(g, cos, min, max) : genera un polinomio de grado g, con raices en cuerpo
+    cos='Z' o 'Q', entre valores min y max. Entonces, se podria definir la ecuación "eq" como
+    
+    "eq": "RGALG.rpolz(2, 'Z', -10, 10).toString('x')+'=0'"
+    
+    para definir una ecuación de 2º grado com raices enteras.
+    
+</div>
+
+
+<!-- ************************************************************************ -->
+<h4>polynomial.operations</h4>
+<div id="polynomial.operations" style="padding-left: 15px">
+    Esta tipo de actividad genera operaciones con polinomios.
+    
+    <table class="table-bordered">
+        <tr >
+            <td style="font-weight: bold; padding: 15px;">Parámetros</td>
+            <td>
+                Uno de los dos parámetros:
+                <table>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">template</td>
+                        <td>Plantilla de la operación (procesada como un template).</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">range</td>
+                        <td>Rango para los valores aleatorios de la template</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">expr</td>
+                        <td>Expresión matemática de la operación</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 15px;">bar</td>
+                        <td>Nombre de la variable (por defecto x)</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+         <tr>
+            <td style="font-weight: bold; padding: 15px;">Método de entrada</td>
+            <td>Mathquill</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold; padding: 15px;">Ejemplo</td>
+            <td>
+<div hljs hljs-language="json">
+{   
+    "title": "Suma y resta de polinomios",
+    "parameters": {
+        "n1": "rent1(0,4,false,false)+1",
+        "n2": "rent1(0,4,false,false)+1",
+        "poly1": "rpolc(#n1,'Z',-20,20)",
+        "poly2": "rpolc(#n2,'Z',-20,20)",
+        "op": "['+','-'].random()",
+        "expr": "#poly1.toString('x')+#op+'('+#poly2.toString('x')+')'"
+    },
+    "repeat": 10,
+    "steps": [
+        {
+            "type": "polynomial.operations",
+            "formulation": "'P(x)='+#poly1.toString('x', 'html')+',  Q(x)='+#poly2.toString('x','html')+'. Calcula P(x) '+#op+' Q(x)'",
+            "tips": "Recorda que pots sumar nombre amb nombre, x amb x, x^2 and x^2, etc."
+        }
+    ]
+}
+</div>
+     
+            </td>
+        </tr>
+    </table>   
+    
+</div>
+

@@ -1,0 +1,166 @@
+<div ng-class="bg" ng-switch="status">
+    
+    <div style="background-color: whitesmoke;padding: 5px;margin: 10px">
+        <center>
+            <h2> <span ng-if="kahootID>0">Kahoot PIN {{kahootID}}</span>
+                <span ng-if="kahootID<0">Kahoot PIN ERROR</span>
+                <span ng-if="status=='PLAYING' || status=='STATISTICS'" class="pull-left">Pregunta {{QP.counters.doneQ+1}} / {{QP.config.totalQ}} </span>
+                <span ng-if="status=='PLAYING'" class="pull-right">Answers {{answers.length}} / {{joined.length}}</span>           
+            </h2>
+        </center>
+      
+        <center>
+            <img ng-if="status!=='PLAYING' && status!=='STATISTICS'" src="assets/img/kahoot.png"/>        
+        </center>
+    </div>
+    
+    <div class="animate-if" ng-switch-when="CONFIG" style="background: purple; position:absolute; width: 100%; height: 100%; color: white; padding: 10px;">
+        <div style="margin-left: 20%"> 
+         <h2>Configuració
+             <hr>
+         <table>
+             <tr>
+                 <td>Activa sons</td><td><nz-toggle ng-model="QP.config.kahootPlayMusic" val-true="1" val-false="0"></nz-toggle></td> 
+            </tr>
+            <tr>
+                <td>Barreja les questions</td><td><nz-toggle ng-model="QP.config.shuffleQuestions" val-true="true" val-false="false"></nz-toggle></td>  
+            </tr>
+            <tr>
+                <td>Barreja les respostes</td><td><nz-toggle ng-model="QP.config.shuffleOptions" val-true="true" val-false="false"></nz-toggle></td> 
+            </tr>
+         </table>  
+             <center>
+             <button ng-disabled="firstButtonDisabled" ng-click="waiting()" class="btn btn-large btn-success glyphicon glyphicon-arrow-right text-center">Següent</button>
+             </center>
+        </h2>
+            
+        <hr>
+        <div ng-if="!firstButtonDisabled">           
+            <h2>{{ldatabase.length}} Preguntes</h2>
+            <hr>
+            <ul ng-repeat="q in ldatabase track by $index">
+                <li> <h3><span style="color: wheat">{{$index+1}}.</span> <span style="color:white" compile="q.formulation"></span></h3></li> 
+            </ul>
+        </div>    
+            
+        </div>
+    </div>
+    
+    <div class="animate-if" style="color:white" ng-switch-when="WAITING">
+    <h2 class="text-center">Esperant que els jugadors es connectin ... <button class="btn btn-large btn-info" ng-disabled="joined.length<1 || vars.loading" ng-click="start()">Comença</button></h2>
+
+    <hr>
+    <center>
+        <h2>Jugadors Connectats {{joined.length}}</h2>
+    </center>
+    
+    <ul class="list-unstyled list-inline">
+        <li ng-repeat="a in joined track by $index">
+            <h3><img ng-src="assets/img/avatar/{{a.uopts.avatar|| 0}}.png" title="{{a.id}}"
+                width="60" height="60" style="display:inline;max-width:80px; margin-top: -12px; cursor: not-allowed;" ng-click="reject(a)"/>
+                {{a.fullname}}</h3>
+        </li>
+</ul>
+</div>
+    
+<div class="animate-if" ng-switch-when="PLAYING">
+    
+     
+        <!--READY:: this window appears before every question and requires 2 seconds to close-->
+        <div id="readyLoader" style="position: absolute; width: 100%; height: 100%; background: lightblue; z-index: 2000;">
+             <uib-progressbar type="info" value="kahoot.pgbar" style="width:100%"></uib-progressbar>
+            <br>
+            <center>
+                 <h2 compile="subquestion"></h2>
+                <!--spinner-->
+                <img src="assets/img/spinner.gif"/>        
+            </center>
+        </div>
+    
+    
+    <center>
+        <h3><span class="lcd" ng-class="remains<10?'blink-text':''">Temps {{remains}} segons </span> <button class="btn btn-danger btn-large glyphicon glyphicon-time" ng-click="setTimeout()" title="Força acabament"></button></h3>    
+    <center>
+        
+    <button ng-click="skip()" class="btn btn-warning btn-large glyphicon glyphicon-circle-arrow-right pull-right"> Skip Question </button>
+
+    <h3 compile="question"></h3>
+    <h2 compile="subquestion"></h2>
+    <hr>    
+    <div compile="inputdiv"></div>
+     
+</div>
+
+    
+<div class="animate-if" ng-switch-when="STATISTICS"  style="margin: 20px">
+    
+    <h3 compile="question"></h3>
+    <h2 compile="subquestion"></h2>
+    <hr>    
+    
+    <center ng-if="!answerOptions">
+        <h2>Resposta: <span compile="msg"></span></h2>
+    </center>
+    
+    <hr>    
+    <!-- TODO: msg posar-ho com un objecte -->
+    
+    <div ng-if="answerOptions" style="margin-left: 50px">
+        <table class="table">
+            <tr ng-repeat="ao in answerOptions">
+                <td style="width: 30%; height: 30px;">
+                <h3>
+                <span ng-if="ao.valid" style="color:green" class="glyphicon glyphicon-check"></span>
+                <span ng-if="!ao.valid" style="color:red" class="glyphicon glyphicon-remove"></span>
+                <span compile="ao.text"></span>
+                </h3>
+                </td>
+                <td style="width: 70%; height: 30px;">                
+                <uib-progressbar value="answers.length? (ao.count*100/answers.length) : 0">
+                    <span>{{ao.count || 0}}</span>
+                </uib-progressbar>                
+            </td>            
+        </table>
+    </div>
+    <hr>
+    
+    <button ng-click="continue()" class="btn btn-large btn-info glyphicon glyphicon-arrow-right pull-right">Continuar</button> 
+    <br>
+    <h3>Puntuacions:</h3>
+    <!-- list joined students and order them by total score --><!-- | orderBy:'score'" -->
+            <table class="table table-responsive table-striped table-bordered">
+                <tr ng-repeat="a in joined track by $index"> 
+                                            
+                    <td style="width: 10%"><h3>{{$index+1}}.</h3></td> 
+                    <td style="width: 50%"><h3><img ng-src="assets/img/avatar/{{a.uopts.avatar|| 0}}.png" title="{{a.id}}" width="60" height="60" style="display:inline;max-width:80px; margin-top: -12px; margin-right: 20px"/>
+                        {{a.fullname}}</h3></td> 
+                        <td style="width: 10%"><h3 class="picoin">{{a.score}}</h3></td>
+                        <td style="width: 30%" ng-style="{'background': a.valid? 'lightgreen': 'lightcoral'}"><h4 compile="a.userAnswer"></h4></td>
+                </tr>
+            </table>
+    
+    
+       
+</div>
+
+    
+<div class="animate-if" ng-switch-when="END">
+    <h2>Els guanyadors</h2>
+    <table class="table table-responsive table-striped table-bordered">
+                <tr ng-repeat="a in cjoined track by $index | limitTo: 3">                                             
+                    <td style="width: 10%"><h2>{{$index+1}}.</h2></td> 
+                    <td style="width: 50%"><h3><img ng-src="assets/img/avatar/{{a.uopts.avatar|| 0}}.png" title="{{a.id}}" width="60" height="60" style="display:inline;max-width:80px; margin-top: -12px; margin-right: 20px"/>
+                        {{a.fullname}}</h3></td> 
+                        <td style="width: 10%"><h3 class="picoin">{{a.score}}</h3></td>                        
+                </tr>
+    </table>
+    <br>
+    <h2>Valoració del joc (en línia {{joined.length}}):  <span uib-rating ng-model="meanRating" max="10" read-only="true" aria-labelledby="default-rating"></span>   </h2>
+    <br>
+    <center>
+        <button ng-click="home()" class="btn btn-large btn-dark glyphicon glyphicon-home text-center">Home</button>
+        <button ng-click="review()" class="btn btn-large btn-info glyphicon glyphicon-edit text-center">Revisa</button>
+    </center>
+</div>    
+    
+</div>

@@ -1,0 +1,157 @@
+ 
+<div class="quick-search">
+    <pwc-quick-search></pwc-quick-search>
+</div>
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a href="" ng-click="go('home')">
+                <img style="display:inline;max-width:41px; margin-top: 4px;" src="assets/img/logo.png" width="40" height="40" title="{{user.fullname}}"/>                
+            </a>           
+            <strong>&#960;World</strong>               
+        </div>
+        <div class="navbar-collapse collapse" uib-collapse="navCollapsed">              
+            <ul class="nav navbar-nav navbar-right">
+                <li><a ng-click="go('home')"><span class="glyphicon glyphicon-home"></span> <span class="navbar-label" translate='HOME'></span></a></li>
+
+                <li uib-dropdown>
+                    <a href="#" uib-dropdown-toggle>
+                        <span class="glyphicon glyphicon-paperclip"></span>
+                        <span class="navbar-label" translate="ADMINISTRATION"></span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                        <li><a href="" ng-click="authAndGo('home.center')" ng-if="user.idRole === USER_ROLES.teacheradmin"> <span class="glyphicon glyphicon-th-large" translate="CENTER"></span></a></li>        
+                        <li><a href="" ng-click="authAndGo('home.centers')" ng-if="user.idRole === USER_ROLES.admin"> <span class="gglyphicon glyphicon-th-large" translate="CENTER"></span></a></li>       
+                        <li><a href="" ng-click="authAndGo('home.groups')"> <span class="glyphicon glyphicon-th-large" translate="GROUPS"></span></a></li>   
+                        <li><a href="" ng-click="authAndGo('home.files')"> <span class="glyphicon glyphicon-th-large" translate="FILES"></span></a></li>                          
+                        <li><a href="" ng-click="authAndGo('home.students')"> <span class="glyphicon glyphicon-th-large" translate="STUDENTS"></span></a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="" ng-click="authAndGo('home.bookmgr')"> <span class="glyphicon glyphicon-th-large" translate="BOOK_MANAGER"></span></a></li>   
+                        <li><a href="" ng-click="authAndGo('home.challenges')"> <span class="glyphicon glyphicon-th-large" translate="CHALLENGES"></span></a></li>   
+                    </ul>  
+                </li>
+
+                <li>
+                    <a href="#" ng-click="" ui-sref="home.activitysearch">
+                        <span class="glyphicon glyphicon-edit"></span> 
+                        <span class="navbar-label" translate="ACTIVITIES"></span></a>
+                </li>
+
+
+
+                <li uib-dropdown>
+                    <a href="#" uib-dropdown-toggle>
+                        <span class="glyphicon glyphicon-paperclip"></span>
+                        <span class="navbar-label" translate="PERSONAL"></span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">                      
+                        <li><a ui-sref="home.kahootit({kahootId: 0})"><span class="glyphicon glyphicon-bookmark"> </span> Kahoot it!</a></li>
+                        <li><a ui-sref="home.pokemath"><span class="glyphicon glyphicon-bookmark"> </span> PokeMath!</a></li>
+                        <li><a ui-sref="home.notebook"> <span class="glyphicon glyphicon-book"></span> PiTeX</a></li>
+                        <li><a ui-sref="home.forum"> <span class="glyphicon glyphicon-comment"></span> Forum</a></li>       
+                        <li><a href="#" ng-click="" ui-sref="home.tools"><span class="glyphicon glyphicon-wrench"></span> Geogebra WEB 5 </a></li>
+                    </ul>                                          
+                </li>
+
+
+                <li><a href="#" ng-click="" ui-sref="home.help">
+                        <span class="glyphicon glyphicon-question-sign"></span> <span class="navbar-label" translate="HELP"></span></a>
+                </li>
+
+
+                <li uib-dropdown>
+                    <a href="#" uib-dropdown-toggle>
+                        <img class="pw-avatar-{{user.uopts.avatar||0}}" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAQMAAACQp+OdAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAA9JREFUeNpjYBgFo4B8AAACQAAB4E0dRAAAAABJRU5ErkJggg==" title="{{user.id}}-{{user.fullname}}" width="40" height="40" style="display:inline;max-width:40px; margin-top: -12px;"/>
+                        <span class="navbar-label" ng-bind="user.username"></span>
+                        <b class="caret"></b>                        
+                    </a>
+                    <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                        <li><center><span style="font-size: small; font-weight: bold" class="hidden-xs">{{user.username}}</span></center></li>
+                <li role="separator" class="divider"></li>
+                <li><a ng-click="changeAvatar()"><span class="glyphicon glyphicon-apple" translate="AVATAR"></span></a></li>
+                <li><a ng-click="changePwd()"><span class="glyphicon glyphicon-user"></span> <span translate="CHANGE_PASSWORD"></span> </a></li>
+                <li class="separator"></li>
+                <li><a ng-click="logout()"><span class="glyphicon glyphicon-off" translate="EXIT"></span> </a></li>    
+                <li role="separator" class="divider"></li>
+                <li class='text-center'>
+                    <button class='btn btn-xs' ng-click="changeLanguage('ca')"><img src='assets/img/ca.png'/></button>
+                    <button class='btn btn-xs' ng-click="changeLanguage('es')"><img src='assets/img/es.png'/></button>
+                    <button class='btn btn-xs' ng-click="changeLanguage('en')"><img src='assets/img/en.png'/></button>
+                </li>
+            </ul>               
+
+            </li>     
+            </ul>
+        </div>
+
+
+    </div>
+</nav>
+
+<div growl reference="home"></div>
+
+
+<div  id="homeDashboard" style="padding: 2px">
+    <div class='row-fluid'>
+
+        <div ng-class="leftClass" style="padding: 4px; margin: 0px">                  
+            <div class='prow' id="pwc-welcome">
+                <button class="pull-right btn btn-xs glyphicon visible-lg visible-md" ng-class="leftExpanded?'glyphicon-resize-small':'glyphicon-resize-full'" ng-click="toggleLeft()"></button>
+                <pwc-welcome user="user"  group="selectedGroup"></pwc-welcome>                        
+            </div>
+
+            <pwc-scores class='prow' id="pwc-scores"  user="user"  group="selectedGroup"></pwc-scores>
+
+
+            <pwc-online class="prow" id="pwc-online" user="user" group="selectedGroup"></pwc-online>
+
+        </div> <!--end left column-->
+
+
+        <div id="maincol" ng-class="mainClass" style="padding: 4px; margin: 0px; height: 100%">
+
+            <!-- <im-kahoot-input ng-model="kmodel" options="klist"></im-kahoot-input>-->
+
+            <pwc-group-enroll id="pwc-group-enroll" ng-show="tgs.group" class='prow' user="user"></pwc-group-enroll>
+
+            <pwc-units-teacher class='prow' user="user"></pwc-units-teacher>
+
+
+
+        </div> <!--end center column-->
+
+        <div ng-class="rightClass" style="padding: 4px; margin: 0px">
+
+
+            <div class='prow' id="pwc-chat">
+                <button ng-class="rightExpanded?'pull-right btn btn-xs glyphicon glyphicon-resize-small visible-lg  visible-md':'pull-right btn btn-xs glyphicon glyphicon-resize-full visible-lg  visible-md'" ng-click="toggleRight()"></button>
+                <pwc-chat user="user" group="selectedGroup"></pwc-chat> 
+            </div>
+
+            <pwc-challenges class='prow' id="pwc-challenges" user="user" group="selectedGroup" challenge="challenge"></pwc-challenges> 
+
+
+            <pwc-famous-equation class='prow' id="pwc-famous-equation" equation="randomEqn"></pwc-famous-equation>
+
+            <pwc-famous-quote class='prow' id="pwc-famous-quote" quote="randomQuote"></pwc-famous-quote>
+
+
+
+        </div> <!--end right column -->
+    </div> <!--end row-->
+</div> <!--end container-->
+
+
+<div ui-view="" class="fade-animation">
+</div>

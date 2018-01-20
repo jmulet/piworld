@@ -6,7 +6,7 @@
 # http://code.google.com/p/sequel-pro/
 #
 # Host: 139.59.131.136 (MySQL 5.7.20-0ubuntu0.16.04.1)
-# Base de datos: imaths
+# Base de datos: piworld
 # Tiempo de Generación: 2018-01-20 08:26:06 +0000
 # ************************************************************
 

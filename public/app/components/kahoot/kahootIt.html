@@ -1,0 +1,96 @@
+<div style="background-color: lightblue; position: absolute; width: 100%; height: 100%; padding: 10px; color: darkslateblue;" ng-switch="kahoot.status">
+    
+     
+    <center>
+    <h1>
+          Kahoot! {{kahoot.id? kahoot.id : ""}}        
+    </h1>
+    </center>
+    
+    <div ng-switch-when="START">
+        <center>
+            <img  class="img img-responsive text-center" src="assets/img/kahoot.png"/> 
+        </center>
+        <div ng-show="!err && kahoot.connected" style="position: absolute; width: 100%; height: 100%; color: white;">
+            <h2 class="text-center">
+                <br>
+                <span ng-if="teacher">Esperau que el joc comenci ...</span>
+                <span ng-if="!teacher">Connectant a aquest kahoot ...</span>
+            </h2>
+            
+            <!--Frases celebres-->
+            <br>
+            <center>               
+                <blockquote class="alert alert-info"><h3>{{randomQuote.quote}}</h3><footer><h3>{{randomQuote.author}}</h3></footer></blockquote>                                
+            </center>
+             
+        </div>
+        
+           <div ng-show="err || !kahoot.connected">
+                <center>
+                <h2>PIN JOC</h2>
+                <h2><input id="kahootIDinput" class="form-control" style="width: 40%; height: 50px; font-size: 40px; text-align: center;" type="text" ng-model="kahoot.id" autofocus/></h2>
+                
+                <button class="btn btn-success btn-large" ng-click="join()" ng-keydown="$event.which === 13 && join()">
+                <h4><span style="color: white;">Connecta</span></h4></button>
+                </center>
+             
+            <center>
+            <div ng-if="err" class="alert alert-danger" style="width: 50%"><h4><span style="color: brown;" compile="err"></span></h4></div>            
+            </center>
+        </div>
+    </div>
+
+ 
+     <div ng-switch-when="WAITING">        
+        <h2>Esperant que tots els jugadors contestin...</h2>
+        <h3>D'aquí poc rebreu la correcció ....</h3>
+        <button ng-click="modifyAnswer()">Modificar la resposta</button>
+    </div>
+    
+    <div ng-switch-when="PLAYING">
+        
+        <!--READY:: this window appears before every question and requires 2 seconds to close-->
+        <div id="readyLoader" style="position: absolute; width: 100%; height: 100%; background: lightblue; z-index: 2000;">
+             <uib-progressbar type="info" value="kahoot.pgbar" style="width:100%"></uib-progressbar>
+            <br>
+            <center>
+                <h2>Preparats...</h2>
+                <!--spinner-->
+                <img src="assets/img/spinner.gif"/>        
+            </center>
+        </div>
+        
+        
+        <h5 compile="qdef.question"></h5>
+        <h4 compile="qdef.subquestion"></h4>        
+        <div compile="qdef.inputdiv">
+        </div>  
+        <br>
+        <button ng-if="sendButton" class="btn btn-large btn-success glyphicon glyphicon-send text-center" ng-click="sendAnswer()">Envia</button>
+    </div>
+    
+    <div ng-switch-when="FEEDBACK" style="margin-left: 40px; margin-right: 40px;" ng-style="{ 'background-color': feedback.valid?'rgba(0.25, 1, 0.25, 0.4)':'rgba(1, 0, 0, 0.4)'}">
+        <center>           
+        <h2>La teva resposta és ....</h2>    
+        <h2 ng-class="feedback.valid?'correct':'incorrect'">{{feedback.valid?'Correcta!':'Incorrecta :-('}}</h3>
+        <h3>{{feedback.feedback}}</h2>
+        <h3 ng-if="feedback.valid">Has aconseguit {{feedback.score}} punts</h3>         
+        <br>
+        <h3 ng-if="feedback.position">Estas en posició <em>{{feedback.position}}a</em></h3>                
+        </center>
+    </div>
+    
+    <div ng-switch-when="FINISH">
+        <center>
+            <h2>Valora aquesta activitat</h2>
+            <br>
+            <br>
+            <h1 uib-rating ng-model="rate" max="10" read-only="false" aria-labelledby="default-rating"></h1>
+            <br>
+            <br>
+            <br>
+            <button ng-click="finish()">Acaba</button>
+        </center>
+    </div>
+</div>

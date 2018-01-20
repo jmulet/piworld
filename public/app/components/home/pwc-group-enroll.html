@@ -1,0 +1,35 @@
+<div class="panel panel-default panel-transparency" ng-style="{'margin': vm.mobile?'40px 0px 40px':'4px 0px 4px'}">
+    <div class="panel-heading">
+        <h6 class="panel-title">
+            <button ng-if="!vm.mobile" class="pull-right btn btn-xs glyphicon glyphicon-remove" ng-click="vm.toggleMe()"></button>
+            <span translate="GROUPS_IN_CENTRE"></span> {{vm.user.schoolName}}</h6>                                
+    </div>
+    <div class="panel-body">
+
+        <alert ng-if="vm.user.idRole >= vm.USER_ROLES.student && vm.user.groups.length === 0" type="danger">
+            <p><b translate="ENROLL_WARN0"></b> <span translate="ENROLL_WARN1"></span> </p>                         
+        </alert>
+
+
+        <table class="table table-striped table-responsive">
+            <thead class="header">
+            <td><span translate="GROUP"></span></td><td><span translate="SUBJECT"></span></td><td><span translate="TEACHER"></span></td><td>  </td>                         
+            </thead>
+            <tbody>
+                <tr ng-repeat="g in vm.groupsCenter track by $index">
+                    <td> {{g.groupYear+"/"+(g.groupYear+1)+": "+g.groupName}}</td> <td>{{g.name}}</td>  <td>{{g.fullname}}</td>
+                    <td><button type='button' class="btn btn-xs btn-info" ng-if="!g.edit && !g.enrolled" ng-click="vm.enroll(g)"><span translate="ENROLL"></span></button>
+                        <button ng-if="vm.user.id!==g.idUserCreator && g.enrolled" class="btn btn-xs btn-danger glyphicon glyphicon-remove" ng-click="vm.unenroll(g)"></button>
+                        <span ng-if="vm.user.id===g.idUserCreator">Owner</span>
+                        <div ng-if="g.edit">
+                            <input type="password" placeholder="GROUP PASSWORD" ng-model="g.enrollPwd"/>
+                            <button type='button' class="btn btn-xs btn-warning glyphicon glyphicon-remove" title="cancel" ng-click="g.edit = !g.edit"></button>
+                            <button type='button' class="btn btn-xs btn-success glyphicon glyphicon-send" title="process" ng-click="vm.enroll(g);">
+                        </div></td>                         
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>

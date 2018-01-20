@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body">
+   <div class="row">
+        <div class="col-sm-4">
+              <img  class="image image-responsive" src="assets/img/info.png" height="100" alt="info"/>
+        </div>
+        <div class="col-sm-8">
+            <p ng-bind-html="msg"></p>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+     <button class="btn btn-primary glyphicon glyphicon-ok" ng-click="ok()"><span translate="ACCEPT"></span></button>    
+</div>

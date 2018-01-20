@@ -1,0 +1,42 @@
+<div class="panel  panel-default panel-transparency" style="padding: 4px; margin: 2px">
+    <div class="panel-heading" ng-style="vm.panelheadingStyle">
+        <h6 class="panel-title" >
+            <button ng-if="!vm.mobile"  ng-class="vm.collapsed?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="vm.collapsed = !vm.collapsed"></button>
+            <span style="font-size: small" translate="CHAT"></span> <span ng-if="vm.mobile" style="font-size: small">{{vm.group.groupName}}</span>
+             <button ng-if="!vm.chat.all" class="glyphicon glyphicon-menu-up btn btn-xs btn-default" ng-click="vm.loadPreviousChats()"><span translate="PREVIOUS"></span></button>
+        </h6>
+    </div>
+    <div id="chat-body" class="panel-body" ng-if="!vm.collapsed"  style="padding: 0px; margin: 0px" ng-style="vm.panelbodyStyle">
+
+        <div class="chat-scroll">
+    
+            <div ng-repeat="d in vm.chat.dates track by $index">
+                <div class="text-center text-info">{{d.date}}</div>
+                <div class="chat-entry" ng-repeat="x in d.list track by x.id" ng-style="{'background': vm.lightColor(x.idUser)}">                                        
+                    <p ng-if="x.fullname !== vm.user.fullname" style="font-size: small;">
+                    <center>
+                        <img class="pull-left pw-avatar-{{x.uopts.avatar||0}}"
+                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAQMAAACQp+OdAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAA9JREFUeNpjYBgFo4B8AAACQAAB4E0dRAAAAABJRU5ErkJggg=="
+                             title="{{vm.user.id}}-{{vm.user.fullname}}" width="20" height="20" style="display:inline;max-width:20px;"/>
+                        <span>{{x.fullname}}</span>
+                         <span class="pull-right" style="font-size: small; font-name: 'Arial'">{{x.when| date:'HH:mm'}}</span>
+                    </center>                                               
+                    </p>
+                    <p>
+                        <span compile="x.msg" compile-once="1"></span>                         
+                    </p>
+                </div>
+            </div>
+            <span ng-if="vm.chat.dates.length===0"><i>No hi ha xats</i></span>
+        </div>
+    </div>
+    <div class="panel-footer" ng-style="vm.panelfooterStyle" ng-if="vm.user.idRole <= 200">
+        <div class="input-group">
+            <input class="form-control" type="text" ng-model="vm.chat.input" ng-keyup="vm.handleKeyEvent($event)"/>  
+            <span class="input-group-btn">
+                <button ng-click="vm.xat()" class="btn btn-sm btn-info glyphicon glyphicon-send"></button>                        
+            </span>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,229 @@
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top" style="background: lightsalmon">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a ui-sref="home">
+                <img style="display:inline;max-width:40px; margin-top: 5px;" src="assets/img/logo.png" width="40" height="40" title="{{user.fullname}}"/>                
+            </a>           
+            <strong>&#960;World</strong> 
+            
+        </div>
+         <div class="navbar-collapse collapse" uib-collapse="navCollapsed">        
+            <ul class="nav navbar-nav navbar-right">
+                <li><a ng-click="go('home')"><span class="glyphicon glyphicon-home"></span> <span class="navbar-label" translate='HOME'></span></a></li>
+
+               <li uib-dropdown>
+                            <a href="#" uib-dropdown-toggle>
+                                <span class="glyphicon glyphicon-paperclip"></span>
+                                 <span class="navbar-label" translate="ADMINISTRATION"></span>
+                                <b class="caret"></b>
+                            </a>
+                            <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                        <li><a href="" ui-sref="home.centers"><span class="glyphicon glyphicon-th-large" translate="CENTERS"></span></a></li>     
+                        <li><a href="" ui-sref="home.news"><span class="glyphicon glyphicon-th-large" translate="NEWS PANEL"></span></a></li>
+                        <li><a href="" ui-sref="home.challenges"><span class="glyphicon glyphicon-th-large" translate="CHALLENGES"></span></a></li>
+                        <li><a href="" ng-click="showEquations()"><span class="glyphicon glyphicon-th-large" translate="SHOW EQUATIONS"></span></a></li>     
+                        <!--<li><a href="" ui-sref="home.groups"><span class="glyphicon glyphicon-th-large" translate="GROUPS"></span></a></li>        
+                        <li><a href="" ui-sref="home.students"><span class="glyphicon glyphicon-th-large" translate="STUDENTS"></span></a></li>   -->         
+                    </ul>  
+                </li>
+
+                <li>
+                    <a href="#" ng-click="" ui-sref="home.activitysearch">
+                        <span class="glyphicon glyphicon-edit"></span> 
+                        <span class="navbar-label" translate="ACTIVITIES"></span></a>
+                </li>
+
+                <li>
+                    <a href="#" ng-click="" ui-sref="home.tools" ng-if="user.idRole < USER_ROLES.student || user.gopts.showTools">
+                        <span class="glyphicon glyphicon-wrench"></span> <span class="navbar-label" translate="TOOLS"></span></a>
+                </li>
+
+                <li><a href="#" ng-click="" ui-sref="home.help">
+                        <span class="glyphicon glyphicon-question-sign"></span> <span class="navbar-label" translate="HELP"></span></a>
+                </li>
+ 
+                 <li uib-dropdown>
+                    <a href="#" uib-dropdown-toggle>
+                        <img class="pw-avatar-{{user.uopts.avatar||0}}" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAQMAAACQp+OdAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAA9JREFUeNpjYBgFo4B8AAACQAAB4E0dRAAAAABJRU5ErkJggg==" title="{{user.id}} - {{user.fullname}}" width="40" height="40" style="display:inline;max-width:40px; margin-top: -12px;"/>
+                        <span class="navbar-label" ng-bind="user.username"></span>
+                        <b class="caret"></b>                        
+                    </a>
+                    <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                        <li><a ng-click="changeAvatar()"><span class="glyphicon glyphicon-apple" translate="AVATAR"></span></a></li>
+                        <li><a ng-click="logout()"><span class="glyphicon glyphicon-off" translate="EXIT"></span> </a></li>    
+                        <li role="separator" class="divider"></li>
+                        <li class='text-center'>
+                            <button class='btn btn-xs' ng-click="changeLanguage('ca')"><img src='assets/img/ca.png'/></button>
+                            <button class='btn btn-xs' ng-click="changeLanguage('es')"><img src='assets/img/es.png'/></button>
+                            <button class='btn btn-xs' ng-click="changeLanguage('en')"><img src='assets/img/en.png'/></button>
+                        </li>
+                    </ul>               
+
+                </li>     
+            </ul>
+        </div>
+
+
+    </div>
+</nav>
+
+
+
+<div ui-view="">
+
+    <div class='container-fluid'>
+        <div class='row-fluid'>
+            
+            <div class="col-md-3">
+ 
+                    <div class='prow'>
+                    <div class="panel panel-warning panel-transparency bg-warning">
+                        <div class="panel-heading">
+                            <h6 class="panel-title">
+                                <button ng-class="tgs.welcome?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.welcome = !tgs.welcome"></button>
+                                <span translate="WELCOME"></span> <b>&#960;World</b></h6>
+                        </div>
+                        <div class="panel-body" ng-if='tgs.welcome'>
+                            <span ng-bind="user.fullname"></span> 
+                            - <span style="font-size: 11px">{{user.idRole| rolename}}</span>    
+                            
+                            <br>
+                            <center><button ng-if="user.idRole === USER_ROLES.student" ng-click="tgs.groups = !tgs.groups" class="btn btn-sm btn-info"><span translate="SHOW"></span> <span translate="GROUPS"></span> </button></center>
+                        </div>
+                    </div>
+                    </div>
+                 
+                    <div class='prow'>
+                    <div class="panel  panel-default panel-transparency">
+                        <div class="panel-heading">
+                            <h6 class="panel-title">
+                                <button ng-class="tgs.score?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.score = !tgs.score"></button>
+                                <span translate="SCORES"></span> </h6>
+                        </div>
+                        <div class="panel-body" ng-if='tgs.score'>
+
+                            <center>
+                                <button ng-click="showScore(0)" ng-class="score.pos==0?'btn btn-xs btn-success':'btn btn-xs'" ng-if="user.idRole >= USER_ROLES.student"><span translate="ME"></span></button>
+
+                                <div class="btn-group" dropdown dropdown-append-to-body ng-if="myGroups.length > 0">
+                                    <button type="button" ng-class="score.pos==1?'btn btn-xs btn-success dropdown-toggle':'btn btn-xs dropdown-toggle'" dropdown-toggle>
+                                        <span translate="GROUPS"></span> <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li ng-repeat="g in myGroups"><a ng-click="showScore(1, g.id)">{{g.name + ' ' + g.groupName}}</a></li>                                    
+                                    </ul>
+                                </div>
+                                <button ng-click="showScore(2)" ng-class="score.pos==2?'btn btn-xs btn-success':'btn btn-xs'"><span translate="CENTER"></span></button>
+                                <button ng-click="showScore(3)" ng-class="score.pos==3?'btn btn-xs btn-success':'btn btn-xs'">All</button>
+                            </center>
+
+                            <table class="table-responsive table-striped" ng-if="score.pos > 0">
+                                <thead>
+                                <td style="width:20%"><b translate="POSITION"></b></td>
+                                <td style="width:50%"><b translate="NAME"></b></td>
+                                <td style="width:30%; text-align:right"><b translate="SCORE"></b></td>
+                                </thead>
+                                <tr ng-repeat="it in allScores" ng-class="user.id==it.idUser?'bg-warning':''">
+                                    <td>{{$index + 1}}</td><td> {{it.fullname}}<br><small><span ng-if="score.pos > 2">{{it.schoolName}} - </span><span ng-if="score.pos > 1"> {{it.groupName}}</span></small></td><td style="width:30%; text-align:right" title="{{it.score}} + {{it.vscore}}">{{it.score + it.vscore}}</td>
+                                </tr>
+                            </table>
+
+                            <div ng-if="score.pos === 0">
+                                <table style="width:90%">
+                                    <tr>
+                                        <td>  <span translate="ACTIVITIES"></span>: {{myScores.score}}<br>
+                                            <span translate="VIDEOS"></span> {{myScores.vscore}}</td>
+                                        <td style="text-align: right"><h5><span translate="TOTAL"></span> {{myScores.vscore + myScores.score}}</h5></td>
+                                    </tr>
+                                </table>
+
+                                <hr>
+
+                                <div style="overflow: auto; max-height: 300">
+                                    <table  style="width:90%">
+
+                                        <tr ng-repeat="(key,value) in myScores.categories">
+                                            <td style="vertical-align: text-top"><small>{{key}}</small></td>  
+                                            <td><progressbar value="value.tpc" min="0" max="100" type="{{value.tpc<30?'danger':(value.tpc<60?'warning':'success')}}"><span style="color:black; white-space:nowrap;">{{value.tpc}}%</span></progressbar>
+                                        </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                        
+                        
+                          <div class='prow'>
+                <div class="panel  panel-default panel-transparency">
+                    <div class="panel-heading">
+                        <h6 class="panel-title">
+                            <button ng-class="tgs.famouseqn?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.famouseqn = !tgs.famouseqn"></button>
+                            <span translate="FAMOUS_EQN"></span> <button class='btn btn-xs glyphicon glyphicon-refresh' ng-click="randomizeEqn()"></button></h6>
+                    </div>
+                    <div class="panel-body" ng-if='tgs.famouseqn'>
+                        <center><div katex expr="randomEqn.eqn"></div> <em><a ng-href='{{randomEqn.url}}' target='_blank'>{{randomEqn.title}}</a></em></center>
+                    </div>
+                </div>
+                </div>
+                
+                <div class='prow'>
+                <div class="panel  panel-default panel-transparency">
+                    <div class="panel-heading">
+                        <h6 class="panel-title">
+                            <button ng-class="tgs.quote?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.quote = !tgs.quote"></button>
+                            <span translate="QUOTE"></span> <button class='btn btn-xs glyphicon glyphicon-refresh' ng-click="randomizeQuote()"></button></h6>
+                    </div>
+                    <div class="panel-body" ng-if="tgs.quote">
+                        <div compile="randomQuote"></div>
+                    </div>
+                </div>
+                </div>
+                
+                <div class='prow'>
+                <div class="panel  panel-default panel-transparency" ng-if='randomProblem'>
+                    <div class="panel-heading">
+                        <h6 class="panel-title">
+                            <button ng-class="tgs.problem?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.problem = !tgs.problem"></button>
+                            <span translate="PROBLEM_OF_DAY"></span> </h6>
+                    </div>
+                    <div class="panel-body"ng-if="tgs.problem">
+                        <div compile="randomProblem"></div>
+                    </div>
+                </div>
+                </div>
+            </div> <!--end right column -->
+        </div> <!--end row-->
+                        
+                 
+         <div class="col-md-9"> <!-- Begin center column -->
+ 
+                <div class='prow'>
+                  <div ng-if="eqns">
+                        <button ng-click="eqns = null;">x Close</button>
+                        <div class="panel  panel-default panel-transparency" ng-repeat="x in eqns">
+                       <div class="panel-heading">   
+                           <div class="badge">{{$index+1}}</div>
+                        </div>
+                        <div class="panel-body">
+                             <center><div katex expr="x.eqn"></div> <em><a ng-href='{{x.url}}' target='_blank'>{{x.title}}</a></em></center>
+                        </div>
+                       </div>                        
+                    </div>
+                    
+                </div>
+            </div> <!--end center column-->
+
+             
+</div>
+

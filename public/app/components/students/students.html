@@ -1,0 +1,118 @@
+<div growl></div>
+
+<div class="container-fluid" style="padding: 10px">
+
+    <div class="row">
+        <div class="col-md-2">
+            
+            <h4>GRUPS</h4>
+            <div ng-repeat="y in years" class="panel panel-primary">
+             <div class="panel-heading">  {{(y.year+2000)}}  / {{y.year+2001}}</div>
+             <div class="panel-body">
+                <table class="table table-responsive table-hover">
+                    <tr ng-repeat="g in y.groups" ng-click="gotoGrup(g)">
+                        <td class="cursor-hand" ng-class="g===grpBean?'table-selection':''"><small>{{g.groupName}} - {{g.name}}  <img ng-if="g.gopts.isGhost" src="/assets/img/ghost.png" style="height: 20px"/></small></td>
+                    </tr>    
+                </table>
+             </div>
+            </div>
+           
+            <button ng-click="gestionaGrups()" class='btn btn-primary glyphicon glyphicon-plus-sign'>Més...</button>
+         
+        </div>
+        <div class="col-md-10" ng-if="grpBean">
+            <h4>ALUMNES EN EL GRUP 
+                <span style="background:lightblue">{{grpBean.groupYear+'/'+(grpBean.groupYear+1)+": "+ grpBean.groupName +" ~ "+grpBean.name}}</span> 
+            </h4>
+            <div ng-if="show.main">
+            
+         <button ng-if="grpBean.eidRole<USER_ROLES.teacherNonEditing" ng-click="show.main=!show.main;" class='btn btn-success glyphicon glyphicon-education'>Enrolla usuaris</button>
+             <button ng-click="show.passwords = !show.passwords"  ng-class="show.passwords?'btn btn-primary':'btn'">Contrasenyes</button>
+             <button ng-click="show.emails = !show.emails"  ng-class="show.emails?'btn btn-primary':'btn'">Emails</button>
+            <!-- <button ng-click="print()" class="btn btn-xs btn-primary glyphicon glyphicon-print">Emails</button>-->
+            
+           
+            
+            <div loading-container="tableParams.$loading">
+                <table class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th ng-click="tableParams.sortBy('id')" class="cursor-hand"> <b ng-class="tableParams.params.classes.id"></b></th>
+                            <th ng-click="tableParams.sortBy('fullname')" class="cursor-hand"> Full name <b ng-class="tableParams.params.classes.fullname"></b></th>
+                            <th ng-click="tableParams.sortBy('username')" class="cursor-hand"> Username <b ng-class="tableParams.params.classes.username"></b></th>
+                            <th ng-if="show.passwords">Password student</th>                           
+                            <th ng-if="show.passwords">Password parents</th> 
+                            <th ng-click="tableParams.sortBy('idRole')" class="cursor-hand"> Role <b ng-class="tableParams.params.classes.idRole"></b></th>
+                            <th ng-if="show.emails" ng-click="tableParams.sortBy('email')" class="cursor-hand"> Email student <b ng-class="tableParams.params.classes.email"></b></th>
+                            <th ng-if="show.emails" ng-click="tableParams.sortBy('emailParents')" class="cursor-hand"> Email parents <b ng-class="tableParams.params.classes.emailParents"></b></th>
+                            <th>Actions</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th><input class="form-control" type="text" ng-model="tableParams.params.filter.fullname" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>
+                            <th><input class="form-control" type="text" ng-model="tableParams.params.filter.username" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>
+                            <th ng-if="show.passwords"></th>
+                            <th ng-if="show.passwords"></th>
+                            <th></th>
+                            <th ng-if="show.emails"><input class="form-control" type="text" ng-model="tableParams.params.filter.email" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>                            
+                            <th ng-if="show.emails"><input class="form-control" type="text" ng-model="tableParams.params.filter.emailParents" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>                            
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="g in tableParams.$data" ng-mouseenter="onRowEnter(g)" ng-mouseleave="onRowLeave(g)">
+                            <td>
+                                <span title="{{g.id}}">{{$index+1}}</span>
+                            </td>
+                            <td>
+                                <button ng-if="g.idRole>=USER_ROLES.student"  class='glyphicon glyphicon-search' ng-click='onClick(g)'> </button>{{g.fullname}}    
+                            </td>                            
+                            <td>
+                                {{g.username}}    
+                            </td>
+                            <td ng-if="show.passwords">
+                                <span style="min-height: 15px; min-width: 100px; ">{{g.displaypassword}}</span>
+                            </td>
+                            <td ng-if="show.passwords">
+                                <span style="min-height: 15px; min-width: 100px; ">{{g.displaypasswordParents}}</span>
+                            </td>
+                            <td>
+                                <span >{{g.eidRole | rolename}}</span>
+                                
+                            </td>             
+                            <td ng-if="show.emails">
+                                {{g.email}}
+                            </td> 
+                             <td ng-if="show.emails">
+                                {{g.emailParents}}
+                            </td> 
+                            <td >
+                                <div>
+                                    <button ng-if="g.idRole>=USER_ROLES.student && grpBean.eidRole<USER_ROLES.teacherNonEditing" class='btn btn-sm btn-danger glyphicon glyphicon-remove' ng-click='confirmDeleteDlg(g)'> </button> 
+                                    <button ng-if="g.id!=grpBean.idUserCreator && grpBean.eidRole<USER_ROLES.teacherNonEditing" class='btn btn-sm btn-primary glyphicon glyphicon-pencil' ng-click='editDlg(g)'> </button>
+                                </div> 
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul class="pull-left" uib-pagination items-per-page="tableParams.params.count" total-items="tableParams.params.total" ng-model="tableParams.params.page" max-size="tableParams.params.maxSize" 
+                    class="pagination-sm" boundary-links="true" force-ellipses="true" ng-change="tableParams.paginate()"></ul>
+                <div class="btn-group pull-right">
+                        <button ng-repeat="b in tableParams.params.counts" type="button" class="btn" ng-class="b===tableParams.params.count?'btn-primary':'btn-default'" ng-click="tableParams.setCount(b)">{{b}}</button>
+                </div>
+                
+            </div> 
+                      
+            
+            </div>
+            
+            <!-- Gestiona enrolla alumnes -->
+            <div ng-if="!show.main">
+                <button ng-click="show.main=!show.main;" class='btn btn-danger glyphicon glyphicon-remove'>Cancel·la</button>
+                <button ng-click="enroll()" class='btn btn-success glyphicon glyphicon-ok'>Accepta</button>
+                <br><br>
+                Filter <input type="text" ng-model="filter.name"  ng-keypress="($event.which===13) && loadAllStudents()" /><button ng-click="loadAllStudents()" class="btn btn-xs glyphicon glyphicon-search"></button>
+                <picklist name="pkenroll" size="10" rows="25" data-picklist="" data-pick-model="enrolled"  data-pick-options="s.fullname for s in studentsFiltered" />
+            </div>
+        </div>
+    </div>

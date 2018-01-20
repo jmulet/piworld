@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div print-section class="modal-body" style="max-height: 600px; overflow: scroll;">
+    <h4 compile="msg"></h4>
+    <hr>
+    <h4 ng-if="feedback" compile="feedback" ng-cloak=""></h4>
+    <hr ng-if="feedback">
+    
+    <a ng-click="detail()" style="cursor: pointer;">Show steps</a>
+    <div compile="detailedAnswer" ng-cloack="">
+        
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default glyphicon glyphicon-print pull-left" print-btn></button>
+    <button class="btn btn-primary glyphicon glyphicon-ok pull-right" ng-click="ok()"><span translate="ACCEPT"></span></button>
+</div>

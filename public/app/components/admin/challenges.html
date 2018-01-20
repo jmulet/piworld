@@ -1,0 +1,160 @@
+<div style="padding: 10px">
+    <div>
+    <h4>CHALLENGES LIST <button ng-click="create()" class="btn btn-success glyphicon glyphicon-plus-sign">Create</button> This week is {{thisWeek}}</h4>
+    
+       <div loading-container="tableParams.$loading">
+                <table class="table table-hover table-responsive">
+                    <thead>
+                         <tr>
+                            <th ng-click="tableParams.sortBy('id')" class="cursor-hand"> id <b ng-class="tableParams.params.classes.id"></b></th>
+                            <th ng-click="tableParams.sortBy('w')" class="cursor-hand"> Week <b ng-class="tableParams.params.classes.w"></b></th>
+                            <th ng-click="tableParams.sortBy('level')" class="cursor-hand"> Level <b ng-class="tableParams.params.classes.level"></b></th>
+                            <th>Formulation</th>
+                            <th>Right Answer</th>
+                            <th ng-click="tableParams.sortBy('score')" class="cursor-hand"> Score <b ng-class="tableParams.params.classes.score"></b></th>           
+                            <th>N. Answers/Pending</th>   
+                            <th>Detail</th>                        
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th><input class="form-control" type="text" ng-model="tableParams.params.filter.w" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>
+                            <th><input class="form-control" type="text" ng-model="tableParams.params.filter.level" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>
+                            <th><input class="form-control" type="text" ng-model="tableParams.params.filter.formulation" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>
+                            <th><input class="form-control" type="text" ng-model="tableParams.params.filter.ranswer" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>
+                            <th><input class="form-control" type="text" ng-model="tableParams.params.filter.score" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="g in tableParams.$data" ng-click="onSelect(g)">
+                            <td>
+                                {{g.id}}
+                            </td>
+                            <td>
+                                <span ng-if="!g.edit" ng-bind="g.w"></span>
+                                <input type="number" ng-if="g.edit" ng-model="g.w"/>
+                            </td>
+                            <td >
+                                <span ng-if="!g.edit">{{g.level===0?"1-2ESO":g.level===1?"3-4ESO":"BAT"}}</span>
+                                <select ng-if="g.edit" ng-model="g.level">
+                                    <option ng-repeat="item in levelList" ng-value="item.id">{{item.label}}</option>                                    
+                                </select>
+                            </td>
+                            <td>
+                               <uib-tabset type="tabs" active="g.activeLang">                              
+                                <uib-tab index="0" class="btn-sm">
+                                  <uib-tab-heading>
+                                      <img src='assets/img/ca.png'/> <button ng-if="g.activeLang===0" ng-click="translate(g,'ca', 1)" class="btn btn-xs glyphicon glyphicon-asterisk" title="translate"></button>
+                                  </uib-tab-heading>
+                                    <div ng-if="!g.edit" compile="g.formulation_ca"></div>
+                                    <textarea ng-if="g.edit" ng-model="g.formulation_ca" rows="4" style="width: 100%" ng-change="translate(g, 'ca')" ng-model-options="{debounce: 500}"></textarea>
+                                </uib-tab>
+                                   <uib-tab index="1"  class="btn-sm">
+                                  <uib-tab-heading>
+                                    <img src='assets/img/es.png'/> <button ng-if="g.activeLang===1" ng-click="translate(g,'es',1)" class="btn btn-xs glyphicon glyphicon-asterisk" title="translate"></button>
+                                  </uib-tab-heading>
+                                    <div ng-if="!g.edit" compile="g.formulation_es"></div>
+                                    <textarea ng-if="g.edit" ng-model="g.formulation_es" rows="4"  style="width: 100%"  ng-change="translate(g, 'es')" ng-model-options="{debounce: 500}"></textarea>
+                                </uib-tab>
+                                   <uib-tab index="2"  class="btn-sm">
+                                  <uib-tab-heading>
+                                    <img src='assets/img/en.png'/> <button  ng-if="g.activeLang===2" ng-click="translate(g,'en',1)" class="btn btn-xs glyphicon glyphicon-asterisk" title="translate"></button>
+                                  </uib-tab-heading>
+                                    <div ng-if="!g.edit" compile="g.formulation_en"></div>
+                                    <textarea ng-if="g.edit" ng-model="g.formulation_en" rows="4"  style="width: 100%"  ng-change="translate(g, 'en')" ng-model-options="{debounce: 500}"></textarea>
+                                </uib-tab>
+                              </uib-tabset>   
+                            </td>
+                            <td>
+                                <p ng-if="!g.edit">
+                                <span ng-bind="g.ranswer"></span>
+                                <span ng-if="!g.ranswer"><em>Correcció manual</em></span>
+                                </p>
+                                <textarea ng-if="g.edit" ng-model="g.ranswer" rows="4"  style="width: 100%"></textarea>
+                            </td> 
+                            <td>
+                                <span ng-if="!g.edit" ng-bind="g.score"></span>
+                                <input type="number" ng-if="g.edit" ng-model="g.score"/>
+                            </td> 
+                             <td>
+                                 <span class="badge">{{g.total}}</span>
+                                 <span ng-if="g.total" class="badge" ng-class="g.pending?'btn-warning':'btn-success'"> / {{g.pending}}</span>
+                             </td>
+                            <td>
+                                <button ng-if="!g.edit" ng-click="onDelete(g)"  class="btn btn-xs btn-danger">Delete</button>
+                                <button ng-if="!g.edit" ng-click="onEdit(g)"  class="btn btn-xs btn-info">Edit</button>
+                                <button ng-if="g.edit" ng-click="onCancelEdit(g)" class="btn btn-xs btn-warning">Cancel</button>
+                                <button ng-if="g.edit" ng-click="onSaveEdit(g)" class="btn btn-xs btn-success">Save</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                    
+                    
+                    <ul class="pull-left" uib-pagination items-per-page="tableParams.params.count" total-items="tableParams.params.total" ng-model="tableParams.params.page" max-size="tableParams.params.maxSize" 
+                        class="pagination-sm" boundary-links="true" force-ellipses="true" ng-change="tableParams.paginate()"></ul>
+                    <div class="btn-group pull-right">
+                            <button ng-repeat="b in tableParams.params.counts" type="button" class="btn" ng-class="b===tableParams.params.count?'btn-primary':'btn-default'" ng-click="tableParams.setCount(b)">{{b}}</button>
+                    </div>
+
+         </div>
+     <br>
+      <br>
+       <br>
+        <br>
+    </div>
+    
+    
+   <div ng-if="selected">
+            
+        <h4>CHALLENGES QUIZZ ON {{selected.id}}</h4>
+        <div loading-container="tableParams2.$loading">
+                <table class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th ng-click="tableParams2.sortBy('id')" class="cursor-hand"> id <b ng-class="tableParams2.params.classes.id"></b></th>
+                            <th ng-click="tableParams2.sortBy('when')" class="cursor-hand"> Date <b ng-class="tableParams2.params.classes.when"></b></th>
+                            <th ng-click="tableParams2.sortBy('fullname')" class="cursor-hand"> Fullname <b ng-class="tableParams2.params.classes.fullname"></b></th>                             
+                            <th ng-click="tableParams2.sortBy('answer')" class="cursor-hand"> User answer <b ng-class="tableParams2.params.classes.answer"></b></th>           
+                            <th>Correcció</th>   
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th><input class="form-control" type="text" ng-model="tableParams2.params.filter.fullname" ng-change="tableParams2.paginate()" ng-model-options="{debounce: 500}"/></th>
+                            <th><input class="form-control" type="text" ng-model="tableParams2.params.filter.answer" ng-change="tableParams2.paginate()" ng-model-options="{debounce: 500}"/></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="g in tableParams2.$data">
+                            <td>
+                                {{g.cqid}}
+                                 
+                            </td>
+                            <td>
+                                {{g.when | date: "dd-MM-yyyy HH:mm"}}
+                            </td>
+                            <td>
+                                <span ng-bind="g.fullname"></span>                                
+                            </td>
+                            <td>
+                               <p compile="g.answer"></p>
+                            </td>
+                            <td>
+                                <nz-toggle tri-toggle ng-model="g.valid" val-true="1" val-false="0" on-toggle="changeCorrect(g)"></nz-toggle>
+                            </td>  
+                        </tr>
+                    </tbody>
+                </table>
+                    
+                    
+                    <ul class="pull-left" uib-pagination items-per-page="tableParams.params.count" total-items="tableParams.params.total" ng-model="tableParams.params.page" max-size="tableParams.params.maxSize" 
+                        class="pagination-sm" boundary-links="true" force-ellipses="true" ng-change="tableParams.paginate()"></ul>
+                    <div class="btn-group pull-right">
+                            <button ng-repeat="b in tableParams.params.counts" type="button" class="btn" ng-class="b===tableParams.params.count?'btn-primary':'btn-default'" ng-click="tableParams.setCount(b)">{{b}}</button>
+                    </div>
+            
+        </div>
+</div>

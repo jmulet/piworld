@@ -1,0 +1,74 @@
+<div class="container"> 
+    <div class="row">
+  <tabset>
+      <tab heading="Algebra" ng-if="tabs.algebra">
+          <button ng-click="add(' + ')" title="Plus" class="tb btn-toolbar"> + </button>
+          <button ng-click="add(' - ')" title="Minus" class="tb btn-toolbar"> - </button>
+          <button ng-click="add(' &pm ')" title="Plus-minus" class="tb btn-toolbar"> <katex>\pm</katex> </button>
+          <button ng-click="add(' &mp ')" title="Minus-plus" class="tb btn-toolbar"> <katex>\mp</katex> </button>
+          <button ng-click="add(' * ')" title="Product" class="tb btn-toolbar"> * </button>
+          <button ng-click="add(' / ')" title="Division" class="tb btn-toolbar"> / </button>
+          <button ng-click="add(' a^b ')" title="Power" class="tb btn-toolbar"><katex>a^b</katex></button>
+          <button ng-click="add(' sqrt(a) ')" title="Square root" class="tb btn-toolbar"><katex>\sqrt{a}</katex></button>
+          <button ng-click="add(' root(a,n) ')" title="Root" class="tb btn-toolbar"><katex>\sqrt[n]{a}</katex></button>         
+          <button ng-click="add(' ln(a) ')" title="Neperian logarithm" class="tb btn-toolbar"><katex>\ln a</katex></button>         
+          <button ng-click="add(' log(a, b) ')" title="Logarithm" class="btn-toolbar"><katex>\log_b{a}</katex></button>         
+          <button ng-click="add(' (:a,b:) ')" title="Open interval" class="btn-toolbar"><katex>(a,b)</katex></button>         
+          <button ng-click="add(' [:a,b:] ')" title="Closed interval" class="btn-toolbar"><katex>[a,b]</katex></button>         
+          <button ng-click="add(' union ')" title="Union" class="btn-toolbar"><katex>\cup</katex></button>         
+          <button ng-click="add(' intersect ')" title="Intersection" class="btn-toolbar"><katex>\cap</katex></button>         
+      </tab>
+      <tab heading="Constants" ng-if="tabs.constants">
+          <button ng-click="add(' #pi ')" title="Number Pi" class="tb btn-toolbar"><katex>\pi</katex></button>
+          <button ng-click="add(' #e ')" title="Number e" class="tb btn-toolbar"><katex>e</katex></button>
+          <button ng-click="add(' #i ')" title="Imaginary unit" class="tb btn-toolbar"><katex>i</katex></button>
+          <button ng-click="add(' #infinity ')" title="Infinity" class="tb btn-toolbar"><katex>\infty</katex></button>
+          <button ng-click="add(' #empty ')" title="Empty set" class="tb btn-toolbar"><katex>\emptyset</katex></button>         
+          <button ng-click="add(' #v0 ')" title="Zero vector" class="tb btn-toolbar"><katex>\vec 0</katex></button>
+          <button ng-click="add(' #ui ')" title="Unitary vector i" class="tb btn-toolbar"><katex>\vec i</katex></button>
+          <button ng-click="add(' #uj ')" title="Unitary vector j" class="tb btn-toolbar"><katex>\vec j</katex></button>
+          <button ng-click="add(' #uk ')" title="Unitary vector k" class="tb btn-toolbar"><katex>\vec k</katex></button>
+          <button ng-click="add(' #0 ')" title="Zero matrix" class="tb btn-toolbar"><katex>O</katex></button>
+          <button ng-click="add(' #1 ')" title="Identity matrix" class="tb btn-toolbar"><katex>I</katex></button>
+      </tab>
+      <tab heading="Symbols" ng-if="tabs.symbols">
+          <button ng-click="add(' alpha ')" class="tb btn-toolbar"><katex>\alpha</katex></button>
+          <button ng-click="add(' beta ')" class="tb btn-toolbar"><katex>\beta</katex></button>
+          <button ng-click="add(' gamma ')" class="tb btn-toolbar"><katex>\gamma</katex></button>
+          <button ng-click="add(' delta ')" class="tb btn-toolbar"><katex>\delta</katex></button>          
+      </tab>
+      <tab heading="Vectors" ng-if="tabs.vectors">
+          <button ng-click="add(' &v a ')" title="Vector" class="tb btn-toolbar"><katex>\vec a</katex></button>
+          <button ng-click="add(' &v a &. &v b ')" title="Scalar product" class="btn-toolbar"><katex>\vec a \cdot \vec b</katex></button>
+          <button ng-click="add(' &v a &x &v b ')" title="Vectorial product" class="btn-toolbar"><katex>\vec a \times \vec b</katex></button>          
+          <button ng-click="add(' [<a, b>,<c, d>] ')" title="Matrix 2x2" class="btn-toolbar"><span>M<sub>2x2</sub></span></button>          
+          <button ng-click="add(' [<a,b,c>,<d,e,f>,<g,h,i>] ')" title="Matrix 3x3" class="btn-toolbar"><span>M<sub>3x3</sub></span></button>          
+      </tab>
+      <tab heading="Trigonometry" ng-if="tabs.trigonometry">
+          <button ng-click="add(' sin(a) ')" title="Sinus function" class="btn-toolbar"><katex>\sin a</katex></button>
+          <button ng-click="add(' cos(a) ')" title="Cosinus function" class="btn-toolbar"><katex>\cos a</katex></button>
+          <button ng-click="add(' tan(a) ')" title="Tangent function" class="btn-toolbar"><katex>\tan a</katex></button>
+          <button ng-click="add(' arcsin(a) ')" title="Sinus inverse" class="btn-toolbar"><katex>\arcsin a</katex></button>
+          <button ng-click="add(' arccos(a) ')" title="Cosinus inverse" class="btn-toolbar"><katex>\arccos a</katex></button>
+          <button ng-click="add(' arctan(a) ')" title="Tangent inverse" class="btn-toolbar"><katex>\arctan a</katex></button>          
+      </tab>
+      <tab heading="Functions" ng-if="tabs.functions">
+          <button ng-click="add(' diff(f(x),x) ')" title="Derivate" class="btn-toolbar"><katex>f^\prime(x)</katex></button>
+          <button ng-click="add(' lim(f(x),x,a) ')" title="Limit" class="btn-toolbar"><katex>\lim_{x\rightarrow a} f(x)</katex></button>
+          <button ng-click="add(' int(f(x),x) ')" title="Integral function" class="btn-toolbar"><katex>\int f(x) dx</katex></button>
+          <button ng-click="add(' int(f(x),x,a,b) ')" title="Integral" class="btn-toolbar"><katex>\int_a^b  f(x) dx</katex></button>
+          
+      </tab>
+  </tabset>
+  <div style="display: block;width:100%;padding: 4px;">
+  <textarea id="{{id}}" style="display: block;width:100%;padding: 4px;" rows="3" ng-model="model" placeholder="{{placeholder}}"></textarea>
+  </div>
+        <div class="panel panel-info">
+            <div class="panel-body">
+                <p>Preview:</p>
+                <div style="padding-bottom: 5px;" expr="model | mathlex: 'latex'" katex=""></div>  
+        
+            </div>
+        </div>
+    </div>
+</div>

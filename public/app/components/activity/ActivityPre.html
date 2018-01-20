@@ -1,0 +1,162 @@
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+   
+
+    <div class="container-fluid">
+          <!--
+        <div class='row'>       
+   
+                    <div class="btn-group">                         
+                        <button ng-if="activity.ytid" class="btn btn-sm btn-primary" ng-click="playVideo()" uib-tooltip="Play video"> 
+                            <img src="assets/img/video.jpeg" alt="View video" height="30"/>
+                        </button>
+                        
+                        
+                       
+                        <button class="btn btn-sm btn-primary" ng-click='startAttempt()'> <img src="assets/img/quiz.png" height="30" alt=""/><span translate="START_ATTEMPT"></span></button>
+                        
+
+                        <div class="btn-group" uib-dropdown ng-if="user.idRole<USER_ROLES.student && idAssignment>0">
+                            <button id="split-button" type="button" class="btn btn-sm btn-primary" ng-click='startKahoot()'>
+                                <img src="assets/img/kahoot.png" height="30" alt=""/><span translate="KAHOOT"></span>                                
+                            </button>
+                            <button type="button" class="btn btn-sm btn-primary" style="height:42px" uib-dropdown-toggle>
+                                <span class="caret"></span>
+                                <span class="sr-only">Kahoot report</span>
+                            </button>
+                            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                <li role="menuitem"><a href="" ng-click="reportKahoot()">Kahoot reports</a></li>
+                                <li class="divider"></li>
+                                <li role="menuitem"><a href="" ng-click="startKahoot()">Start Kahoot</a></li>
+                            </ul>
+                        </div>
+                  
+                      
+                    </div>                     
+        </div>
+    -->
+    
+            <div ng-if="showWarning && !isGuest" uib-alert class="alert-danger" close="closeWarning()">
+               <h4>
+                    <em translate="ATENTION"></em>: <span translate="WRONG_LEVEL_MSG"></span>
+                </h4>
+            </div>            
+        
+
+        <div class="row">
+         
+            <div class="col-xs-12 col-md-10">
+                <h4 class="bg-primary bg-heading" title="{{'id='+activity.id}}"> 
+                    <span class="badge">{{activity.id}}</span>
+                    <span>{{activity.activity}}</span>
+                  <!--  <button ng-if="!isGuest && !atmpPanelShowing" class="pull-right btn btn-primary btn-xs glyphicon glyphicon-arrow-right" ng-click="toggleAttemptsPanel(true)"></button>-->
+                  <button ng-if="canEdit" class="btn btn-xs pull-right btn-warning glyphicon glyphicon-pencil" ng-click="openIde()"></button>
+                </h4>     
+                           
+                <div class="teoria" ng-if="theoryData" ng-include="'activities/theory.html'"></div>
+                
+                <div ng-if="activity.activityType==='U'">
+                    <div ng-if="idAssignment===0" class='alert alert-danger'>
+                        <p>La pujada de de fitxers només està operativa una vegada s'ha assignat l'activitat a un grup / unitat.</p>
+                    </div>
+                    <div ng-if="idAssignment>0">
+                    
+                        <button ng-disabled="activity.assignment.open<=0 || isGuest" ng-if="user.id!==activity.assignment.idUser" class='btn btn-default glyphicon glyphicon-upload' ngf-select ngf-change="uploadFiles($files)" ngf-max-size="20000000"  ng-disabled="importing">
+                              Importa fitxer
+                       </button>
+                      
+                        <table class="table table-striped table-responsive table-bordered">
+                            <tr>
+                                <th></th>
+                                <th ng-if="user.id===activity.assignment.idUser">Student Name</th>
+                                <th>File name</th>
+                                <th>Message</th>
+                                <th>Date</th>
+                                <th>Score (%)</th>                                                                                                
+                                <th>Feedback</th>
+                            </tr>
+                            <tr ng-repeat="u in uploadsDB track by u.id">
+                                <td><button class="btn btn-xs btn-danger glyphicon glyphicon-remove" ng-if="u.score<0" ng-click="deleteUploads(u)"></button></td>
+                                <td ng-if="user.id===activity.assignment.idUser">{{u.fullname}}</td>
+                                <td><a ng-href="files/users/{{u.idUser}}/.uploads/{{u.id}}-{{u.file}}" target="_blank">{{u.file}}</a></td>
+                                 <td>
+                                    <span ng-if="user.idRole<USER_ROLES.student">{{u.message}}</span>
+                                    <textarea ng-disabled="u.score>=0" style="width: 100%" rows="4" ng-if="user.idRole>=USER_ROLES.student" ng-model="u.message"  ng-blur="updateUploadsScore(u)"></textarea>
+                                </td>
+                                <td>{{u.uploadDate | date: 'dd-MM-yyyy HH:mm:ss'}}</td>
+                                <td>
+                                    <span ng-if="user.idRole>=USER_ROLES.student" class="picoin">{{u.score>=0? u.score : '---'}}</span>
+                                    <input ng-if="user.idRole<USER_ROLES.student" type="number" step="10" ng-model="u.score" ng-blur="updateUploadsScore(u)"/>
+                                </td>
+                                 <td>
+                                    <span ng-if="user.idRole>=USER_ROLES.student">{{u.feedback}}</span>
+                                    <textarea style="width: 100%" rows=2 ng-if="user.idRole<USER_ROLES.student" ng-model="u.feedback" ng-blur="updateUploadsScore(u)"></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                        <table ng-if="uploads && uploads.length" class="table table-striped table-responsive table-bordered">
+                            <tr>
+                                <th>File name</th>
+                                <th>Status</th>                                
+                            </tr>
+                            <tr ng-repeat="u in uploads track by u.id">
+                                <td>{{u.description}}</td>
+                                <td>{{u.progress}}</td>                                
+                            </tr>
+                        </table>
+                       
+                        <h4 ng-if="!uploadsDB || uploadsDB.length===0"><em>No s'han encara efectuat pujades.</em></h4>
+                        
+                        
+                    </div>
+                </div>
+                <hr>
+                <div ng-if="!isGuest">
+                    <span translate="RATING"></span>
+                    <span uib-rating ng-model="activity.vrating" readOnly="false" max="5" state-on="'glyphicon-star orange'" state-off="'glyphicon-star gray'" ng-change="updateRating()"></span>
+                </div> 
+               
+                
+                
+                <span translate="COMMENTS"></span>: <button ng-if="rest.postcomments" class="btn btn-sm btn-success glyphicon glyphicon-plus-sign" ng-click="newcomment()"></button><br><br>
+                <div id="c{{$index}}" ng-repeat="c in activity.comments track by $index" style="margin-bottom: 40px; padding-left: 10px">
+                    <img class="pull-left" ng-src="assets/img/avatar/{{c.avatar || 0}}.png" width="50" height="50" style="margin-right: 10px"/>
+                    <div style="margin-bottom: 10px;border-bottom: solid; border-width: 1px">{{c.fullname}} <span class="pull-right">{{c.when | date: "dd-MM-yyyy  HH:mm" }} 
+                            <button class="btn btn-xs btn-danger glyphicon glyphicon-trash" title="delete" ng-if="(user.id==c.idUser || (c.schoolId==user.schoolId && user.idRole<USER_ROLES.student)) && !c.edit" ng-click="deleteComment(c)"></button>
+                            <button class="btn btn-xs btn-info glyphicon glyphicon-pencil" title="edit" ng-if="(user.id==c.idUser || (c.schoolId==user.schoolId && user.idRole<USER_ROLES.student)) && !c.edit" ng-disabled="!rest.postcomments" 
+                                    ng-click="edita(c)"></button>                            
+                            
+                        
+                            <button class="btn btn-xs btn-warning glyphicon glyphicon-remove" title="cancel" ng-if="c.edit" ng-click="c.edit=!c.edit; c.comment=c.bck;"></button>
+                            <button class="btn btn-xs btn-success glyphicon glyphicon-save" title="save" ng-if="c.edit" ng-click="c.edit=!c.edit;saveComment(c)"></button>
+                        </span></div>                       
+                            
+                            
+                    <div>
+                        <div style="background:white;" ng-if="!c.edit" compile="c.comment" ng-dblclick="edita(c)">
+                        </div>
+                        <textarea ng-model="c.comment" ng-if="c.edit" rows="3" style="width:90%" maxlength="1000" ng-blur="c.edit=!c.edit;saveComment(c)"></textarea>
+                    </div>
+                </div>
+                
+            </div> <!--end column theory-->
+            
+           
+            
+                        
+            <div class="col-xs-12 col-md-2" style="padding:2px; margin: 0px" ng-if="related.length">
+                
+                <h4 class="bg-primary bg-heading" ><span translate="RELATED"></span></h4>                
+                <div style="text-align: center">
+                    <div ng-repeat="r in related track by $index" class="img-thumbnail" style="height:100px; width:150px;overflow:hidden;" ng-style="{'background': r.id?'lightblue':'white'}"> 
+                       <a href="" ng-click="goRelated(r)"  uib-popover="{{r.description + ' ' + r.levels }}" popover-title="{{r.activity || ' '}}" popover-trigger="mouseenter"  popover-placement="left">
+                         <center><img ng-src="{{r.icon}}"  class="img-responsive"  alt="img"/></center>                        
+                    </a>                   
+                </div>
+               </div>
+            </div>
+            
+            
+        </div>
+
+    </div>
+ 

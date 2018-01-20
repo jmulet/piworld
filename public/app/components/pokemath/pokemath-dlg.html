@@ -1,0 +1,22 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body">
+    <p compile="question.formulation"></p>
+    
+    <div ng-switch="question.type">
+        <div ng-switch-when="multiple">
+            <ul class="list list-unstyled">
+                <li ng-repeat="o in question.options">
+                    <input type="checkbox" ng-model="o.selected"/> <span compile="o.text"></span>
+                </li>
+            </ul>
+        </div>
+        <input ng-switch-when="input" style="width: 90%;" type="text" ng-model="model.text"  ng-keyup="$event.keyCode == 13 && ok()" class="form-control-static"/>     
+    </div>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning glyphicon glyphicon-remove" ng-click="cancel()"><span translate="CANCEL"></span></button>
+    <button class="btn btn-primary glyphicon glyphicon-ok" ng-click="ok()"><span translate="ACCEPT"></span></button>    
+</div>

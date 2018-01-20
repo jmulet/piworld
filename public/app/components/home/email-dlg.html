@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <h4 class="modal-title">Email to {{username}}</h4>
+</div>
+<div class="modal-body">
+    Subject <input type="text" class="form-control" ng-model="bean.subject"/>
+    Body
+    <textarea ui-tinymce="tinymceOpts" ng-model="bean.html"></textarea>
+</div>
+<div class="modal-footer">
+    <span class='pull-left'><i>{{email}}</i></span>
+    <button class="btn btn-warning glyphicon glyphicon-remove" ng-click="cancel()"><span translate="CANCEL"></span></button>
+    <button class="btn btn-primary glyphicon glyphicon-ok" ng-click="ok()"><span translate="ACCEPT"></span></button>    
+</div>

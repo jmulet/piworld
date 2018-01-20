@@ -1,0 +1,55 @@
+ 
+<div class="panel panel-default panel-transparency" style="padding: 4px; margin: 2px">
+    <div class="panel-heading" ng-style="vm.panelheadingStyle">
+        <h6 class="panel-title">
+            <button ng-if="!vm.mobile"  ng-class="vm.collapsed?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="vm.collapsed = !vm.collapsed"></button>
+            {{'ONLINE'| translate}}  <span class="badge">{{onlineusers.length}}</span>
+            
+            <div ng-if='!vm.collapsed' class="input-group input-group-sm">
+              <span class="input-group-addon glyphicon glyphicon-search"></span>
+              <input type="text" class="form-control"  ng-model="vm.tgs.filterNames" style="min-width: 40px"/>
+              <span class="input-group-btn">
+                <button class="btn btn-default btn-sm" 
+                        ng-class="vm.orderByParticipants=='-lastLogin' ? 'glyphicon glyphicon-sort-by-attributes' : 'glyphicon glyphicon-sort-by-alphabet'" 
+                        ng-click="vm.swithOrderByParticipants()"></button>  
+              </span>
+            </div>                                                             
+        </h6>
+    </div>
+    <div class="panel-body" ng-if='!vm.collapsed' ng-style="vm.panelbodyStyle">
+        <ul class="list list-unstyled" style="display:inline-block">
+        
+            <li class="list-item"  ng-repeat="u in vm.participants| orderBy: vm.orderByParticipantsFunc | filter: vm.myFilter track by $index" style="border-spacing: 5px 5px; " ng-class="u.online?'bg-success':''">
+                      <div class="btn-group pull-left" uib-dropdown ng-if="vm.user.idRole < vm.USER_ROLES.student" >
+                        <span uib-dropdown-toggle>
+                            <img class="pw-thm-{{u.username}} pw-avatar-{{u.uopts.avatar || 0}}" 
+                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAQMAAACQp+OdAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAA9JREFUeNpjYBgFo4B8AAACQAAB4E0dRAAAAABJRU5ErkJggg==" 
+                                 title="{{u.id}} - {{u.fullname}}" width="40" height="45" style="display:inline;min-width:40px; "/>                                  
+                            <span class="caret"></span>
+                        </span>
+                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                            <li role="menuitem" ng-if="u.online"><a href="" ng-click="vm.sendNotification(u.id, u.fullname)">Send Notification</a></li>
+                            <li role="menuitem" ng-if="u.email && u.email.substring(0, 2) !== '??'" ><a href="" ng-click="vm.sendEmail(u)">Send Email</a></li>                                            
+                            <li class="divider"></li>
+                            <li role="menuitem"><a href="" ng-click="vm.manageBadges(u)"><span translate="BADGES"></span></a></li>  
+                        </ul>
+                    </div>    
+                    <div class="btn-group pull-left"  ng-if="vm.user.idRole >= vm.USER_ROLES.student" >
+                        <img class="pw-avatar-{{u.uopts.avatar || 0}}" 
+                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAQMAAACQp+OdAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAA9JREFUeNpjYBgFo4B8AAACQAAB4E0dRAAAAABJRU5ErkJggg==" 
+                                 title="{{u.id}} - {{u.fullname}}" width="40" height="40" style="display:inline;min-width:40px; "/>                                                          
+                    </div>    
+                
+                    <div style="vertical-align: top; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left">
+                        <span ng-if="vm.user.idRole >= vm.USER_ROLES.student">{{u.fullname}}</span>
+                        <a ng-if="vm.user.idRole < vm.USER_ROLES.student" href="" ng-click="vm.showStudentProgress(u)">{{u.fullname}}</a>
+                        <br>
+                        <span ng-if="u.lastLogin" style="font-size: small">{{u.lastLogin| timeDHM}}</span>
+                        <span ng-if="!u.lastLogin" style="font-size: small" translate="NEVER"></span>
+                        <br><br>
+                    </div>
+
+            </li>
+        </ul>
+    </div>                     
+</div>

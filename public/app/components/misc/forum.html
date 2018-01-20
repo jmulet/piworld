@@ -1,0 +1,168 @@
+<script type="text/ng-template" id="forum_renderer.html">
+  <div class="panel panel-default">
+    <div class="panel panel-header panel-info">
+         <img ng-src="assets/img/avatar/{{field.uopts.avatar|| 0}}.png" width="40" height="40" style="display:inline;max-width:40px; margin-top: -12px;"/>
+         {{field.fullname}}
+         <span class="pull-right">
+            {{field.createdWhen | date: 'dd-MM-yyyy HH:mm'}}
+            <button ng-if="admin || field.createdBy===user.id" ng-disabled="field.edit" ng-click="deleteEntry(field)" title="Delete" class="btn btn-xs btn-danger glyphicon glyphicon-trash"></button>
+            <button ng-if="admin || field.createdBy===user.id" ng-disabled="field.edit" ng-click="editEntry(field)" title="Edit" class="btn btn-xs btn-default glyphicon glyphicon-pencil"></button>
+            <button ng-if="cTheme.buttonEnabled" ng-disabled="field.edit" ng-click="createEntry(field)" title="Reply" class="btn btn-xs btn-success glyphicon glyphicon-plus-sign"></button>
+         </span>
+    </div>
+    <div class="panel-body" style="padding-top:0px; padding-bottom:1px;">
+        <div ng-if="!field.edit" compile="field.entry">
+        </div>
+        <div ng-if="field.edit">
+            <textarea ui-tinymce="tinymceOptions" class="form-control" ng-model="field.entry">
+            </textarea>
+            <button ng-click="cancelEditEntry(field)" title="Cancel" class="btn btn-xs btn-warning glyphicon glyphicon-remove"></button>
+            <button ng-click="applyEditEntry(field)" title="Save" class="btn btn-xs btn-success glyphicon glyphicon-save"></button>
+        </div>
+        
+    </div>
+  </div>
+  <ul ng-if="field.nodes" style="list-style-type: none;">
+      <li ng-repeat="field in field.nodes" ng-include="'forum_renderer.html'">
+      </li>
+  </ul>
+</script>
+
+
+<div class="container-fluid" style="padding:10px">
+
+    <div ng-if="!cForum">
+        <ul class="breadcrumb">
+            <li class="active">FORUMS</li>
+        </ul>
+
+        <button ng-if="teacher || user.gopts.canCreateForums" ng-click="editForum()" class="btn btn-success glyphicon glyphicon-plus-sign">Create Forum</button>
+        <!--<span ng-if="teacher"><input type="checkbox" ng-model="tgs.showAllForums" ng-change="forumsTable.reload()" class="btn btn-default"/>Show all forums</span>-->
+        
+        <div loading-container="forumsTable.$loading">
+            <table class="table table-hover table-responsive">
+                <thead>
+                    <th ng-click="forumsTable.sortBy('forum')" class="cursor-hand"> Forum <b ng-class="forumsTable.params.classes.forum"></b></th>
+                    <th ng-click="forumsTable.sortBy('fullname')" class="cursor-hand"> Author <b ng-class="forumsTable.params.classes.fullname"></b></th>
+                    <th ng-click="forumsTable.sortBy('createdWhen')" class="cursor-hand"> Created <b ng-class="forumsTable.params.classes.createdWhen"></b></th>
+                    <th ng-click="forumsTable.sortBy('visited')" class="cursor-hand"> Visits <b ng-class="forumsTable.params.classes.visited"></b></th>
+                    <th ng-click="forumsTable.sortBy('totalThemes')" class="cursor-hand"> Themes <b ng-class="forumsTable.params.classes.totalThemes"></b></th>
+                    <th></th>
+                </thead>
+                    
+                <tbody>
+                    <tr ng-repeat="g in forumsTable.$data">
+                        <td>
+                            <button ng-click="goForum(g)" class="btn btn-sm btn-primary glyphicon glyphicon-arrow-right"></button>{{g.forum}}
+                        </td>                            
+                        <td>
+                            {{g.fullname}}    
+                        </td>
+                        <td>
+                            {{g.createdWhen | date:'dd-MM-yyyy HH:mm'}}    
+                        </td>
+                        <td>
+                            {{g.visited}}    
+                        </td>
+                        <td>
+                            {{g.totalThemes}}    
+                        </td>
+                        <td>
+                            <span ng-if="user.id==g.createdBy || teacher">
+                            <button ng-click="deleteForum(g)" class="btn btn-xs btn-danger glyphicon glyphicon-trash"></button>
+                            <button ng-click="editForum(g)" class="btn btn-xs btn-default glyphicon glyphicon-pencil"></button>                            
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            
+            <ul class="pull-left" uib-pagination items-per-page="forumsTable.params.count" total-items="forumsTable.params.total" ng-model="forumsTable.params.page" max-size="forumsTable.params.maxSize" 
+                class="pagination-sm" boundary-links="true" force-ellipses="true" ng-change="forumsTable.paginate()"></ul>
+            <div class="btn-group pull-right">
+                    <button ng-repeat="b in forumsTable.params.counts" type="button" class="btn" ng-class="b===forumsTable.params.count?'btn-primary':'btn-default'" ng-click="forumsTable.setCount(b)">{{b}}</button>
+            </div>
+            
+        </div> 
+    </div>
+
+
+    <div ng-if="cForum && !cTheme">
+        <ul class="breadcrumb">
+            <li><a href="" ng-click="goHome()">FORUMS</a></li>   
+            <li class="active">{{cForum.forum}}</li>
+        </ul>
+        
+        <button ng-if="cForum.buttonEnabled" ng-click="editTheme()" class="btn btn-success glyphicon glyphicon-plus-sign">Create Theme</button>
+        
+        <div ng-if="cForum.description" class="well" compile="cForum.description"></div>
+        
+        <div loading-container="themesTable.$loading">
+            <table class="table table-hover table-responsive">
+                <thead>
+                    <th ng-click="themesTable.sortBy('theme')" class="cursor-hand"> Theme <b ng-class="themesTable.params.classes.theme"></b></th>
+                    <th ng-click="themesTable.sortBy('fullname')" class="cursor-hand"> Author <b ng-class="themesTable.params.classes.fullname"></b></th>
+                    <th ng-click="themesTable.sortBy('createdWhen')" class="cursor-hand"> Created <b ng-class="themesTable.params.classes.createdWhen"></b></th>
+                    <th ng-click="themesTable.sortBy('visited')" class="cursor-hand"> Visits <b ng-class="themesTable.params.classes.visited"></b></th>
+                    <th ng-click="themesTable.sortBy('totalEntries')" class="cursor-hand"> Entries <b ng-class="themesTable.params.classes.totalEntries"></b></th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="g in themesTable.$data">
+                        <td data-title="'Theme'" sortable="'theme'">
+                            <button ng-click="goTheme(g)" class="btn btn-sm btn-primary glyphicon glyphicon-arrow-right"></button> {{g.theme}}
+                        </td>                            
+                        <td data-title="'Author'" sortable="'fullname'">
+                            {{g.fullname}}    
+                        </td>
+                         <td data-title="'Created'" sortable="'createdWhen'">
+                            {{g.createdWhen | date:'dd-MM-yyyy HH:mm'}}    
+                        </td>
+                        <td data-title="'Visits'" sortable="'visited'">
+                            {{g.visited}}    
+                        </td>
+                        <td data-title="'Entries'" sortable="'totalEntries'">
+                            {{g.totalEntries}}    
+                        </td>
+                        <td data-title="''">
+                             <span ng-if="user.id==g.createdBy || teacher">
+                            <button ng-click="deleteTheme(g)" class="btn btn-xs btn-danger glyphicon glyphicon-trash"></button>
+                            <button ng-click="editTheme(g)" class="btn btn-xs btn-default glyphicon glyphicon-pencil"></button>                            
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <ul class="pull-left" uib-pagination items-per-page="themesTable.params.count" total-items="themesTable.params.total" ng-model="tableParams.params.page" max-size="themesTable.params.maxSize" 
+                class="pagination-sm" boundary-links="true" force-ellipses="true" ng-change="themesTable.paginate()"></ul>
+            <div class="btn-group pull-right">
+                    <button ng-repeat="b in themesTable.params.counts" type="button" class="btn" ng-class="b===themesTable.params.count?'btn-primary':'btn-default'" ng-click="themesTable.setCount(b)">{{b}}</button>
+            </div>
+        </div> 
+    </div>
+
+
+    <div ng-if="cForum && cTheme">
+        <ul class="breadcrumb">
+            <li><a href="" ng-click="goHome()">FORUMS</a></li>   
+            <li><a href="" ng-click="goBackForum();">{{cForum.forum}}</a></li>
+            <li class="active">{{cTheme.theme}}</li>
+        </ul>
+        </ul>
+        
+        <button ng-if="cTheme.buttonEnabled" ng-click="createEntry()" class="btn btn-success glyphicon glyphicon-plus-sign">Create Entry</button>
+        <br>
+
+        <div ng-if="cTheme.description" class="well" compile="cTheme.description"></div>
+        <br>
+        
+        <div>
+            <ul style="list-style-type: none;">
+                <li ng-repeat="field in theme_entries" ng-include="'forum_renderer.html'"></li>
+            </ul>
+        </div>
+    </div>
+
+</div>

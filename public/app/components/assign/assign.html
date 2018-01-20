@@ -1,0 +1,92 @@
+<lazy-style href="assets/libs/datetimepicker/datetimepicker.css"></lazy-style>
+        
+<div class="container-fluid" style="padding: 10px">
+<h4>
+    <span ng-if="asgn.idActivity>0">Assign activity id={{asgn.idActivity}} to group </span>
+    <span ng-if="asgn.idActivity===0">Create label to group </span>
+
+            <!-- group selection -->
+            <div class="btn-group" uib-dropdown>                  
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" uib-dropdown-toggle>
+                    <span> {{selgroup.name + ' - ' +selgroup.groupName}} </span>
+                    <span class="caret"></span>
+                    </button>
+                    <ul class="uib-dropdown-menu"  uib-dropdown-menu style="overflow:visible;z-index:1000">                        
+                        <li role="menuitem" ng-repeat="g in user.groups"><a href="" ng-click="changeGroup(g)">{{g.name + ' - ' +g.groupName}}</a></li>
+                    </ul>
+            </div>
+
+</h4>
+
+<p>
+Description
+<br>
+<textarea ui-tinymce="tinymceOpts" ng-model="asgn.instructions"></textarea>
+</p>
+
+<p>
+    Treat as a label entry: <input type="checkbox" ng-model="cbm.isLabel" ng-disabled="asgn.idActivity==0" ng-click="asgn.applyToAll=cbm.isLabel"/>
+</p>
+
+<p>
+    Post Date:
+    <datetimepicker show-weeks="true" hour-step="1" minute-step="5" ng-model="asgn.postDate" 
+                show-meridian="false" date-format="dd-MMM-yyyy" date-options="dateOptions" 
+                date-disabled="disabled(date, mode)" readonly-time="false"></datetimepicker>
+</p>
+
+<div ng-if="!cbm.isLabel">
+
+    <p>
+        Max Attempts: <input type="number" ng-model="asgn.maxAttempts" min="0"/>
+    </p>    
+    
+<p>
+    Period:<br>
+<input type="checkbox" ng-model="cbm.isStartOpen"/>Without start date 
+<input type="checkbox" ng-model="cbm.isEndOpen"/>Without deadline date 
+
+<br>
+<div ng-if="!cbm.isStartOpen">
+Start Date :
+<datetimepicker show-weeks="true" hour-step="1" minute-step="5" ng-model="asgn.fromDate" 
+                show-meridian="false" date-format="dd-MMM-yyyy" date-options="dateOptions" 
+                date-disabled="disabled(date, mode)" readonly-time="false"></datetimepicker>
+</div>
+
+<br>
+
+
+<div ng-if="!cbm.isEndOpen">
+Deadline Date:
+
+<datetimepicker show-weeks="true" hour-step="1" minute-step="5" ng-model="asgn.toDate" 
+                show-meridian="false" date-format="dd-MMM-yyyy" date-options="dateOptions" 
+                date-disabled="disabled(date, mode)" readonly-time="false"></datetimepicker>
+</div>
+<br>
+ 
+
+
+</div> 
+
+
+Units:
+<select ng-model="selunit" ng-options="u.unit for u in units"></select><br>
+
+Parameters:<br>
+<textarea ng-model="asgn.params" rows="4" cols="60"></textarea><br>
+
+Apply to students:
+<input type="checkbox" ng-model="asgn.applyToAll" ng-true-value="1" ng-false-value="0"/> Assign to all students in group
+<br>
+<br>
+<div ng-if="!asgn.applyToAll">
+    Filter <input type="text" ng-model="filter.name"  ng-keypress="($event.which===13) && reloadPicklist()" /><button ng-click="reloadPicklist()" class="btn btn-xs glyphicon glyphicon-search"></button>
+    <picklist name="pktest" size="10"  data-picklist="" data-pick-model="uselected" data-pick-options="v.fullname for v in myusers"/>
+</div>
+<br>
+<br>
+<button class="btn btn-danger glyphicon glyphicon-backward" ng-click="cancel()">Cancel</button>
+<button class="btn btn-success glyphicon glyphicon-save" ng-click="save()" ng-disabled="block"><img ng-if="block" src="assets/img/ajax-loader-squares.gif" />Save</button>
+</div>

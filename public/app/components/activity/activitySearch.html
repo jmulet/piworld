@@ -1,0 +1,213 @@
+<style>
+.myGrid {
+    width: 650px;
+    height: 200px;
+  }
+</style>
+
+<div class="container-fluid" style="margin: 5px">
+<div class="row">
+    <div class="col-md-8 panel">
+<h4>ActivityTube 
+    
+    <div class="btn-group" uib-dropdown ng-if="user.idRole<USER_ROLES.student">
+      
+      <button type="button" class="btn btn-sm btn-success glyphicon glyphicon-plus-sign" uib-dropdown-toggle>
+        <span translate='CREATE'></span>
+        <span class="caret"></span>
+        <span class="sr-only">Custom creation</span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="custom-creation">
+        
+        <li role="menuitem"><a href="" ng-click="create('V')">Activity with video</a></li>
+        <li role="menuitem"><a href="" ng-click="create('Q')">Activity with quizz</a></li>
+        <li role="menuitem"><a href="" ng-click="create('U')">Activity with upload file</a></li>        
+        <li class="divider"></li>
+        <li role="menuitem"><a href="" ng-click="create('A')">Advanced creation</a></li>
+      </ul>
+    </div>
+
+
+</h4>
+<label for='curs'><span translate='CURS'></span></label>
+<select id='curs' ng-options="g for g in groupsAvail" class="input-medium"  ng-model="search.course" ng-change="onChangeCourse()"></select>
+<div style="display: inline-block">
+    <label for='text' translate='TEXT'></label>
+    <input id='text' type="text" ng-model="search.text" ng-keypress="($event.which===13) && doSearch()" class="input-medium"/>
+</div>
+
+<div ng-show="!search.simple" style="display: inline-block">
+   
+<!--    
+<label for='text' translate='CATEGORY'></label>
+<input id='categ' type="text"  class="input-medium" ng-model="search.category"/>
+  
+<label for='title'  translate='TITLE'></label>
+<input id='title' type="text"  class="input-medium" ng-model="search.title"/>
+
+<label for='desc'  translate='DESCRIPTION'></label>
+<input id='desc' type="text" class="input-medium"  ng-model="search.description"/>
+-->
+<label for='ytvideo' title="Contains youtube video"><img src="assets/img/ytvideo.png" height="25"/></label>
+<input id='ytvideo' type="checkbox"  class="input-medium" ng-model="search.hasVideo" ng-change="doSearch()"/>
+<label for='act' title="Contains activity"><img src="assets/img/quiz.png" height="25"/></label>
+<input id='act' type="checkbox"  class="input-medium" ng-model="search.hasAct"  ng-change="doSearch()"/>
+<label for='ggb' title="Contains GeoGebra applet"><img src="assets/img/geogebra.png" height="25"/></label>
+<input id='ggb' type="checkbox"  class="input-medium" ng-model="search.hasGGB"  ng-change="doSearch()"/>
+<label for='simjs' title="Contains simulation"><img src="assets/img/sim.png" height="25"/></label>
+<input id='simjs' type="checkbox"  class="input-medium" ng-model="search.hasSim"  ng-change="doSearch()"/>
+
+
+<label for='author' translate='AUTHOR'></label>
+<input id='author' type="text"  class="input-medium" ng-model="search.author"  ng-keypress="($event.which===13) && doSearch()" />
+</div>
+
+
+
+<button ng-click="doSearch()" class="btn btn-sm btn-primary glyphicon glyphicon-search"><span translate='SEARCH'></span></button>
+<span translate='ADVANCED'></span> <input type="checkbox" class="input-medium"  ng-click="search.simple=!search.simple"/>
+<br>
+
+
+ <table class="table">
+        <thead>
+            <tr>
+                <th ng-if="search.course==='*'"><span translate="LEVEL"></span></th>
+                <!--<th><span translate="CATEGORY"></span></th>-->
+                <th><span translate="ACTIVITIES"></span></th>
+                <th><span translate="AUTHOR"></span></th>
+            </tr>
+                
+       </thead>
+        <tbody >
+            <tr ng-repeat="g in table.chunck" ng-click="changeSelection(g);" ng-class="g.$selected?'active':''">
+          
+            <td ng-if="search.course==='*'">
+                 <small>{{g.levels}}</small>
+            </td> 
+                     
+            <td ng-click="open(g);" class="cursor-hand">                
+                <img ng-if="g.ytid" title="Video" src="assets/img/ytvideo.png" height="25"/>
+                <span ng-if="g.ytqu" title="Video amb preguntes"><b>+</b><img src="assets/img/eq.jpg" height="20"/></span>
+                <img ng-if="g.hasAct" title="Activitat" src="assets/img/quiz.png" height="25"/>
+                <img ng-if="g.ggbid" title="Geogebra" src="assets/img/geogebra.png" height="25"/>    
+                <img ng-if="g.createjs" title="Simulació" src="assets/img/sim.png" height="25"/>
+                <img ng-if="g.activityType==='U'" title="Simulació" src="assets/img/upload.png" height="25"/>
+                <span ng-if="!g.ytid && !g.hasAct && !g.ggbid && !g.createjs && g.activityType!=='U'" class='btn btn-xs btn-success glyphicon glyphicon-play-circle'></span>
+                <span title="{{'id='+g.id}}">{{g.activity}}</span>
+            </td>
+            
+            <td>
+                <small><span ng-if="g.createdBy!==user.username">{{g.createdBy}}</span></small>
+                 
+                 <div class="btn-group" uib-dropdown ng-if="teacher">
+                     <button id="single-button" type="button" class="btn btn-xs btn-primary" uib-dropdown-toggle>
+                        <span class="caret"></span>
+                     </button>
+                     <ul class="uib-dropdown-menu" uib-dropdown-menu role="menu">                             
+                         <li role="menuitem"><a ng-click="edit(selected)" ng-if="user.idRole===USER_ROLES.admin || selected.createdBy===user.username" class="glyphicon glyphicon-pencil"> <span translate="EDIT"></span></a></li>
+                         <li role="menuitem"><a ng-click="ide(selected)" ng-if="user.idRole===USER_ROLES.admin || selected.createdBy===user.username" class="glyphicon glyphicon-star"> IDE</a></li>
+                         <li role="menuitem"><a ng-click="clone(selected)" title="Clone id={{selected.id}}" class="glyphicon glyphicon-copy"> <span translate="CLONE"></span></a></li>
+                         <li role="menuitem"><a ng-href="/rest/activity/pack/{{selected.id}}" ng-if="user.idRole<USER_ROLES.student" title="Pack id={{selected.id}}" class="glyphicon glyphicon-copy"> <span translate="PACK"></span></a></li>
+                         <li class="divider"></li>
+                         <li role="menuitem"><a ng-click="remove(selected)" ng-if="user.idRole===USER_ROLES.admin || selected.createdBy===user.username" class="glyphicon glyphicon-trash"> <span translate="DELETE"></span></a></li>
+                     </ul>
+                 </div>
+                 
+                <span><button ng-if="g.createdBy===user.username" ng-disabled="g.activityType==='U'" ng-class="g.share==0?'btn btn-xs btn-danger glyphicon glyphicon-eye-close':(g.share==1? 'btn btn-xs btn-warning glyphicon glyphicon-eye-open':'btn btn-xs btn-info glyphicon glyphicon-globe')" title="shared" ng-click="switchShare(g)"></button> </span>
+            </td>
+               
+          </tr>
+        </tbody>
+</table>
+   
+<p ng-if="table.data.length===0 && table.initialized"><em><span translate='NORESULTS'></span></em></p>         
+<ul ng-if="table.numPages>1" uib-pagination total-items="table.totalItems" ng-model="table.currentPage" max-size="table.maxSize" class="pagination-sm" boundary-links="true" num-pages="table.numPages" ng-change="table.pageChanged()"></ul>
+         
+            
+
+<!--
+<div loading-container="tableParams.settings().$loading" style="height: 500px; max-height: 500px;">
+      <table ng-table="tableParams" show-filter="false" class="table ng-table-rowselected" ng-table-pagination-scroll infinite-scroll-distance="3" infinite-scroll-disabled="false">
+        <tbody >
+            <tr ng-repeat="g in $data" ng-click="changeSelection(g, $data);"
+                ng-class="g.$selected?'active':''">
+          
+             <td data-title="'LEVEL' | translate" ng-show="search.course=='*'">
+                 <small>{{g.levels}}</small>
+            </td> 
+              
+            <td data-title="'CATEGORY' | translate" sortable="'category'">
+                <small>{{g.category}}</small>
+            </td>
+         
+            <td data-title="'ACTIVITIES' | translate" sortable="'activity'" ng-click="open(g);">
+                
+                <img ng-if="g.ytid" title="Video" src="assets/img/ytvideo.png" height="25"/>
+                <span ng-if="g.ytqu" title="Video amb preguntes"><b>+</b><img src="assets/img/eq.jpg" height="20"/></span>
+                <img ng-if="g.hasAct" title="Activitat" src="assets/img/quiz.png" height="25"/>
+                <img ng-if="g.ggbid" title="Geogebra" src="assets/img/geogebra.png" height="25"/>    
+                <img ng-if="g.createjs" title="Simulació" src="assets/img/sim.png" height="25"/>
+                <img ng-if="g.activityType==='U'" title="Simulació" src="assets/img/upload.png" height="25"/>
+                <span ng-if="!g.ytid && !g.hasAct && !g.ggbid && !g.createjs && g.activityType!=='U'" class='btn btn-xs btn-success glyphicon glyphicon-play-circle'></span>
+                {{g.activity}}
+ 
+            </td>
+            <td data-title="'AUTHOR' | translate" sortable="'createdBy'">
+                <small><span ng-if="g.createdBy!==user.username">{{g.createdBy}}</span></small>
+                 
+                 <div class="btn-group" uib-dropdown ng-if="teacher">
+                     <button id="single-button" type="button" class="btn btn-xs btn-primary" uib-dropdown-toggle>
+                        <span class="caret"></span>
+                     </button>
+                     <ul class="uib-dropdown-menu" uib-dropdown-menu role="menu">                             
+                         <li role="menuitem"><a ng-click="edit(selected)" ng-if="user.idRole===USER_ROLES.admin || selected.createdBy===user.username" class="glyphicon glyphicon-pencil"> <span translate="EDIT"></span></a></li>
+                         <li role="menuitem"><a ng-click="ide(selected)" ng-if="user.idRole===USER_ROLES.admin || selected.createdBy===user.username" class="glyphicon glyphicon-star"> IDE</a></li>
+                         <li role="menuitem"><a ng-click="clone(selected)" title="Clone id={{selected.id}}" class="glyphicon glyphicon-copy"> <span translate="CLONE"></span></a></li>
+                         <li role="menuitem"><a ng-href="/rest/activity/pack/{{selected.id}}" ng-if="user.idRole<USER_ROLES.student" title="Pack id={{selected.id}}" class="glyphicon glyphicon-copy"> <span translate="PACK"></span></a></li>
+                         <li class="divider"></li>
+                         <li role="menuitem"><a ng-click="remove(selected)" ng-if="user.idRole===USER_ROLES.admin || selected.createdBy===user.username" class="glyphicon glyphicon-trash"> <span translate="DELETE"></span></a></li>
+                     </ul>
+                 </div>
+                 
+                <span><button ng-if="g.createdBy===user.username" ng-disabled="g.activityType==='U'" ng-class="g.share==0?'btn btn-xs btn-danger glyphicon glyphicon-eye-close':(g.share==1? 'btn btn-xs btn-warning glyphicon glyphicon-eye-open':'btn btn-xs btn-info glyphicon glyphicon-globe')" title="shared" ng-click="switchShare(g)"></button> </span>
+            </td>
+               
+          </tr>
+        </tbody>
+      </table>
+</div>
+ 
+-->
+</div>
+
+    
+<div class="col-md-4 panel panel-default" style="height:100%">
+    <div class="panel-heading panel-info"><h4>{{selected.activity}}</h4></div>
+    <div class="panel-body" ng-if="selected">
+        <img class="img-responsive center-block rborder cursor-hand" ng-if='selected.icon' ng-src="{{selected.icon}}"  ng-click="open(selected)" width="250px" alt="pic"/>
+        <p compile="selected.description"><p>        
+        <hr>
+        <table>
+            <tr ng-if="selected.ytid"><td><img src="assets/img/video.jpeg" height="50"/> <b>Activitat amb vídeo</b></td>  <td><span ng-if="selected.ytqu"> <img src="assets/img/eq.jpg" height="50"/> <em>: Conté preguntes incrustades</em></span></td></tr>
+            <tr ng-if="selected.ggbid"><td colspan="2"><img src="assets/img/geogebra.png" height="50"/> <b>Activitat amb applet de geogebra</b></td></tr>
+            <tr ng-if="selected.hasAct"><td colspan="2"><img src="assets/img/quiz.png" height="50"/> <b>Activitat amb exercicis</b></td></tr>
+            <tr ng-if="selected.hasSim"><td colspan="2"><img src="assets/img/sim.png" height="50"/> <b>Activitat amb joc/simulació JS</b></td></tr>
+            <tr><td><span translate="ID"></span>:</td>  <td>{{selected.id}}</td></tr>
+            <tr><td><span translate="CATEGORY"></span>:</td>  <td>{{selected.category}}</td></tr>
+            <tr><td><span translate="DIFFICULTY"></span>: </td>  <td> <span uib-rating ng-model="selected.difficulty" read-only="true" state-on="'glyphicon-fire red'" state-off="'glyphicon-fire gray'" max="4"></span></td></tr>
+            <tr><td><span translate="RATING"></span>: </td>  <td><span uib-rating ng-model="selected.rating" read-only="true" max="5" state-on="'glyphicon-star orange'" state-off="'glyphicon-star gray'"></span> {{selected.votes}} <span translate="VOTES"></span></td></tr>
+            <tr><td><span translate="AUTHOR"></span>:</td>  <td> <em> {{selected.createdBy}} - {{selected.fullname}}</em></td></tr>
+            <tr><td><span translate="CREATED"></span>: </td>  <td>{{selected.createdWhen | date:'dd-MM-yyyy HH:mm'}}</td></tr>
+            <tr><td><span translate="VISUALIZATIONS"></span>: </td>  <td><span class="lcd" ng-bind="selected.counter"></span></td></tr>
+        </table>
+        <hr>
+        <center>
+        <button ng-click="open(selected)" title="Play id={{selected.id}}" class="btn btn-success glyphicon glyphicon-play-circle"><span translate="PLAY"></span></button>
+        <button ng-click="assign(selected)" title="Assign id={{selected.id}}" class="btn btn-info glyphicon glyphicon-arrow-left" ng-if="user.idRole<USER_ROLES.student"><span translate="ASSIGN"></span></button><br><br>
+        </center>
+    </div>
+</div>
+
+</div>
+</div>

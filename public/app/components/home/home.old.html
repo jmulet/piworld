@@ -1,0 +1,420 @@
+ 
+<lazy-style href="assets/libs/mathquill-0.10.1/mathquill.min.css"></lazy-style>
+
+<script type="text/ng-template" id="category_renderer.html">
+    <div style="display: table-layout">
+        <div style="display: table-cell; width: 30%; vertical-align: top;">
+            <span class="glyphicon glyphicon-menu-right">{{field.key}}</span>
+        </div>
+        <div style="display: table-cell; width: 70%; vertical-align: bottom;">
+            <progressbar ng-if="field.tpc" value="field.tpc" min="0" max="100" type="{{field.tpc<30?'danger':(field.tpc<60?'warning':'success')}}">
+                <span style="color:black; white-space:nowrap;">
+                    {{field.tpc}}%
+                </span>
+            </progressbar>
+        </div>
+    </div>
+  <ul ng-if="field.children" style="list-style-type: none; padding-left: 9px">
+      <li ng-repeat="field in field.children" ng-include="'category_renderer.html'">
+      </li>
+  </ul>
+</script>
+ 
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top" style="min-height: 60px;">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a href="" ng-click="go('home')" title="{{user.fullname}}">
+                <img style="display:inline;max-width:41px; margin-top: 4px;" src="assets/img/logo.png" width="40" height="40"/>                
+            </a>           
+            <strong>&#960;World</strong>            
+          
+        </div>
+        
+        <div class="navbar-collapse collapse" uib-collapse="navCollapsed">          
+            <ul class="nav navbar-nav navbar-right">
+                <li><a ng-click="go('home')"><span class="glyphicon glyphicon-home"></span> <span class="navbar-label" translate='HOME'></span></a></li>
+ 
+                <li>
+                    <a href="#" ng-click="" ui-sref="home.activitysearch">
+                        <span class="glyphicon glyphicon-edit"></span> 
+                        <span class="navbar-label" translate="ACTIVITIES"></span></a>
+                </li>
+ 
+                <li uib-dropdown>
+                            <a href="#" uib-dropdown-toggle>
+                                <span class="glyphicon glyphicon-paperclip"></span>
+                                 <span class="navbar-label" translate="TOOLS"></span>
+                                <b class="caret"></b>
+                            </a>
+                            <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                <li><a ui-sref="home.kahootit({kahootId: 0})"> <span class="glyphicon glyphicon-bookmark"></span>Kahoot it!</a></li>
+                                <!-- <li><a ui-sref="home.notebook"><span class="glyphicon glyphicon-book" translate="NOTEBOOK"></span></a></li>-->
+                                 <li><a ui-sref="home.forum"> <span class="glyphicon glyphicon-comment" translate="FORUM"></span> </a></li>                              
+                                 <li><a href="#" ng-click="" ui-sref="home.tools"> <span class="glyphicon glyphicon-wrench">Geogebra WEB 5</span> </a></li>                            
+                            </ul>
+                </li>
+                 
+                <li><a href="#" ng-click="" ui-sref="home.help">
+                        <span class="glyphicon glyphicon-question-sign"></span> <span class="navbar-label" translate="HELP"></span></a>
+                </li>
+ 
+                <li uib-dropdown>
+                    <a href="#" uib-dropdown-toggle>
+                        <img class="pw-avatar-{{user.uopts.avatar||0}}" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAQMAAACQp+OdAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAA9JREFUeNpjYBgFo4B8AAACQAAB4E0dRAAAAABJRU5ErkJggg==" title="{{user.id}} - {{user.fullname}}" width="40" height="40" style="display:inline;max-width:40px; margin-top: -12px;"/>
+                        <span class="navbar-label" ng-bind="user.username"></span>
+                        <b class="caret"></b>                        
+                    </a>
+                    <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                          <li><a ng-click="changeAvatar()"><span class="glyphicon glyphicon-apple" translate="AVATAR"></span></a></li>
+                        <li><a ng-click="changePwd()"><span class="glyphicon glyphicon-user" translate="CHANGE_PASSWORD"></span></a></li>
+                        <li class="separator"></li>
+                        <li><a ng-click="logout()"><span class="glyphicon glyphicon-off" translate="EXIT"></span> </a></li>    
+                        <li role="separator" class="divider"></li>
+                        <li class='text-center'>
+                            <button class='btn btn-xs' ng-click="changeLanguage('ca')"><img src='assets/img/ca.png'/></button>
+                            <button class='btn btn-xs' ng-click="changeLanguage('es')"><img src='assets/img/es.png'/></button>
+                            <button class='btn btn-xs' ng-click="changeLanguage('en')"><img src='assets/img/en.png'/></button>
+                        </li>
+                    </ul>
+                   
+                </li>     
+            </ul>
+        </div>
+        
+         
+    </div>
+</nav>
+
+<div growl reference="home"></div>
+
+<div ui-view="" class="fade-animation">
+
+    <div class='container-fluid' style="padding: 2px">
+        <div class='row-fluid' >
+         
+            
+            <div ng-class="leftClass" style="padding: 4px; margin: 0px">
+ 
+                    <div class='prow'>
+                        <pwc-welcome user="user" teacher="data.selectedGroup.creatorFullname"></pwc-welcome>
+                    </div>
+                 
+                    <div class='prow'>
+                        <pwc-scores user="user"></pwc-scores>
+                    </div>
+                 
+
+               <div class="panel  panel-default panel-transparency" style="margin-bottom: 4px;">
+                        <div class="panel-heading">
+                            <h6 class="panel-title">
+                                <button ng-class="tgs.users?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.users = !tgs.users"></button>
+                                {{'ONLINE'| translate}}  <span class="badge">{{onlineusers.length}}</span>
+                                
+                                 <span class="pull-right">
+                                    <button ng-class="orderByParticipants=='-lastLogin' ? 'glyphicon glyphicon-sort-by-attributes' : 'glyphicon glyphicon-sort-by-alphabet'" ng-click="swithOrderByParticipants()"></button>                                    
+                                </span>
+                            </h6>
+                        </div>
+                        <div class="panel-body" ng-if='tgs.users' style="max-height: 300px; overflow-y: scroll;">
+                          <table class="table-responsive table-hover" style="table-layout: fixed">
+                                <tr class="list-unstyled" ng-repeat="u in participants | orderBy:orderByParticipantsFunc track by u.id" style="border-spacing: 5px 5px" ng-class="u.online?'bg-success':''">
+                                <!--<td>
+                                    <button ng-click="sendNotification(u.id, u.fullname)" ng-disabled="!u.online"  ng-class="u.online?'btn btn-sm btn-success glyphicon glyphicon glyphicon-option-vertical':'btn btn-sm btn-default glyphicon glyphicon glyphicon-option-vertical'"></button>                                
+                                    <br><br><br>
+                                </td>
+                                -->
+                                <td>   
+                                    <img class="pw-avatar-{{u.uopts.avatar||0}}" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAQMAAACQp+OdAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAA9JREFUeNpjYBgFo4B8AAACQAAB4E0dRAAAAABJRU5ErkJggg==" title="{{u.id}} - {{u.fullname}}" width="40" height="40" style="display:inline;max-width:40px; margin-top: -12px;"/>                                  
+                                <br><br>
+                                </td>
+                                <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <span>{{u.fullname}}</span><br>
+                                <span ng-if="u.lastLogin" style="font-size: small">{{u.lastLogin | timeDHM}}</span>
+                                <span ng-if="!u.lastLogin" style="font-size: small" translate="NEVER"></span>
+                                <br><br>
+                                </td>
+                                
+                            </tr>
+                        </table>
+                        </div>
+                     <div class="panel-footer">
+                          
+                     </div>
+                </div>
+
+
+
+
+            </div> <!--end left column-->
+
+
+            <div id="maincol" ng-class="mainClass" style="padding: 4px; margin: 0px">
+
+                <div class='prow'>
+                <div class="panel panel-default panel-transparency" style="margin-bottom: 4px;" ng-if="tgs.groups">
+                    <div class="panel-heading">
+                        <h6 class="panel-title">
+                            <button class="pull-right btn btn-xs glyphicon glyphicon-remove" ng-click="tgs.groups = !tgs.groups"></button>
+                            <span translate="GROUPS_IN_CENTRE"></span> {{user.schoolName}}</h6>                                
+                    </div>
+                    <div class="panel-body">
+
+                        <alert ng-if="user.idRole === USER_ROLES.student && myGroups.length === 0" type="danger">
+                            <p><b translate="ENROLL_WARN0"></b> <span translate="ENROLL_WARN1"></span> </p>                         
+                        </alert>
+
+
+                        <table class="table table-striped table-responsive">
+                            <thead class="header">
+                            <td><span translate="GROUP"></span></td><td><span translate="SUBJECT"></span></td><td><span translate="TEACHER"></span></td><td>  </td>                         
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="g in groupsCenter track by g.idGroup">
+                                    <td>{{g.groupName}}</td> <td>{{g.name}}</td>  <td>{{g.fullname}}</td>
+                                    <td><button type='button' class="btn btn-xs btn-info" ng-if="!g.edit && !g.enrolled" ng-click="enroll(g)"><span translate="ENROLL"></span></button>
+                                        
+                                        <button ng-if="g.enrolled" class="btn btn-xs btn-danger glyphicon glyphicon-remove" ng-click="unenroll(g)"><span translate="UNENROLL"></span></button>
+                                        <div ng-if="g.edit">
+                                            <input type="password" placeholder="GROUP PASSWORD" ng-model="g.enrollPwd"/>
+                                            <button type='button' class="btn btn-xs btn-warning glyphicon glyphicon-remove" title="cancel" ng-click="g.edit = !g.edit"></button>
+                                            <button type='button' class="btn btn-xs btn-success glyphicon glyphicon-send" title="process" ng-click="enroll(g);">
+                                        </div></td>                         
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+                </div>
+                
+                <div class='prow'>
+                <div ng-if="user.groups.length" class="panel panel-default panel-transparency" style="margin:0px; padding:0px">
+                      <div class="panel-heading">                       
+                         
+                        <button title="Refresh" class="btn btn-xs glyphicon glyphicon-refresh" ng-click="reload(true)"></button>
+                        <button title="Go to active unit" class="btn btn-xs btn-warning glyphicon glyphicon-star-empty" ng-click="gotoActiveUnit()"></button> 
+                        <button title="Expand/Collapse units" class="btn btn-xs btn-primary glyphicon" ng-class="tgs.globalCollapse?'glyphicon-collapse-down':'glyphicon-collapse-up'" ng-click="toggleGlobalCollapse()"></button>   
+                        <!--
+                        <select  ng-options="g.groupName + ' - ' + g.name for g in user.groups" ng-model="data.selectedGroup"  ng-change="onChangeGrp(true)" ng-value="g"></select>
+                        -->
+                      <div class="btn-group" uib-dropdown>
+                            <button type="button" class="btn btn-xs btn-default dropdown-toggle" uib-dropdown-toggle >
+                                <span style="max-width: 300px"><span ng-style="{'background-color': data.selectedGroup.groupYear===currentYear?'lightgreen':'lightsalmon'}">
+                                        {{data.selectedGroup.groupYear +"/"+ (data.selectedGroup.groupYear+1)}}</span>{{": "+data.selectedGroup.groupName}}</span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+                                <li ng-repeat="g in user.groups track by g.idGroup">
+                                    <a href="" ng-click="data.selectedGroup=g;onChangeGrp(true);">
+                                        <span  ng-style="{'background-color': g.groupYear===currentYear?'lightgreen':'lightsalmon'}">
+                                            {{g.groupYear +"/"+ (g.groupYear+1)}} </span>{{": "+g.groupName}}</a>
+                                </li>
+                            </ul>
+                        </div>  
+                      </div>
+                    
+                    <div id='maincol-scroll' class='maincol-scroll'>
+                    <div ng-if='tgs.assignments' class="panel-body" style="margin:0px; padding:0px">
+                        <div class="list-group" style="margin:0px">
+                               
+                                <div class="list-group-item" style='padding: 0px;' ng-repeat="u in units track by u.id">
+                                    <div ng-if="$index>0 || u.assignments.length">
+                                    <div ng-class="data.selectedGroup.currentUnit===u.id?'list-group-item-heading unit-current':'list-group-item-heading unit-visible'">
+                                        <h5><button ng-click="collapse(u)" ng-class="u.collapsed?'btn btn-xs glyphicon glyphicon-collapse-up':'btn btn-xs glyphicon glyphicon-collapse-down'"></button>
+                                            <!--<span translate="UNIT"></span> {{$index}}. -->
+                                            <span ng-if="!u.edit">{{u.unit | uppercase}}</span>
+                                            <span ng-if="u.edit"><input type="text" ng-model="u.unit"/></span>
+                                        <span class="pull-right">
+                                               <span ng-class="data.selectedGroup.currentUnit===u.id?'glyphicon glyphicon-star':''"></span>                              
+                                        </span>
+                                        </h5>
+                                    </div>
+                                   
+                                         <ul class="list-unstyled" ng-hide="u.collapsed">
+                                            <li ng-repeat="a in u.assignments track by a.id">
+                                                
+                                                <div ng-if="data.selectedGroup.currentUnit===u.id || $first || u.showAll || u.order==0" 
+                                                    ng-class="a.idActivity===0? 'asgn' : (a.open? (a.collapsed? 'asgn asgn-green':'asgn asgn-yellow'): 'asgn asgn-gray')"> 
+                                                   
+                                                    <span ng-if="a.idActivity > 0">     
+                                                        <span class="badge">{{a.idActivity}}</span>
+                                                        <b>{{a.activity}}</b>
+                                                        <div class="pull-right">
+                                                            <span ng-if="!a.assigned" class="picoin" title="{{a.score + ' '+a.vscore+' '+ a.uscore}}"> {{a.score + a.vscore+ a.uscore}}</span> <!--student-->
+                                                            <button ng-click="goAsgn(a, u.assignments)" class="btn-xs glyphicon glyphicon-play-circle" ng-class="a.open===1?'btn-success':'btn-default'"></button>
+                                                        </div>
+                                                    </span> 
+                                                    
+                                                    <div style="background-color: white">
+                                                        <table style="width:100%;">
+                                                           <tr>
+                                                               <td><img class="rborder cursor-hand" ng-if='a.icon' ng-src="{{a.icon}}" width="150px" alt="pic" ng-click="goAsgn(a, u.assignments)"/></td>
+                                                               <td><div style="padding-left: 5px" compile='a.instructions'></div></td>                                                     
+                                                           </tr>
+                                                       </table>
+                                                        
+                                                        <div ng-if="a.idActivity > 0 && ( (a.fromDate || a.toDate) || a.maxAttempts>0 )" style="border-top: solid; border-color: #aaa; height: 20px">
+                                                            <span ng-if="a.fromDate || a.toDate"><i translate='PERIODE'></i>: {{a.fromDate| date:"dd-MM-yyyy" }} &#8594; {{a.toDate| date:"dd-MM-yyyy"}}</span>
+                                                            <span ng-if="a.open===1 && a.maxAttempts===0" class="pull-right" translate="UNLIMITED_ATTEMPTS"></span>
+                                                            <span ng-if="a.open===1 && a.maxAttempts>0" class="pull-right" translate="YOU_HAVE_ATTEMPTS" translate-values="{remains: (a.maxAttempts-a.doneAttempts)}"></span>                                                                                                                    
+                                                            <span ng-if="a.open!=1" class="pull-right" translate="CLOSED" style='color: red;'></span>                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </li> 
+                                            
+                                            
+                                            <div ng-if="data.selectedGroup.currentUnit!==u.id && u.assignments.length>1 && !u.showAll && u.order!=0" class="text-center">
+                                                <button class="glyphicon glyphicon-menu-down form-control" ng-click="showAllIn(u)"> <span translate="SHOW_MORE"></span></button>
+                                            </div>
+                                           
+                                        </ul>
+                                        
+                                     </div>
+                                </div>
+                        </div>
+
+                        
+                    </div>
+                    
+                    
+                    
+                    <div class="panel-body" ng-if='tgs.assignments'>
+                         <div style="height:80%;position:relative;overflow:auto;">
+
+                           
+                        </div>                            
+                    </div>
+
+                </div> <!--end maincol-scroll-->
+                </div>
+                </div>
+            </div> <!--end center column-->
+
+        <div ng-class="rightClass" style="padding: 4px; margin: 0px">
+            <div class='prow'>
+                <div class="panel  panel-default panel-transparency" style="padding: 4px; margin: 2px">
+                    <div class="panel-heading">
+                        <h6 class="panel-title">
+                            <button ng-class="tgs.chat?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.chat = !tgs.chat"></button>
+                            <span translate="CHAT"></span>
+                            <button ng-class="rightExpanded?'pull-right btn btn-xs glyphicon glyphicon-resize-small visible-lg  visible-md':'pull-right btn btn-xs glyphicon glyphicon-resize-full visible-lg  visible-md'" ng-click="toggleRight()"></button>
+                             
+                        </h6>
+                    </div>
+                       <div class="panel-body" ng-if="tgs.chat" ng-init="tgs.chat=1" style="padding: 0px; margin: 0px">
+                        
+                            <button ng-if="!chat.all" class="glyphicon glyphicon-menu-up form-control" ng-click="loadPreviousChats()"><span translate="PREVIOUS"></span></button>
+                            <div id="chat-scroll" style="max-height: 300px;overflow-y: scroll;">
+                                <div ng-repeat="d in chat.dates track by $index">
+                                    <p class="text-center text-info">{{d.date}}</p>
+                                    <div class="chat-entry" ng-repeat="x in d.list" ng-style="{'background': lightColor(x.idUser)}">                                        
+                                        <p ng-if="x.fullname!==user.fullname" style="font-size: small;">
+                                            <center>
+                                            <img class="pull-left pw-avatar-{{x.uopts.avatar||0}}" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAQMAAACQp+OdAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAA9JREFUeNpjYBgFo4B8AAACQAAB4E0dRAAAAABJRU5ErkJggg==" title="{{user.id}} - {{user.fullname}}" width="20" height="20" style="display:inline;max-width:20px;"/>
+                                            {{x.fullname}}</center>
+                                        </p>                                 
+                                        <p>
+                                        <span compile="x.msg"></span> 
+                                        <span class="pull-right" style="font-size: small; font-name: 'Arial'">{{x.when | date:'HH:mm'}}</span>
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                    </div>
+                     <div class="panel-footer" ng-if="tgs.chat && canSendChat">
+                         <div class="input-group">
+                            <input class="form-control" type="text" ng-model="chat.input" ng-keyup="$event.keyCode == 13 && xat()"/>  
+                            <span class="input-group-btn">
+                                <button ng-click="xat()" class="btn btn-sm btn-info glyphicon glyphicon-send"></button>                        
+                            </span>
+                         </div>
+                     </div>
+                     
+                </div>
+                </div>
+            
+                <div class='prow'>
+                <div class="panel  panel-default panel-transparency" >
+                    <div class="panel-heading">
+                        <h6 class="panel-title">
+                            <button ng-class="tgs.problem?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.problem = !tgs.problem"></button>
+                            <span translate="PROBLEM_OF_DAY"></span> 
+                         <span  class="pull-right"><a href="" ng-click="showChallenges()">Historial</a></span>
+                        </h6>
+                       
+                    </div>
+                    <div class="panel-body" ng-if="tgs.problem" ng-style="{'background': challenge.formulation?'#FFE4B5':'#FFFFFF'}">
+                        <div ng-if='challenge'>
+                            <div compile="challenge.formulation"></div>
+                            <hr>
+                            <div ng-if="challenge.userAnswer">
+                                <p><em>La teva resposta:</em> <button ng-click="modifyChallenge()" ng-if="challenge.userAnswer.valid==null">Modifica</button> 
+                                    <img src="assets/img/tick.png" ng-if="challenge.userAnswer.valid===1"/>
+                                    <img src="assets/img/cross.png" ng-if="challenge.userAnswer.valid===0"/>
+                                </p>
+                                <p compile="challenge.userAnswer.answer"></p>
+                                
+                            </div>
+                            <div ng-if="!challenge.userAnswer">
+                                <p class="lcd">Recompensa: {{challenge.score}} <img src="assets/img/picoin-xs.png"> i <img src="assets/img/badge-5.png" height="30"/></p>
+                                <p><em>Envia la teva resposta:</em> <button ng-click="sendChallenge()">Envia</button> </p>
+                                <textarea class="form-control" style="width: 100%;" type="text" ng-model="challenge.myanswer" rows="2"></textarea>
+                                 
+                            </div>
+                        </div>
+                        <div ng-if='!challenge'><em>No hi ha reptes.</em></div>
+                        
+                       
+                    </div>
+                </div>
+                </div>
+            
+            
+                <div class='prow'>
+                <div class="panel  panel-default panel-transparency" >
+                    <div class="panel-heading">
+                        <h6 class="panel-title">
+                            <button ng-class="tgs.famouseqn?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.famouseqn = !tgs.famouseqn"></button>
+                            <span translate="FAMOUS_EQN"></span>                                 
+                        </h6>
+                    </div>
+                    <div class="panel-body" ng-if='tgs.famouseqn'>
+                         <center><div katex expr="randomEqn.eqn"></div> <em><a ng-href='{{randomEqn.url}}' target='_blank'>{{randomEqn.title}}</a></em></center>
+                    </div>
+                </div>
+                </div>
+                
+                <div class='prow'>
+                <div class="panel  panel-default panel-transparency">
+                    <div class="panel-heading">
+                        <h6 class="panel-title">
+                            <button ng-class="tgs.quote?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.quote = !tgs.quote"></button> 
+                             <span translate="QUOTE"></span>                                 
+                        </h6>
+                    </div>
+                    <div class="panel-body" ng-if="tgs.quote">
+                        <blockquote><p> {{randomQuote.quote}} </p><footer> {{randomQuote.author}}</footer></blockquote>                        
+                    </div>
+                </div>
+                </div>
+                
+            
+            </div> <!--end right column -->
+        </div> <!--end row-->
+    </div> <!--end container-->
+
+</div>
+

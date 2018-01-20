@@ -1,0 +1,16 @@
+<div class="container-fluid">
+    
+    <h4>PokeMath</h4>
+    <center>
+    <div id="pokemap" style="width:90%; height: 700px">        
+    </div>
+    </center>
+    
+    <h4>Captures</h4>
+    <ul class="list list-unstyled list-inline">
+        <li ng-repeat="c in captures track by $index">
+            <img ng-src="{{c}}"/>
+        </li>
+    </ul>
+    
+</div>

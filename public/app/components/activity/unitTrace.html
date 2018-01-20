@@ -1,0 +1,169 @@
+<div class="container-fluid" ng-keyup="($event.which === 27)? hideOverlays() : 0" style="padding:10px">
+    
+    <!-- overlay for question activities-->
+    
+    <div ng-if="tgs.overlayQ" class="container" id="ut-overlay" style="position: fixed; top: 10%; left: 5%; bottom: 0; right: 10%; height:90%; width:80%; background-color: rgba(255,255,255,0.9); z-index: 10000; border: 1px solid gray;"
+          >
+        <div style="width: 100%; height: 25px;">
+            <button ng-click="tgs.overlayQ=false;" class="btn btn-sm btn-danger pull-right">x</button>
+        </div>
+        <div class="row" style="overflow: auto;position: absolute; top: 25px; bottom:10px; left: 0%; height: 94%; width:100%">
+            <div class="col-md-2">
+                <h4>Attempts</h4>
+                        <table class="table table-responsive table-hover">
+                            <thead>
+                                <tr>
+                                    <th>id</th><th><span translate="DAY"></span></th><th>Pts</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-click="fetchReview(atmp.id)" ng-repeat="atmp in attempts.a" style="cursor:pointer;">
+                                 <td>                                   
+                                     {{atmp.id}}
+                                </td>
+                                <td>                                   
+                                     {{atmp.attemptStart| date:'dd-MM-yyyy HH:mm'}}
+                                </td>
+                                
+                                <td>
+                                    {{atmp.score}}
+                                </td>                                
+                            </tr>
+                            </tbody>
+                        </table>                                
+            </div>
+            <div class="col-md-9">
+                <h4>Review {{attempt.id}}</h4>
+                
+                <ul>
+                    <li><b>{{'STUDENT' | translate}}:</b> {{attempt.fullname}}</li>
+                    <li><b>{{'START' | translate}}:</b> {{attempt.start}}</li>
+                    <li><b>{{'LAPSED' | translate}}:</b> {{attempt.seconds | timeHMS}}</li>
+                    <li><b>{{'FINISHED' | translate}}:</b> <span compile="attempt.done | correct"></span></li>
+                    <li><b>{{'LEVEL' | translate}}:</b> {{attempt.level}}</li>
+                    <li><b>{{'FINALSCORE' | translate}}:</b> {{attempt.score}}</li>
+                </ul>
+
+                <div id="ut-overlay-questions">
+                <h4>{{'QUESTIONS' | translate}}:</h4>
+                <ol>
+                    <li ng-repeat="q in review">
+                        <h5><span compile="q.question"></span> <small>[{{q.seconds | timeHMS}}]</small></h5> 
+                        <p>
+                                <span ng-if="q.askHelp=='S'">{{'ASKHELP' | translate}}: <span compile="q.askHelp | correct" style="font-weight:bold;"></span> -- </span>
+                                <span ng-if="q.askTheory=='S'">{{'ASKTHEORY' | translate}}: <span compile="q.askTheory | correct" style="font-weight:bold;"></span>  </span>
+                                <span ng-if="q.askSolution=='S'">{{'ASKSOLUTION' | translate}}: <span compile="q.askSolution | correct" style="font-weight:bold;"></span> --  </span>
+                        </p>
+                        
+                        <ul ng-repeat="a in q.answers">
+                            <li><span compile="a.answer"></span> -- Valid: <span compile="a.isCorrect | correct" style="font-weight:bold;"></span></li>
+                        </ul>
+
+                </ol>
+                </div>
+                <br>
+        </div>
+        </div>
+    </div>
+    
+    <!--overlay for videos-->
+    
+    
+    <div ng-if="tgs.overlayV" class="container" id="ut-overlay" style="position: fixed; top: 10%; padding:10px; left: 5%; bottom: 0; right: 10%; height:90%; width:80%; background-color: rgba(255,255,255,0.95); z-index: 10000; border: 1px solid gray;"
+       >
+        <div style="width: 100%; height: 25px;">
+            <button ng-click="tgs.overlayV=false;" class="btn btn-sm btn-danger pull-right">x</button>
+        </div>
+        <div class="row" style="overflow: auto;position: absolute; top: 25px; bottom:10px; left: 0%; height: 94%; width:100%">
+            <div class="col-md-3">
+                <h4>Attempts</h4>
+                        <table class="table table-responsive table-hover">
+                            <thead>
+                                <tr>
+                                    <th><span translate="DAY"></span></th><th>Pts</th><th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-click="fetchVideo(atmp)" ng-repeat="atmp in attempts.v" style="cursor:pointer;">
+                                 <td>                                   
+                                     {{atmp.login| date:'dd-MM-yyyy HH:mm'}}
+                                </td>                                
+                                <td>
+                                    {{atmp.vscore}}
+                                </td>                                
+                                <td>
+                                    {{atmp.vseconds | timeHMS}}
+                                </td>                                
+                            </tr>
+                            </tbody>
+                        </table>                                
+            </div>
+            <div class="col-md-9">
+                <h4>Review  {{attempt.login| date:'dd-MM-yyyy HH:mm'}}</h4>
+                 
+                <span ng-if='attempt.quizz.length<=0'><em>No conté preguntes incrustades</em></span>
+                
+                 <table  ng-if='attempt.quizz.length' class="table table-striped table-responsive">
+                    <tr>
+                        <th>Question</th>
+                        <th>Answer</th>
+                        <th>RightAnswer</th>
+                        <th>Score</th>
+                    </tr>
+                    <tr ng-repeat="f in attempt.quizz">
+                        <th><span compile="f.formulation"></span></th>
+                        <th><span compile="f.answer"></span></th>
+                        <th><span compile="f.rightAnswer"></span></th>
+                        <th><span ng-if="f.isValid">+</span><span ng-if="!f.isValid">-</span>{{f.score}} <span class="{{f.isValid?'glyphicon glyphicon-ok btn-success':'glyphicon glyphicon-remove btn-danger'}}"></span></th>
+                    </tr>
+                </table>
+        </div>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    <!--- MAIN PAGE-->
+    
+    <h5>Report of activity in Unit #{{idUnit}}: {{unit.unit}}
+    <button class="btn btn-small btn-primary glyphicon glyphicon-print" print-btn></button>
+    </h5>
+    
+    <h5>Filter participants <input type="text" ng-model="filterNames" ng-blur="updateAccomplished()" ng-keydown="updateAccomplished()" ng-model-options="{debounce: 250}"/> 
+    Done {{accomplished}}%
+    </h5>
+    
+  <div print-section>  
+    <h5 print-only>Report of activity in Unit #{{idUnit}}: {{unit.unit}}</h5>
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <td>
+                    Nom
+                </td>
+                <td ng-repeat="a in unit.activities" title="{{a.activity}}" style="cursor:pointer">
+                    {{a.activityType}} {{a.idActivity}} <button ng-click="sendRemainder(a)" class="btn btn-warning btn-sm pull-right glyphicon glyphicon-envelope" title="Send remainder for this activity"></button>
+                        
+                </td>
+                 <td>
+                    Total
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="s in students | filter: myFilter">
+                    <td>{{s.fullname}}</td>                 
+                    <td ng-repeat="a in s.activities track by $index" style="{{a.enabled? (a.score>0?'background:lightgreen':'background:lightcoral'): 'background:grey'}}">
+                         {{a.score || -1}}
+                         <button ng-if="a.score>0 && a.activity" class="btn btn-xs btn-success glyphicon glyphicon-info-sign pull-right" ng-click="showAttempts(s, $index)"> {{a.activity.score}}</button>
+                         <button ng-if="a.score>0 && a.video" class="btn btn-xs btn-success glyphicon glyphicon-facetime-video pull-right" ng-click="showVideo(s, $index)"> {{a.video.score}}</button>
+                    </td>
+                    <td>{{s.total}}</td>    
+            </tr>
+        </tbody>                
+    </table>
+  </div>
+    
+</div>

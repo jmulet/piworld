@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{title}} <span class="lcd push-right">score: {{score}}</span></h3>
+</div>
+<div style="padding: 10px; max-height: 400px; height: 300px; overflow-y: scroll;">
+    <div ng-repeat="cc in limits" class="panel panel-primary">
+        <div class='panel-heading'>
+            <span class="picoin lcd"> &gt;{{cc}}</span>
+        </div>
+        <div class='panel-body'>
+        <div style="height: 100px; overflow-x: scroll;">    
+          <div ng-repeat="slide in avatars| filter:{ c: $index }" style="display:inline;height:70x;">  
+              <img class="pw-avatar-{{slide.image}}" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAQMAAACQp+OdAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAA9JREFUeNpjYBgFo4B8AAACQAAB4E0dRAAAAABJRU5ErkJggg=="  width="40px" height="40px" ng-click='onclick(slide)'
+                   ng-class="score<cc?'opaque':(slide===selected?'shadow':'')"/>    
+          </div>
+        </div>
+        </div>
+        <br>
+    </div>
+
+    <!--
+<div ng-if="score>=cc[2]">
+    <img ng-src="assets/img/avatar/custom/{{user.id}}.png?dc={{dc}}" width="64px" height="64px" ng-click='onclick()' alt="Custom"
+        ng-class="score<cc[2]?'opaque':(custom.image===selected.image?'shadow':'')"/>       
+    
+    <div class="drop-box" style="display: inline-block" ngf-drop="upload($files)" ngf-max-size="20000000"  ngf-drag-over-class="dragover"  ngf-multiple="false" ngf-pattern="'image/*'">
+          <span>Drag image (64x64).png ... {{uploadPercent}}</span>   
+    </div>
+<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+    
+</div>
+    -->
+    
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning glyphicon glyphicon-remove" ng-click="cancel()"><span translate="CANCEL"></span></button>
+    <button class="btn btn-primary glyphicon glyphicon-ok" ng-click="ok()"><span translate="ACCEPT"></span></button>    
+</div>

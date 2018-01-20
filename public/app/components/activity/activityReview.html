@@ -1,0 +1,59 @@
+<h3><button class="btn btn-danger glyphicon glyphicon-hand-left" ng-click="close()"></button>{{'REVIEWOFACTIVITY' | translate}}  #{{attempt.idActivity}}. {{attempt.activity}}</h3>
+
+<div ng-repeat="atmp in attempts.v">
+    <table class="table">
+        <tr>
+            <td>
+                <span translate="DAY"></span>: {{atmp.login| date:'dd-MM-yyyy HH:mm'}}
+            </td>
+            <td>                                     
+                <span ng-if="!atmp.idAssignment"><i>FREE</i></span>
+                <span ng-if="atmp.idAssignment>0 && atmp.idAssignment=== idAssignment"><i>ASSIGNED</i></span>
+            </td>
+            <td>
+                <span translate="SCORE"></span>: {{atmp.vscore}}
+            </td>
+            <td>
+                <span translate="TIME"></span>: {{atmp.vseconds| timeHMS}}
+            </td>
+        </tr>
+    </table>
+</div>
+
+<h4>{{'ATTEMPT' | translate}}</h4>
+<ul>
+    <li><b>{{'STUDENT' | translate}}:</b> {{attempt.fullname}}</li>
+    <li><b>{{'START' | translate}}:</b> {{attempt.start}}</li>
+    <li><b>{{'LAPSED' | translate}}:</b> {{attempt.seconds | timeHMS}}</li>
+    <li><b>{{'FINISHED' | translate}}:</b> <span compile="attempt.done | correct"></span></li>
+</ul>
+
+<h4>{{'QUESTIONS' | translate}}:</h4>
+<ol>
+    <li ng-repeat="q in review">
+        <h5><span compile="q.question"></span> <small>[{{q.seconds | timeHMS}}]</small></h5> 
+
+        <ol ng-repeat="s in q.steps">
+            <li type="a"> <span compile="s.step"></span> -- <small>{{'RIGHTANSWER' | translate}}:</small> <span compile="s.rightAnswer"></span> <br>
+                <span ng-if="s.askHelp=='S'">{{'ASKHELP' | translate}}: <span compile="s.askHelp | correct"></span> -- </span>
+                <span ng-if="s.askTheory=='S'">{{'ASKTHEORY' | translate}}: <span compile="s.askTheory | correct"></span>  </span>
+                <span ng-if="s.askSolution=='S'">{{'ASKSOLUTION' | translate}}: <span compile="s.askSolution | correct"></span> --  </span>
+                
+                <br><em><b>{{'ANSWERS' | translate}}</b></em> <small>[{{s.seconds | timeHMS}}]</small>
+                <ul>   
+                    <li ng-repeat="a in s.answers">
+                        <span compile="a.answer"></span> -- Valid: <span compile="a.isCorrect | correct"></span>
+                    </li>
+                </ul>
+                <br>
+            </li>
+        </ol>
+
+</ol>    
+<br>
+ 
+
+<h4>{{'FINALSCORE' | translate}} = {{attempt.score}}%</h4>
+
+
+

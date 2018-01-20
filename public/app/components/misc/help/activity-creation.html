@@ -1,0 +1,70 @@
+<h3>Creación de actividades</h3>
+
+<p>Para crear una nueva actividad acceda a ActivityTube y pulse el botón CREAR. Rellene le formulario y se le conducirá al editor integrado IDE dónde podrá editar la activitad.</p>
+
+<p> Cuando se crea una actividad, se le asigna un identificador único ID. Además, se crean dos carpetas para albergar los contenidos de la actividad.
+    Una de las carpetas se encuentra en el lado del cliente y es pública, mientras que la otra únicamente es accesible desde el lado del servidor. A partir
+    de ahora, llamaremos a estas carpetas <em>client/ID/</em> y <em>server/ID/</em> respectivamente. Tendrá acceso a estas carpetas desde el IDE.</p>
+    
+
+<p>Una actividad se puede crear directamente escribiendo codigo javascript en el fichero <em>client/ID/QProvider.js</em>, que a su vez, debe ser comprimido en un fichero
+llamado <em>client/ID/QProvider.min.js</em>. Esta forma da la máxima flexibilidad posible aunque se hace algo pesada para quien no domine el lenguage javascript. Por este
+motivo, existe un modo alternativo para definir las actividades mediante la edición de pares "key"-"value" en un fichero del servidor <em>server/ID/QProvider.json</em>. Básicamente,
+mediante las instrucciones del fichero json, el servidor es capaz de generar automaticamente el fichero de código javascript y a su vez comprimirlo. Por lo tanto, cada vez que guarde
+el fichero json, los posibles cambios manuales efectuados en el fichero js se perderan.
+</p>
+
+<h3>Estructura del fichero QProvider.json</h3>
+
+El código siguiente muestra la estructura básica del fichero json. Para más información sobre la sintaxi de este tipo de ficheros acuda a la pàgina 
+<a href="https://geekytheory.com/json-i-que-es-y-para-que-sirve-json/" target="_blank">JSON</a>.
+
+<div hljs hljs-language="json">
+    {
+    "activity": {
+        "author": "jmulet",
+        "levels": "4 ESO",
+        "title": {
+            "en": "Cangur test 2012 - Level 4 ESO",
+            "ca": "Proves Cangur 2012 - Nivell 4 ESO",
+            "es": "Pruebas Canguro 2012 - Nivel 4 ESO"
+        },
+        "description": {
+            "en": "",
+            "ca": "",
+            "es": ""
+        },
+        "category": "MISC",
+        "type": 0
+    },
+    "config": {
+        "shuffleQuestions": true,
+        "shuffleOptions": true,
+        "browsable": false,
+        "timeout": 60,
+        "allowerrors": 2,
+        "canAskTheory": false,
+        "canAskHelp": false
+    },
+    "questions": [
+        {
+           "title": "",
+           "parameters": {
+                "expr": "self.database.random()"
+            },
+            "repeat": 10,
+            "type": "free.multiplechoice",
+            "serverData": [{"var":"database", "file": "server-data.json"}],
+            "tips": ""
+        }
+    ]
+}
+</div>
+
+<p>
+    La propiedad "activity" define la meta-información de la actividad así como la categoria (ver el listado de categorias) y el tipo de actividad ("type" 0 normal, 1 compuesta).
+    La propiedad "config" permite la configuración de la actividad. Utilitze un timeout >0 en segundos para realizar la actividad con cuenta atrás.
+    Por último, la propiedad "questions" define una lista de preguntas. En la propiedad "type" se define el tipo de actividad y "repeat" indica cuantas veces debe repetirse.
+</p>
+
+

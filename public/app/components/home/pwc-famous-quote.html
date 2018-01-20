@@ -1,0 +1,11 @@
+<div class="panel  panel-default panel-transparency" style="padding: 4px; margin: 2px">
+    <div class="panel-heading">
+        <h6 class="panel-title">
+            <button ng-if="!vm.mobile"  ng-class="vm.collapsed?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="vm.collapsed = !vm.collapsed"></button>  
+            <button class="btn btn-xs glyphicon glyphicon-refresh" ng-click="vm.update()"></button>  
+            <span translate="QUOTE"></span> 
+    </div>
+    <div class="panel-body" ng-if="!vm.collapsed">
+        <blockquote><p> {{vm.quote.quote}} </p><footer> {{vm.quote.author}}</footer></blockquote>                        
+    </div>
+</div>

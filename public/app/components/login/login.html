@@ -1,0 +1,212 @@
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+            <a class="navbar-brand" href="#" ui-sref="login">
+                <img style="display:inline;max-width:40px; margin-top: -12px;" src="assets/img/logo.png" width="40" height="40"/>
+                <b>&#960;World</b> <span class="small hidden-xs"> - Flipped Classroom</span></a>
+        </div>
+        <div uib-collapse="navCollapsed" class="navbar-collapse collapse">          
+          <ul class="nav navbar-nav navbar-right">
+
+              <li uib-dropdown>
+                  <a href="#" uib-dropdown-toggle> <span translate='LANGUAGE'></span> <img ng-src='assets/img/{{lang}}.png'/> <b class="caret"></b></a>
+                 
+                  <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">  
+                      <li> <a ng-click="changeLanguage('ca')"><img src='assets/img/ca.png'/> Català</a></li>
+                      <li> <a ng-click="changeLanguage('es')"><img src='assets/img/es.png'/> Español</a></li>
+                      <li> <a ng-click="changeLanguage('en')"><img src='assets/img/en.png'/> English</a></li>
+                  </ul>
+              </li>
+              
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+<div growl reference="login"></div>
+    
+<div ui-view="">
+    
+<div class="container fullscroll-container">
+    <div class="row fullscroll">         
+      
+        <div class="col-md-4">
+            <div class="well">
+                
+                <div class="btn-group btn-group-justified" role="group">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn" ng-class="credentials.parents?'btn-default':'btn-info'" ng-click="credentials.parents=false;"><span translate="STUDENTS"></span></button>
+                    </div>
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn" ng-class="credentials.parents?'btn-info':'btn-default'" ng-click="credentials.parents=true;"><span translate="PARENTS"></span></button>
+                    </div>                      
+                </div>
+                
+                <center>
+                    <h5 ng-if="!credentials.parents" class="header"><b><span translate="ACCESS"></span>  <span translate="STUDENTS"></span></b></h5>
+                    <h5 ng-if="credentials.parents" class="header"><b><span translate="ACCESS"></span>  <span translate="PARENTS"></b></h5>
+                </center>
+                
+                <label for="uname" translate="USERNAME"></label> <button ng-if="isMobile" ng-click="clearLocalStorage()" class="btn btn-xs glyphicon glyphicon-remove-circle"></button>
+                <input ng-disabled="loading" id="uname" type="text" class="form-control" autocorrect="off" autocapitalize="none" autocomplete="off"  ng-model="credentials.username"/><br>
+                <label for="upwd" class="text-capitalize" translate="PASSWORD"></label>
+                <input ng-disabled="loading" id="upwd" type="password" class="form-control" ng-model="credentials.password" ng-keypress='$event.which==13 && login()'/>
+                <br>
+                <center>
+                    <button ng-disabled="loading" class="btn btn-primary btn-block"  ng-click="login()"><img ng-if="loading" src="assets/img/ajax-loader-squares.gif" alt=""/> <span translate='LOGIN'></span></button>
+                    <button ng-disabled="loading" class="btn btn-warning btn-block"  ng-click="guest()" ng-if="!credentials.parents"><span translate='GUEST_SESSION'></span></button>
+                </center>
+                <br>                
+                <div ng-hide="hideAlert">
+                    <uib-alert type="danger" close="">{{error}}</uib-alert>
+                    <a href="" ng-click="forgotPassword()"><span translate='FORGOT_PASSWORD'></span></a>
+                </div>
+            </div>
+            
+             <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <h5>Emissió en directe</h5> 
+                    </div>
+                <div class='panel-body text-center'>
+                   <center>
+                        <a href="https://www.youtube.com/channel/UCp5-h8-cXotPbEE6a966a_g/live" target="_blank"><img class="img img-responsive" src="assets/img/piWorldTV.png" alt="piWorldTV"/></a>
+                    </center>
+                    <p>Estigues atent a les dates de les emissions en directe per repassar i aclarir dubtes.</p>
+                </div>
+            </div>
+             
+             <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <h5>Biblioteca online</h5>
+                    </div>
+                <div class='panel-body text-center' style="background-image: url('assets/img/iesblibrary.png'); background-position: center; background-repeat: no-repeat;">
+                   <center>
+                        <a href="https://piworld.es/books/" target="_blank"><img class="img img-responsive" style='max-width:200px' src="assets/img/iesbbooks.svg" alt="iesbbooks"/></a>
+                   </center>
+                     <p>Accedeix a llibres digitals. Alguns materials requereixen autorització.</p>
+                </div>
+ 
+            </div>
+            
+            <div class='panel panel-default hidden-xs hidden-sm'>
+                    <div class='panel-heading'>
+                        <h5 translate='BADGES'></h5>
+                    </div>
+                <div class='panel-body text-center'>
+                    <center>
+                        <a href="badges.html" target="_blank"><img class="img img-responsive" src="assets/img/badges.jpeg" alt="badges"/></a>
+                    </center>
+                    <p translate="BADGES_PROPAGANDA"></p>
+                </div>
+                 
+            </div>
+            
+        </div>
+        
+        <div class="col-md-8">
+            
+             <div class='panel panel-default' ng-if="slides.length">
+                  <div class='panel-heading'>
+                        <h5 translate="NEWS"></h5>
+                  </div>
+                  <div class='panel-body' style="height: 320px; padding: 0px; margin: 0px;">                      
+                        <div uib-carousel interval="7000" no-wrap="false" active="0">
+                          <div uib-slide ng-repeat="slide in slides track by $index" index="$index" class="newsitem">
+                              <div style="margin: 0px; padding: 0px; height: 320px;" compile="slide.html">                                
+                              </div>
+                          </div>
+                        </div>
+                  </div>                                     
+            </div>
+            
+            <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <h5 translate="ABOUT"></h5>
+                    </div>
+                    <div class='panel-body'>
+                        <p><span ng-bind-html="'ABOUT_TEXT1' | translate"></span>
+                        
+                            <a href="http://exermath.caib.es/exermath/gestexersPublic?opc=llistaExercicis">ExerMath</a>,
+                            <a href="https://es.khanacademy.org">Khan Academy</a>,
+                            <a href="http://matematico.es/">Matematico.es</a>,
+                            <a href="https://www.playposit.com/">Educanon</a>,
+                            <a href="https://getkahoot.com/">Kahoot</a>
+                       </p>
+                    </div>
+            </div>
+            
+            <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <h5 translate="REGISTRATION"></h5>
+                    </div>
+                    <div class='panel-body'>
+                        
+                        <uib-tabset>
+                            
+                        <uib-tab>   
+                        <uib-tab-heading><h5 translate="STUDENTS"></h5></uib-tab-heading>
+                        <div  ng-if="!showRegistrationForm">
+                            <p class="text-justify" ng-bind-html="'STUDENT_TEXT' | translate"></p>
+
+                            <center>
+                                <form action="">
+                                    <div class="form-group">
+                                        <label for="codic"><span translate='CODE'></span> <span translate='CENTER'></span></label>                        
+                                        <input id="codic" class="form-control" type="text" ng-model="enroll.id"/>
+                                    </div>
+                                    <button type="submit" class="btn btn-default" ng-click="prenroll()"><span translate='SUBMIT'></span></button>
+                                </form>
+                            </center>
+
+                        </div>
+                        <br>
+
+                        <form class="form-horizontal" role="form" ng-if="showRegistrationForm">
+                             <div class="bg-info">
+                                <b><span translate='CENTRE'></span>: {{registrationCenter.schoolName}}</b><br>                            
+                             </div>                        
+                             <span translate='FIRSTNAME'></span>: <input class="form-control" type="text" ng-model="enroll.name"/>
+                             <span translate='LASTNAME'></span>: <input class="form-control" type="text" ng-model="enroll.surname"/>
+                             <span translate='EMAIL'></span> <input class="form-control" type="email" ng-model="enroll.email"/>
+                             <span translate='RECOVERY_KEY'></span><sup>1</sup> <input class="form-control" type="text" ng-model="enroll.phone" placeholder="Eg. DNI or Phone"/>
+                             <span translate='PASSWORD'></span><sup>2</sup>: <input class="form-control" type="password" ng-model="enroll.upassword"/>
+                             <span translate='REPEAT'></span> <span translate='PASSWORD'></span> <input class="form-control" type="password" ng-model="enroll.urepassword"/>
+                             <sup>1</sup><small> <span translate='PHONE_POLICY'></span></small><br>
+                             <sup>2</sup><small> <span translate='PWD_POLICY'></span></small><br>
+                             <center>
+                                    <button class="btn btn-warning" ng-click="cancel_enroll()"> <span translate='CANCEL'></span></button>
+                                    <button class="btn btn-success" ng-click="do_enroll()"> <span translate='SUBMIT'></span></button>
+                             </center>
+                        </form>
+                        </uib-tab>
+                         
+                            <uib-tab>
+                                <uib-tab-heading><h5 translate="TEACHERS"></h5></uib-tab-heading>
+                                <p class="text-justify" ng-bind-html="'TEACHER_TEXT' | translate"></p>
+                            </uib-tab>
+                        </uib-tabset>
+                        
+                    </div>
+            </div>
+           
+
+
+        </div>
+ 
+     </div>
+     <div class="row footer well">     
+         <span>Version {{version}}</span>
+         <span class="pull-right">by J. Mulet &copy; 2015-2018</span> 
+     </div>    
+
+</div>
+</div>

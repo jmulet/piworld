@@ -1,0 +1,43 @@
+<div class="container-fluid" style="padding: 10px">
+<h4>{{'ACTIVITY_SHEET' | translate}}</h4>
+<button class="btn btn-success" ng-click="generate()" ng-disabled="loading">{{'GENERATE' | translate}}</button>
+
+<button class="btn btn-primary glyphicon glyphicon-print" print-btn  ng-disabled="loading"></button>
+
+<button class="btn btn-primary" ng-click="generateDocument('tex')" ng-disabled="loading">.tex</button>
+<button class="btn btn-primary" ng-click="generateDocument('docx')"  ng-disabled="loading">.docx</button>
+<button class="btn btn-primary" ng-click="generateDocument('odt')"  ng-disabled="loading">.odt</button>
+<button class="btn btn-primary" ng-click="generateDocument('pdf')"  ng-disabled="loading">.pdf</button>
+<img src="assets/img/ajax-loader-squares.gif" ng-show="loading"/>
+<br>
+<br>
+<hr>
+
+<div print-section>
+
+<h4 print-only>{{'ACTIVITY_SHEET' | translate}}</h4>
+    
+<h5><em>{{'QUESTIONS' | translate}}:</em></h5>
+<ol>
+    <li ng-repeat="q in questions track by $index">
+        <span compile="q.headingHTML"></span>
+        <ul ng-if="q.steps.length">
+           <li ng-repeat="s in q.steps track by $index"> 
+               <span compile="s.formulationHTML"></span>
+           </li>
+        </ul>
+    </li>
+</ol>
+<hr>
+<h5><em>{{'ANSWERS' | translate}}:</em></h5>
+<ol>
+    <li ng-repeat="q in questions track by $index">
+        <ul ng-if="q.steps.length">
+           <li ng-repeat="s in q.steps track by $index"> 
+               <span compile="s.answerHTML"></span>
+           </li>
+        </ul>
+    </li>
+</ol>
+</div>
+</div>

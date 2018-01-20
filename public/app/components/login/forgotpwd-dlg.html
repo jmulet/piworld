@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <h3 class="modal-title">Formulari per al canvi de contrasenya</h3>
+</div>
+<div class="modal-body">
+    <p>Introduïu el correu electrònic i clau de rescat associats amb el vostre usuari piWorld:</p>
+    <span class="glyphicon glyphicon-send"> </span> <input style="width: 75%;" type="text" ng-model="bean.email" class="form-control-static" placeholder="User email"/><br>
+    <span class="glyphicon glyphicon-phone"></span> <input style="width: 75%;" type="text" ng-model="bean.phone" class="form-control-static" placeholder="Recovery key"/>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning glyphicon glyphicon-remove" ng-click="cancel()"><span translate="CANCEL"></span></button>
+    <button class="btn btn-primary glyphicon glyphicon-ok" ng-click="ok()"><span translate="ACCEPT"></span></button>    
+</div>

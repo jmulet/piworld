@@ -1,0 +1,146 @@
+<div style="padding:20px">
+    
+    <h3>Books License Manager</h3>
+    
+    <div class="panel panel-primary">
+        
+        <ul class="list list-unstyled">
+            <li ng-repeat="b in books">
+                <a class="link_title" href="" ng-click="manageBook(b)">{{b.title}}</a>
+            </li>
+        </ul>
+        
+    </div>
+    <div ng-if="currentbook" >
+        
+        <h4>
+            <span ng-if="!currentbook.edit">{{currentbook.title}}</span>
+            <input ng-if="currentbook.edit" ng-model="currentbook.title" class="form-control"/>
+        
+             <button ng-if="!currentbook.edit" class="btn btn-sm btn-primary" ng-click="editIt()">Edit</button>
+             <button ng-if="currentbook.edit" class="btn btn-sm btn-danger" ng-click="cancelIt()">Cancel</button>
+             <button ng-if="currentbook.edit" class="btn btn-sm btn-warning" ng-click="saveIt()">Save</button>
+        </h4>
+        
+        <h5>Internal book code: {{currentbook.bookCode}}</h5>
+        
+        <p>
+        Author:   <span ng-if="!currentbook.edit">{{currentbook.author}}</span>
+                  <input ng-if="currentbook.edit" ng-model="currentbook.author" class="form-control"/>
+        </p>
+        <p>
+        Year:   <span ng-if="!currentbook.edit">{{currentbook.year}}</span>
+                  <input ng-if="currentbook.edit" ng-model="currentbook.year" class="form-control"/>
+        </p>
+        
+        <p>
+        Genre:   <span ng-if="!currentbook.edit">{{currentbook.genre}}</span>
+        <input ng-if="currentbook.edit" ng-model="currentbook.genre" placeholder="Student/Teacher/Solutions" class="form-control"/>
+        </p>
+        
+        <p>
+        Author:   <span ng-if="!currentbook.edit">{{currentbook.author}}</span>
+                  <input ng-if="currentbook.edit" ng-model="currentbook.author" class="form-control"/>
+        </p>
+        
+        <p>
+        URL:   <span ng-if="!currentbook.edit">{{currentbook.url}}</span>
+                  <input ng-if="currentbook.edit" ng-model="currentbook.url" class="form-control"/>
+        </p>
+        
+        <p>
+        IMG:   <span ng-if="!currentbook.edit">{{currentbook.img}}</span>
+               <input ng-if="currentbook.edit" ng-model="currentbook.img" class="form-control"/>
+               <img ng-src="currentbook.img" style="max-height: 50px"/>
+        </p>
+        
+        
+        <nz-toggle ng-disabled="!currentbook.edit" ng-model="currentbook.allStudents"  val-true="1" val-false="0" val-default="0" ></nz-toggle> This book requires validation
+         
+        <nz-toggle ng-disabled="!currentbook.edit || !currentbook.key" ng-model="currentbook.allStudents"  val-true="1" val-false="0" val-default="0" ></nz-toggle> Allow access to all students
+        
+        <nz-toggle ng-disabled="!currentbook.edit || !currentbook.key"  ng-model="currentbook.allTeachers"  val-true="1" val-false="0" val-default="0" ></nz-toggle> Allow access to all teachers
+    
+        
+        <div ng-if="currentbook.key">
+        <h5>Allow access to all users enrolled in groups</h5>
+        <table class="table table-responsive table-bordered">
+            <thead>
+                <tr style="background: lightgray"><td><b>Id</b></td><td><b>Group name</td></td><td><b>Expiration</b></td></tr>
+            </thead>
+            <tbody>
+                 <tr ng-repeat="g in groups">
+                <td>
+                   {{g.idGroup}} : 
+                    <nz-toggle ng-disabled="!currentbook.edit" ng-model="g.selected"></nz-toggle>
+                 
+                </td>
+                <td>
+                    {{g.groupYear+"/"+(g.groupYear+1)+": "+g.groupName+" - "+g.name}}
+                </td>
+                <td>
+                    <span ng-if="!currentbook.edit || !g.selected"> {{g.expires | date: 'dd-MM-yyyy'}}</span>
+                    <span ng-if="currentbook.edit && g.selected" class="input-group">
+                        <input type="text" class="form-control" datetime-picker="dd-MM-yyyy  HH:mm" ng-model="g.expires" is-open="g.isOpen"  />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="g.isOpen=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </span>   
+                </td> 
+            </tr>
+            </tbody>
+        </table>
+        
+        
+        <h5> Allow access to these individual users</h5>
+        <div loading-container="tableParams.$loading">
+                <table class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th ng-click="tableParams.sortBy('selected')" class="cursor-hand"> Selected <b ng-class="tableParams.params.classes.id"></b></th>
+                            <th ng-click="tableParams.sortBy('fullname')" class="cursor-hand"> Full name <b ng-class="tableParams.params.classes.fullname"></b></th>
+                            <th ng-click="tableParams.sortBy('idRole')" class="cursor-hand"> Role <b ng-class="tableParams.params.classes.idRole"></b></th>
+                            <th> Expires</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th><input class="form-control" type="text" ng-model="tableParams.params.filter.fullname" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>
+                            <th><input class="form-control" type="text" ng-model="tableParams.params.filter.username" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="g in tableParams.$data">
+                            <td>
+                                {{g.id}}  <nz-toggle ng-disabled="!currentbook.edit" ng-model="g.selected" on-toggle="onStudentChange(g)"></nz-toggle>
+                            </td>
+                            <td>
+                                {{g.fullname}}    
+                            </td>                            
+                            <td>
+                                <span>  {{g.eidRole | rolename}}</span>
+                            <td>   
+                            <td>
+                                <span ng-if="!currentbook.edit || !g.selected"> {{g.expires | date: 'dd-MM-yyyy'}}</span>
+                                <span ng-if="currentbook.edit && g.selected" class="input-group">
+                                    <input type="text" class="form-control" datetime-picker="dd-MM-yyyy  HH:mm" ng-model="g.expires" is-open="g.isOpen"  />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="g.isOpen=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </span>   
+                            </td> 
+                        </tr>
+                    </tbody>
+                </table>
+                <ul class="pull-left" uib-pagination items-per-page="tableParams.params.count" total-items="tableParams.params.total" ng-model="tableParams.params.page" max-size="tableParams.params.maxSize" 
+                    class="pagination-sm" boundary-links="true" force-ellipses="true" ng-change="tableParams.paginate()"></ul>
+                <div class="btn-group pull-right">
+                        <button ng-repeat="b in tableParams.params.counts" type="button" class="btn" ng-class="b===tableParams.params.count?'btn-primary':'btn-default'" ng-click="tableParams.setCount(b)">{{b}}</button>
+                </div>
+                
+            </div> 
+        </div>
+    </div>   
+    
+    
+</div>

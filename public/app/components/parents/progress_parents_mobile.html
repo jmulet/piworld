@@ -1,0 +1,117 @@
+ 
+
+<div id="badgeDetail" style="right:10px;bottom:10px;position:fixed; z-index:10000; width:300px; height:200px;background:white;border:1px solid gray;visibility: hidden;">
+    <div id="badgeDetailHandler" class="panel panel-warning" style="height:100%;">
+        <div class="panel-heading" id="badgeDetailHandler">
+            <h4 class="panel-title">Dia {{selectedDay.date| date:'dd-mm-yyyy'}}
+                <button class="btn btn-xs btn-default glyphicon glyphicon-remove pull-right" ng-click="hideDetails()"></button></h4>
+        </div>
+        <div class="panel-body" style="padding: 0; height: 150px; overflow-y:auto;">
+            <table class="table table-bordered">                   
+                <thead>
+                    <tr><th>{{i18n.ITEM}}</th><th>{{i18n.SCORE}}</th></tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="b in selectedDay.list">
+                        <td>{{badgeDescription(b.type)}}</td> <td>{{b.rscore}}</td>
+                    </tr>
+                </tbody>
+            </table>                    
+        </div>
+    </div>        
+</div>
+
+<div class='container-fluid' style="padding: 5px">
+    <div class='row-fluid'>
+        <h4><span>{{i18n.PROGRESSOF}} <i>{{user.fullname}}</i> {{i18n.INSUBJECT}}</span>
+
+            <div class="btn-group" uib-dropdown is-open="status.isopen">
+                <button id="single-button" type="button" class="btn btn-default" uib-dropdown-toggle>
+                    {{selectedGroup.name + " " + selectedGroup.groupName}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                    <li ng-repeat="g in user.groups track by $index"><a href="" ng-click="update(g);"> {{g.groupYear + "-" + (g.groupYear + 1) + " : " + g.name + " " + g.groupName}}</a></li>                      
+                </ul>
+            </div>
+
+            <span>{{i18n.OFYEAR}} {{selectedGroup.groupYear + "-" + (selectedGroup.groupYear + 1)}}</span></h4>
+
+
+
+        <div id="view-informes" style="padding-bottom: 50px">
+
+            <div id="view-informes-calendars" style="display: none;">
+                <div style="width: 100%; overflow-x: auto; overflow-y: hidden;">    
+                    <div id="calendar_faltes" style="width: 1000px; height: 200px;">    
+                    </div>
+                    <h5 style="color:gray;">{{i18n.MEANING}}:
+                        <span style="color:white; background:white; border:1px solid black;width:50px">____</span>{{i18n.FA}}
+                        <span style="color:orange;background:orange; border:1px solid black;width:50px;">____</span>{{i18n.RE}}</h5>
+                    <div id="calendar_classe" style="width: 1000px; height: 200px;">    
+                    </div>
+                    <div id="calendar_deures" style="width: 1000px; height: 200px;">    
+                    </div>
+                    <div id="calendar_comportament" style="width: 1000px; height: 200px;">    
+                    </div>
+
+                    <h5 style="color:gray;">{{i18n.MEANING}}
+                        <span style="color:orange; background:orange; border:1px solid black;width:50px">____</span>
+                        {{i18n.GRADEN}} 
+
+                        <span style="color:white; background:white; border:1px solid black;width:50px">____</span>
+                        {{i18n.GRADE0}}
+
+                        <span style="color:blue;background:blue; border:1px solid black;width:50px;">____</span>
+                        {{i18n.GRADEP}}
+                    </h5>
+                </div>
+
+
+                <div id="Resum">
+                    <h3>{{i18n.SUMMARY}}:</h3>
+                    <table class="table table-responsive table-striped table-hover">
+                        <thead>
+                            <tr><th>{{i18n.ITEM}}</th><th>{{i18n.FREQUENCY}}</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>{{i18n.FA}}</td><td id="fa-total"></td></tr>
+                            <tr><td>{{i18n.RE}}</td><td id="re-total"></td></tr>
+                            <tr><td>{{i18n.CLASSWORK}}</td><td id="classe-total"></td></tr>
+                            <tr><td>{{i18n.HOMEWORK}}</td><td id="casa-total"></td></tr>
+                            <tr><td>{{i18n.BADBEHAVIOUR}}</td><td id="comportament-total"></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+                <div id="Missatges">
+                    <h3>{{i18n.MESSAGES}}:</h3>
+                    <table class="table table-responsive table-striped table-hover">
+                        <thead>
+                            <tr><th>{{i18n.DAY}}</th><th>{{i18n.MESSAGE}}</th></tr>
+                        </thead>
+                        <tbody id="tbody-missatges">
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div id="Notes">
+                    <h3>{{i18n.GRADES}}:</h3>
+                    <table class="table table-responsive table-striped table-hover">
+                        <thead>
+                            <tr><th>{{i18n.TERM}}</th><th>{{i18n.DAY}}</th><th>{{i18n.ACTIVITY}}</th><th>{{i18n.GRADE}}</th></tr>
+                        </thead>
+                        <tbody id="tbody-activitats">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>    
+        </div>
+    </div>
+</div> <!--end center column-->
+

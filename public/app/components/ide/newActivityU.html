@@ -1,0 +1,53 @@
+<lazy-style href="assets/libs/multiple-select/multiple-select.min.css"></lazy-style>
+<div class="container-fluid" style="padding: 20px">
+<h4>{{title}}
+<button ng-if="id" class="btn btn-xs btn-warning" ng-click="goIDE();">ADVANCED</button>
+</h4>
+        
+<uib-tabset>
+    <uib-tab ng-repeat="lang in langs" index="$index"> 
+        <uib-tab-heading>
+            <span class="flag flag-{{lang}}"></span>
+        </uib-tab-heading>
+        <h5>Títol:</h5>
+        <input class="form-control" type="text" ng-model="a.title[lang]" ng-blur="onTitleBlur(lang)"/>
+        <h5>Descripcció:</h5>
+        <textarea class="form-control" ng-model="a.description[lang]" rows='4' cols='70' ng-blur="onDescBlur(lang)"></textarea>
+    </uib-tab>    
+</uib-tabset>
+<hr>
+
+    
+<div class='row'>
+<div class='col-sm-6'>
+    <h5>Nivells on està destinada:</h5>
+     <multiple-autocomplete  name="pklevels" ng-model="a.levels" suggestions-arr="groupsAvail"></multiple-autocomplete>
+    
+</div>
+<div class='col-sm-6'>
+<p>Categories:</p>
+    <multiple-autocomplete  name="pkcatg" ng-model="a.categories" suggestions-arr="categories" allow-new-items="true"></multiple-autocomplete>
+</div>
+</div>
+
+<br>
+
+<table>
+    <tr>
+        <td><h5>URL d'icona: </h5></td>
+        <td><input type='text' ng-model="a.icon"/></td>
+    </tr>
+</table>
+
+<!--===============================================================================================================================-->
+
+<h4>Edit upload description</h4>
+<textarea ui-tinymce="tinymceOpts" ng-model="a.theory"></textarea>
+
+<!--===============================================================================================================================-->
+ 
+<br><br>
+<div>
+    <button ng-click="cancel()" class="btn btn-warning">Cancel·la</button>
+    <button ng-click="accept()" class="btn btn-success" ng-disabled="block"><img ng-if="block" src="assets/img/ajax-loader-squares.gif" />Accepta</button>
+</div>

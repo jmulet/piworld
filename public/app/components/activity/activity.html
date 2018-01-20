@@ -1,0 +1,68 @@
+<div class="container-fluid">
+
+    <div class="row">
+        <div ng-class="mainDiv">
+             
+                       
+            <div ng-if="QP.config.browsable">
+                <br>
+                <ol class="list-inline" style="background-color: beige;">
+                    <li ng-repeat="e in QP._generatedQuestions track by $index"><button ng-if="$index<QP.config.totalQ" class="btn btn-xs" ng-click="next($index)" 
+                                                                                        ng-class="QP._generatedQuestions[$index].isDone?'btn-success':''">#{{$index+1}}</button></li>                        
+                </ol>
+            </div>
+            
+            <h3 compile="question" ng-cloack=""></h3>
+            <div>
+                <table ng-show="stepHistory.length">
+                    <tr ng-repeat="s in stepHistory" >
+                        <td style="width:60px"> <h5 class="step"><span translate='STEP'></span> {{$index+1}}</h5></td>
+                        <td style="padding: 5px;"> <h4>{{s.formulationHTML}}</h4></td>
+                        <td style="padding: 5px;"> <h4>{{s.answerHTML}}</h4></td>                       
+                    </tr>
+                </table>
+            </div>
+            
+            <h5 class="step" style="width:60px" ng-show="isMultiStep"><span translate='STEP'></span> {{stepHistory.length+1}}</h5>
+           
+            <h3><span compile="subquestion" ng-cloack=""></span></h3>
+          
+            <br>
+            
+            <div compile="inputdiv" ng-cloack="">              
+            </div>
+
+            <br>
+                <div compile="feedback"></div>
+            <br>
+             
+            <div>
+            <button class="btn btn-success glyphicon glyphicon-check" ng-click="check()" ng-disabled="done" ng-if="QP.config.canCheck"><span translate='CHECK'></span></button>
+            <button class="btn btn-primary glyphicon glyphicon-question-sign" ng-click="showHelp()" ng-disabled="done"  ng-if="QP.config.canAskHelp"><span translate='HELP'></span></button>
+            <button class="btn btn-info glyphicon glyphicon-book" ng-click="showTheory()" ng-disabled="done" ng-if="QP.config.canAskTheory"><span translate='THEORY'></span></button>
+            <button class="btn btn-warning glyphicon glyphicon-eye-open" ng-click="showSolutionDlg()" ng-disabled="done"  ng-if="QP.config.canAskSolution"><span translate='SOLUTION'></span></button>
+            <button class="btn btn-danger glyphicon glyphicon-arrow-right" ng-click="skip()" ng-disabled="done" ng-if="QP.config.canSkipQuestions || isMultiStep"><span translate='NEXT'></span></button>
+            </div>
+            <br>
+           
+        </div>
+        <div ng-class="helpDiv" style="margin-top:15px">                                
+                <div class="row" ng-show="helpVisible">
+                    <button class="btn btn-xs btn-danger glyphicon glyphicon-remove" ng-click="helpVisible = false;"></button> <b translate="HELP"></b>
+                    <p style="margin-left: 20px" compile="help"></p>
+                </div>
+            
+
+                <div class="row" ng-show="theoryVisible">
+                    <button class="btn btn-xs btn-danger  glyphicon glyphicon-remove" ng-click="theoryVisible = false;"></button> <b translate="THEORY"></b>            
+                    <div ng-include="theoryPath">
+                    </div>
+                </div>                
+            
+            
+        </div><!--end of right column-->
+            
+    
+    
+     </div><!--end of row-->
+</div><!--end of container-->

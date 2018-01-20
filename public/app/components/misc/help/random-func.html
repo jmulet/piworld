@@ -1,0 +1,74 @@
+<h3>Funciones aleatorias</h3>
+
+<p>Para dar un carácter aleatorio a las actividades se utilizan una serie de funciones aleatorias.</p>
+
+<h4>[ ].random()</h4>
+
+Si se tiene una lista de objetos y se quiere obtener un elemento aleatoriamente, se puede utilizar el
+método random() sobre el objeto lista. El siguiente ejemplo muestra como elegir aleatóriamente una expresión
+de una lista.
+
+<div hljs>
+    "parameters": {
+        "func": "['2*x+1','1/x','sqrt(x)'].random()"
+    }
+</div>
+
+<p>La expresión func será una de las cadena de texto de la lista.</p>
+
+
+<h4>[ ].shuffle()</h4>
+
+El método shuffle, desordena los elementos de la lista de forma aleatoria.
+
+<h4>list(n, expr)</h4>
+
+Genera una lista de n elemntos a partir de la expresión aleatoria expr. Este ejemplo
+genera una lista de 10 números aleatorios.
+
+<div hljs>
+    "parameters": {
+        "lista": "list(10, Math.irandom(2, 30))"
+    }
+</div>
+
+<h4>Número aleatório entre a y b</h4>
+
+Las siguientes opciones para crear un número aleatorio entero son equivalentes
+<div hljs>
+    "parameters": {
+        "x1": "Math.irandom(0, 10)",
+        "x2": "Math.floor(Math.random()*10)",
+        "x3": "RG1.rent1(0, 10, false, true)"
+    }
+</div>
+
+Math.irandom(a, b): Crea un número aleatorio entre a y b.
+
+RG1.rent1(n, vmax, z, c): Crea un número aleatorio si n=0, de valor máxima vmax, 
+pudiendo ser negativo si z=true, y incluyendo el cero si c=true. Para valores mayores
+de "n", genera operaciones aleatorias con números enteros con mayor grado de dificultat.
+
+
+<h4>Plantillas o templates</h4>
+<div hljs> 
+    RG1.processTemplate(expr, {range: value})
+</div>
+
+La expresión expr, puede contener los siguentes paramétros
+
+<b>N</b>: Número natural incluyendo el cero
+
+<b>N0</b>: Número natural sin el cero
+
+<b>Z</b>: Número entero incluyendo el cero
+
+<b>Z0</b>: Número entero sin el cero
+
+range, determina el valor máximo para los números aleatorios.
+
+Ejemplos:
+<div hljs> 
+    "expr": "RG1.processTemplate('N0-2*Z+N0*(Z+Z-Z)', {range: 20})"
+</div>
+

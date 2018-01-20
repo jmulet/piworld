@@ -1,0 +1,223 @@
+<lazy-style href="assets/libs/angular-ui-tree/angular-ui-tree.min.css"></lazy-style>
+<lazy-style href="app/components/activity/ace.css"></lazy-style>
+
+ <!-- Nested node template -->
+<script type="text/ng-template" id="nodes_renderer.html">
+  <div ui-tree-handle class="tree-node tree-node-content">
+    
+        <span class="cursor-hand" ng-class="collapsed?'btn glyphicon glyphicon-chevron-down':'btn glyphicon glyphicon-chevron-right'" ng-if="node.dir && node.nodes" data-nodrag ng-click="toggle(this)"></span>
+        <span ng-if="!node.dir">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <div class="btn-group" uib-dropdown>
+                    <button ng-if="node.dir" type="button" class="btn btn-info btn-xs dropdown-toggle"  ng-class="collapsed?'btn btn-xs glyphicon glyphicon-folder-close':'btn btn-xs glyphicon glyphicon-folder-open'" uib-dropdown-toggle>
+                    <button ng-if="!node.dir" type="button" class="btn btn-default btn-xs dropdown-toggle glyphicon glyphicon-file" uib-dropdown-toggle>
+                    
+                    <span class="btn-xs"></span>
+                    </button>
+                        <ul class="uib-dropdown-menu" uib-dropdown-menu style="overflow:visible;z-index:1000">                        
+                        <li> <a ng-click="deleteFile(node)" title="Delete" ng-if="!node.root">Delete</a></li>
+                        <li> <a ng-click="renameFile(node)" title="Rename" ng-if="!node.root">Rename</a></li>
+                        <li> <a ng-click="newfile(node)" title="New file" ng-if="node.dir">New file</a></li>
+                        <li> <a ng-if="node.dir" ngf-select ngf-change="upload($files, node)" ngf-multiple="true"  ngf-max-size="20000000"  ng-disabled="importing">Upload file/s...</a></li>
+                        <li> <a ng-click="unzip(node)" title="Unzip" ng-if="!node.dir && (node.title.endsWith('.zip'))">Unzip</a></li> 
+                        <li> <a ng-click="minify(node)" title="Minify" ng-if="!node.dir && (node.title.endsWith('.css') || node.title.endsWith('.js'))">Uglify</a></li>                        
+                    </ul>
+         </div>
+         <a ng-click="openFile(node)" class="cursor-hand"><span style="font-size: 12px; font-weight: normal;" ng-if="!node.dir">{{node.title}}</span></a>
+         <span style="font-size: 12px; font-weight: normal;" ng-if="node.dir">{{node.title}}</span>
+  </div>
+  <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+    <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
+    </li>
+  </ol>
+</script>
+
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div>
+            <b>IDE</b>
+            <button ng-click="save()" class="btn btn-xs btn-danger glyphicon glyphicon-save-file" ng-disabled="saving"><img ng-if="saving" src="assets/img/ajax-loader-squares.gif"/> Save</button>
+            <button ng-click="saveAll()" class="btn btn-xs btn-warning glyphicon glyphicon-save" ng-disabled="savingAll"><img ng-if="savingAll" src="assets/img/ajax-loader-squares.gif"/> Save All</button>            
+            <button ng-click="run()" class="btn btn-xs btn-success glyphicon glyphicon-arrow-right">
+            <span ng-if="showCode">Preview</span><span ng-if="!showCode">Show code</span></button>
+            <button ng-click="play()" class="btn btn-xs btn-success glyphicon glyphicon-play-circle">Play</button>
+            
+            <!-- upload progress -->
+            <div style="display: inline" class="dropdown pull-right">
+                <button class="btn btn-sm btn-default glyphicon glyphicon-upload dropdown-toggle" type="button" data-toggle="dropdown"><img ng-if="uploading" src="assets/img/ajax-loader-squares.gif"/>
+                <span class="caret"></span></button>
+                <ul style="width: 600px" class="dropdown-menu">
+                    <li  ng-repeat="u in uploads"><small> {{u.description}} <span class="pull-right"> {{u.progress}} </span></small></li>                  
+                </ul>
+            </div>
+             
+            <!-- Display only of QProvider.json -->
+            <span ng-if="tabset.activeTab.node.title==='QProvider.json'">
+                
+                <div class="btn-group" uib-dropdown>
+                  <button type="button" class="btn btn-xs btn-default glyphicon glyphicon-dashboard" uib-dropdown-toggle>
+                    Insert activity <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="insert-activity">
+                    <li role="menuitem"><a href="" ng-click="insert('free.multiplechoice')">free.multiplechoice</a></li>
+                    <li role="menuitem"><a href="" ng-click="insert('free.fillgaps')">free.fillgaps</a></li>
+                    <li class="divider"></li>   
+                    <li role="menuitem"><a href="" ng-click="insert('integer.divisors')">integer.divisors</a></li>
+                    <li role="menuitem"><a href="" ng-click="insert('integer.gcd')">integer.gcd</a></li>
+                    <li role="menuitem"><a href="" ng-click="insert('integer.lcm')">integer.lcm</a></li>
+                    <li role="menuitem"><a href="" ng-click="insert('integer.primes')">integer.primes</a></li>
+                    <li role="menuitem"><a href="" ng-click="insert('integer.divisibility')">integer.divisibility</a></li>
+                    <li role="menuitem"><a href="" ng-click="insert('integer.operations')">integer.operations</a></li>
+                    <li role="menuitem"><a href="" ng-click="insert('fraction.operations')">fraction.operations</a></li>
+                    <li class="divider"></li>   
+                    <li role="menuitem"><a href="" ng-click="insert('equation')"></a>equation</li>
+                    <li role="menuitem"><a href="" ng-click="insert('polynomial.operations')">polynomial.operations</a></li>
+                    <li class="divider"></li>   
+                    <li role="menuitem"><a href="" ng-click="insert('function.elemental.type')"></a>function.elemental.type</li>
+                    <li role="menuitem"><a href="" ng-click="insert('function.limit')">function.limit</a></li>
+                    <li role="menuitem"><a href="" ng-click="insert('function.derivate')">function.derivate</a></li>                                     
+                  </ul>
+                </div>
+       
+                <button class="btn btn-xs btn-default glyphicon glyphicon-check" ng-click="check()" title="Check JSON"></button>
+            </span>
+            
+            <!--Display only in HTML tabs -->
+            <span ng-if="tabset.activeTab.node.title.toLowerCase().indexOf('.htm')>0">
+                
+                 <div class="btn-group" uib-dropdown>
+                  <button type="button" class="btn btn-xs btn-default glyphicon glyphicon-dashboard" uib-dropdown-toggle>
+                    Insert HTML <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="insert-activity">
+                    <li role="menuitem"><a href="" ng-click="insertHTML('ytvideo')">Youtube video</a></li>
+                    <li role="menuitem"><a href="" ng-click="insertHTML('geogebra')">Geogebra applet</a></li>
+                    <li class="divider"></li>                       
+                    <li role="menuitem"><a href="" ng-click="insertHTML('link-download')">Link to download document</a></li>
+                    <li role="menuitem"><a href="" ng-click="insertHTML('doc-embed')">Embedded document</a></li>
+                  </ul>
+                </div>
+                 
+                 <div class="btn-group" uib-dropdown>
+                  <button type="button" class="btn btn-xs btn-default glyphicon glyphicon-dashboard" uib-dropdown-toggle>
+                    Insert JS <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="insert-activity">
+                    <li role="menuitem"><a href="" ng-click="insertJS('controller')">Controller</a></li>                    
+                    <li class="divider"></li>                       
+                    <li role="menuitem"><a href="" ng-click="insertJS('question-input')">Video question: input type</a></li>
+                    <li role="menuitem"><a href="" ng-click="insertJS('question-multiple')">Video question: multiple choice</a></li>
+                  </ul>
+                </div>
+                
+                
+            </span>
+            
+            
+            <div class="btn btn-xs btn-warning glyphicon glyphicon-asterisk" ng-click="goEditor()">Editor</div>
+            
+        
+        </div>
+
+        <div class="col-md-2">
+
+            <h5><button class="btn btn-xs glyphicon glyphicon-refresh" ng-click="reloadClient()"></button> Client</h5>
+            <div style="overflow: scroll; max-height: 300px; z-index:1">
+
+                <div ui-tree>
+                    <ol ui-tree-nodes="" ng-model="files" id="tree-root1" data-nodrag="true">
+                        <li ng-repeat="node in files" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+                    </ol>
+                    <br>
+                    <br>
+                </div>  
+            </div>
+            <hr/>
+
+            <h5><button class="btn btn-xs glyphicon glyphicon-refresh" ng-click="reloadServer()"></button> Server</h5>
+            <div style="overflow: scroll; max-height: 300px;z-index:1">
+
+                <div ui-tree>
+                    <ol ui-tree-nodes="" ng-model="serverfiles" id="tree-root3" data-nodrag="true">
+                        <li ng-repeat="node in serverfiles" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+                    </ol>
+                    <br>
+                    <br>
+                </div>  
+            </div>
+
+            
+            <div ng-if="libraries">
+            <hr/>
+            <h5><button class="btn btn-xs glyphicon glyphicon-refresh" ng-click="reloadLibs()"></button> Shared libs</h5>
+            <div style="overflow: scroll; max-height: 300px;z-index:1" ng-if="libraries.length">
+
+                <div ui-tree>
+                    <ol ui-tree-nodes="" ng-model="libraries" id="tree-root2" data-nodrag="true">
+                        <li ng-repeat="node in libraries" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+                    </ol>
+                    <br>
+                    <br>
+                </div>          
+            </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-10">     
+           
+            <uib-tabset ng-if="showCode" active="tabset.activeTabIndex">
+                <uib-tab index="-1" select='tabset.activeTab=null;' style="background: lightblue;">
+                    <uib-tab-heading >IDE log</uib-tab-heading>
+                    <div class="panel panel-body" ng-bind-html="ideLog" style="overflow-y: scroll; max-height: 300px;">                
+                        
+                    </div>     
+                </uib-tab>
+                
+                <uib-tab index="workspace.index" ng-repeat="workspace in workspaces" select='onTabSelect(workspace)'>
+                    <uib-tab-heading><span ng-if="workspace.modified">*</span> {{workspace.node.title}}<a ng-click="close(workspace)">
+                            <span class="close"> x</span>
+                        </a></uib-tab-heading>
+                    <div ng-switch="workspace.type">                
+                        <!-- text editor -->
+                        <div ng-switch-when="editor" ng-model="workspace.src" ui-ace="{onLoad: aceLoaded}" ng-readonly="readonly" ></div>
+                        <!-- google view -->
+                        <div ng-switch-when="preview">{{workspace.url}}<iframe ng-src="{{workspace.url}}" style="width:95%; height:700px;" frameborder="0"></iframe> </div>                        
+                    </div>     
+                </uib-tab>
+            </uib-tabset>
+
+            <!--<div ng-if="showCode" class="panel panel-default static-bottom">
+                <div class="panel panel-heading">
+                    <button ng-class="toggleLog?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="toggleLog = !toggleLog"></button> IDE Log
+                </div>
+                <div ng-if="toggleLog" class="panel panel-body" ng-bind-html="ideLog" style="overflow-y: scroll; max-height: 300px;">
+
+                </div>
+            </div>-->
+
+            <div ng-if="!showCode">
+                <div class="panel panel-info"  ng-if="htmlSrc">
+                    <div class="panel-heading"><h4>Preview <span translate="THEORY"></span></h4></div>
+                    <div class="panel-body" ng-include="htmlSrc" ng-if="htmlSrc"></div>
+                </div>
+         
+                
+                <div ng-if="!htmlSrc">
+                    <div class="panel panel-info">
+                    <div class="panel-heading"><h4>Testing <span translate="ACTIVITY"></span> {{idActivity}}</h4></div>                     
+                    </div>
+                    <p><input ng-model="runopts.guest" type="checkbox"/> Run as guest user (no dabatase output)</p>
+                    <p><input ng-model="runopts.debug" type="checkbox"/> Print debug information </p>
+                    <p><input ng-model="runopts.test" type="checkbox"/> Play the game in test mode</p>    
+                    
+                    <div id="activity-test" class="activity-embed embed-responsive embed-responsive-16by9">
+                            <iframe id="activity-iframe-test" class="embed-responsive-item" ></iframe>
+                            <div class="btn-fullscreen"><button class="btn btn-default glyphicon glyphicon-glyphicon glyphicon-resize-full"></button></div>
+                    <div> 
+                </div>
+            </div>
+        </div>
+    </div></div>

@@ -1,0 +1,113 @@
+<div class="container-fluid" style="padding: 20px">
+    <h4>Center administration <button class="btn btn-xs btn-default glyphicon glyphicon-download" ng-click="sqlite()" ng-disabled="downloadingSqlite">Download sqlite <img ng-if="downloadingSqlite" src="img/assets/ajax-loader-squares.gif"/> ></button></h4>
+
+<h5 class="bg-info">Center information</h5>
+<div class="row">
+<div class="col-md-6">
+<table>
+    <tr><td>Institution Name:</td><td><input type="text" ng-model="user.schoolName" ng-disabled="disable" ng-change="changeInfo()"/></td></tr>
+    <tr><td>Administrator Name:</td><td><input type="text" ng-model="user.professorName" ng-disabled="disable"  ng-change="changeInfo()"/></td></tr>
+    <tr><td>Administrator email:</td><td><input type="text" ng-model="user.professorEmail" ng-disabled="true"  ng-change="changeInfo()"/></td></tr>
+    <tr><td>Default language:</td><td><select ng-model="user.language"  ng-disabled="disable"  ng-change="changeInfo()"><option value="ca" label="Català"></option><option value="es" label="Español"></option><option value="en" label="English"></option></select></td></tr>
+</table>
+</div>
+<div class="col-md-6">
+<table>
+    <tr><td>Enrollment ID:</td><td> {{user.schoolId}}-<input type="text" ng-model="user.enrollPassword" ng-disabled="disable"  ng-change="changeInfo()"/></td></tr>
+    <tr><td>Allow external enrollment:</td><td><nz-toggle ng-model="user.canEnroll"  ng-disabled="disable" val-true="1" val-false="0" val-null="0" on-toggle="changeInfo()"></nz-toggle></td></tr>    
+    <tr><td>Allow publish score result:</td><td><nz-toggle ng-model="user.canPublish"  ng-disabled="disable" val-true="1" val-false="0" val-null="0" on-toggle="changeInfo()"></nz-toggle></td></tr>    
+</table>
+</div>
+</div>    
+    
+
+<br>
+<h5 class="bg-info">Teachers in this center  <button ng-click="newTeacher()" class="btn btn-success glyphicon glyphicon-plus-sign">Create user</button> 
+<button ng-click="importDlg()" class='btn btn-primary glyphicon glyphicon-import'>Import students</button></h5>
+<br>
+<input type="checkbox" ng-model="selection.showStudents" ng-change="tableParams.reload()"></input>Show students
+<input type="checkbox" ng-model="selection.showPasswords" ng-change="tableParams.reload()"></input>Show passwords
+<input type="checkbox" ng-model="selection.showEmails" ng-change="tableParams.reload()"></input>Show emails
+
+<div loading-container="tableParams.$loading">
+<table class="table table-striped table-hover table-responsive">
+    <thead>
+        <tr>
+            <th ng-click="tableParams.sortBy('id')" class="cursor-hand"> id <b ng-class="tableParams.params.classes.id"></b></th>
+            <th ng-click="tableParams.sortBy('fullname')" class="cursor-hand"> Full name <b ng-class="tableParams.params.classes.fullname"></b></th>
+            <th ng-click="tableParams.sortBy('username')" class="cursor-hand"> Username <b ng-class="tableParams.params.classes.username"></b></th>
+            <th ng-if="selection.showPasswords">Password</th>
+            <th ng-if="selection.showPasswords">Password parents</th>
+            <th ng-if="selection.showEmails" ng-click="tableParams.sortBy('email')" class="cursor-hand"> Email <b ng-class="tableParams.params.classes.email"></b></th>
+            <th ng-if="selection.showEmails" ng-click="tableParams.sortBy('emailParents')" class="cursor-hand"> Email parents <b ng-class="tableParams.params.classes.emailParents"></b></th>
+            <th>Recovery key</th>
+            <th ng-click="tableParams.sortBy('idRole')" class="cursor-hand"> Role <b ng-class="tableParams.params.classes.idRole"></b></th>
+            <th>Actions</th>
+        </tr>
+        <tr>
+            <th></th>
+            <th><input class="form-control" type="text" ng-model="tableParams.params.filter.fullname" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>
+            <th><input class="form-control" type="text" ng-model="tableParams.params.filter.username" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>
+            <th ng-if="selection.showPasswords"></th>
+            <th ng-if="selection.showPasswords"></th>
+            <th ng-if="selection.showEmails"><input class="form-control" type="text" ng-model="tableParams.params.filter.email" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>
+            <th ng-if="selection.showEmails"><input class="form-control" type="text" ng-model="tableParams.params.filter.emailParents" ng-change="tableParams.paginate()" ng-model-options="{debounce: 500}"/></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>            
+    <tbody>
+         <tr ng-repeat="u in tableParams.$data">
+            <td>
+                {{u.id}}                
+            </td>
+            <td>
+                <span ng-if="!u.edit">{{u.fullname}}</span>
+                <span ng-if="u.edit"><input type="text" ng-model="u.fullname"/></span>
+            </td>
+            <td>
+                <span ng-if="!u.edit">{{u.username}}</span>
+                <span ng-if="u.edit"><input type="text" ng-model="u.username" ng-disabled="u.email===user.professorEmail"/></span>
+            </td>
+             <td ng-if="selection.showPasswords">
+                  <span ng-if="!u.edit">{{u.password}}</span>
+                  <span ng-if="u.edit"><input type="text" ng-model="u.password"/></span>                                
+            </td>
+            <td ng-if="selection.showPasswords">
+                  <span ng-if="!u.edit">{{u.passwordParents}}</span>
+                  <span ng-if="u.edit"><input type="text" ng-model="u.passwordParents"/></span>                                
+            </td>
+            <td ng-if="selection.showEmails">
+                  <span ng-if="!u.edit">{{u.email}}</span>
+                  <span ng-if="u.edit"><input type="text" ng-model="u.email" ng-disabled="u.email===user.professorEmail"/></span>                     
+            </td>
+            <td ng-if="selection.showEmails">
+                  <span ng-if="!u.edit">{{u.emailParents}}</span>
+                  <span ng-if="u.edit"><input type="text" ng-model="u.emailParents" ng-disabled="u.email===user.professorEmail"/></span>                     
+            </td>
+             <td>
+                  <span ng-if="!u.edit">{{u.phone}}</span>
+                  <span ng-if="u.edit"><input type="text" ng-model="u.phone" ng-disabled="u.email===user.professorEmail"/></span>                     
+            </td>
+            <td>
+                  <span ng-if="!u.edit">{{u.idRole | rolename}}</span>                
+            </td>         
+            <td>
+                   <div><button class='btn btn-sm btn-danger glyphicon glyphicon-trash' title="delete" ng-click='confirmDlg(u)' ng-if="user.id!=u.id && u.idRole!==USER_ROLES.teacheradmin"> </button> 
+                        <button class='btn btn-sm btn-primary glyphicon glyphicon-pencil' title="edit" ng-click='editDlg(u)'> </button>
+                        <!--<button class='btn btn-success glyphicon glyphicon-save' title="save" ng-if="u.edit" ng-click='u.edit=!u.edit; save(u)'> </button>
+                        <button class='btn btn-danger glyphicon glyphicon-stop' title="cancel" ng-if="u.edit" ng-click='cancel(u);u.edit=!u.edit'> </button>-->
+                   </div> 
+            </td>
+          </tr>
+    </tbody>
+</table>
+<ul class="pull-left" uib-pagination items-per-page="tableParams.params.count" total-items="tableParams.params.total" ng-model="tableParams.params.page" max-size="tableParams.params.maxSize" 
+    class="pagination-sm" boundary-links="true" force-ellipses="true" ng-change="tableParams.paginate()"></ul>
+<div class="btn-group pull-right">
+        <button ng-repeat="b in tableParams.params.counts" type="button" class="btn" ng-class="b===tableParams.params.count?'btn-primary':'btn-default'" ng-click="tableParams.setCount(b)">{{b}}</button>
+</div>
+ 
+</div>
+</div>

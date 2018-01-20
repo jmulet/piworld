@@ -1,0 +1,51 @@
+<div class="panel  panel-default panel-transparency" >
+    <div class="panel-heading">
+        <h6 class="panel-title">
+            <button ng-if="!vm.mobile" ng-class="vm.collapsed?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="vm.collapsed = !vm.collapsed"></button>
+            <span translate="PROBLEM_OF_DAY"></span> 
+            <span ng-if="vm.user.idRole>=vm.USER_ROLES.student"  class="pull-right"><a href="" ng-click="vm.showChallenges()">Historial</a></span>
+            <span ng-if="vm.user.idRole<vm.USER_ROLES.student" class="pull-right"><a href="" ng-click="vm.manageChallenges()">Gestiona</a></span>
+        </h6>
+
+    </div>
+    <div class="panel-body" ng-if="!vm.collapsed" ng-style="{'background': vm.challenge.formulation?'#FFE4B5':'#FFFFFF'}">
+        <div ng-if='vm.isChallenge'> 
+            
+            <div id="challengePanel"></div>
+            <div compile="vm.challenge.formulation" ng-if="vm.isChallenge===2"></div>
+            
+            <hr>
+            <div ng-if="vm.challenge.userAnswer && vm.user.idRole>=$crtl.USER_ROLES.student">
+                <p><em>La teva resposta:</em> <button ng-click="vm.modifyChallenge()" ng-if="vm.challenge.userAnswer.valid == null">Modifica</button> 
+                    <img src="assets/img/tick.png" ng-if="vm.challenge.userAnswer.valid === 1"/>
+                    <img src="assets/img/cross.png" ng-if="vm.challenge.userAnswer.valid === 0"/>
+                </p>                
+                <p compile="vm.challenge.userAnswer.answer"></p>
+
+            </div>
+            <p class="lcd">Recompensa: {{vm.challenge.score}} <img src="assets/img/picoin-xs.png"> i <img src="assets/img/badge-5.png" height="30"/></p>
+            <div ng-if="!vm.challenge.userAnswer">
+                 <div ng-if="vm.user.idRole >= vm.USER_ROLES.student">
+                    <p><em>Envia la teva resposta:</em> <button ng-click="vm.sendChallenge()">Envia</button> </p>
+                    <textarea class="form-control" style="width: 100%;" type="text" ng-model="vm.challenge.myanswer" rows="2" ng-if="vm.isChallenge===2"></textarea>
+                </div>  
+            </div>
+            <div ng-if="vm.challenge.userAnswer">
+                                <p><em>La teva resposta:</em> <button ng-click="vm.modifyChallenge()" ng-if="vm.challenge.userAnswer.valid==null">Modifica</button> 
+                                    <img src="assets/img/tick.png" ng-if="vm.challenge.userAnswer.valid===1"/>
+                                    <img src="assets/img/cross.png" ng-if="vm.challenge.userAnswer.valid===0"/>
+                                </p>
+                                
+                                <p compile="vm.challenge.userAnswer.answer"></p>
+                                
+           </div>
+            <div ng-if="vm.user.idRole < vm.USER_ROLES.student">
+                    Hi ha {{vm.challenge.userAnswer.length}} respostes.
+            </div>
+                
+        </div>
+        <div ng-if='!vm.isChallenge'><em>Aviat hi haurà nous reptes.</em></div>
+
+
+    </div>
+</div>

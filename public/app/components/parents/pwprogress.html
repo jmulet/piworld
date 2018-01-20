@@ -1,0 +1,157 @@
+<div class="container-fluid" style="padding: 10px">
+ 
+        <div class="col-md-10">
+            <h4><b>Activitat de {{user.fullname}} a piworld.es</b></h4>
+            
+            <uib-tabset active="active">
+                
+                <uib-tab index="0" select="lazy(0)">
+                  <uib-tab-heading>
+                    <i class="glyphicon glyphicon-bell"></i> ACTIVITAT
+                  </uib-tab-heading>
+                    
+                <div loading-container="tableParams.$loading">
+                <table class="table table-hover table-responsive">
+                    <thead>
+                         <tr>
+                            <th ng-click="tableParams.sortBy('dia')" class="cursor-hand"> Dia <b ng-class="tableParams.params.classes.dia"></b></th>
+                            <th ng-click="tableParams.sortBy('ini')" class="cursor-hand"> Inici <b ng-class="tableParams.params.classes.ini"></b></th>
+                            <th ng-click="tableParams.sortBy('lapsed')" class="cursor-hand"> Temps <b ng-class="tableParams.params.classes.lapsed"></b></th>
+                            <th ng-click="tableParams.sortBy('activity')" class="cursor-hand"> Puntuació <b ng-class="tableParams.params.classes.score"></b></th>
+                             <th>Detall</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="g in tableParams.$data">
+                            <td>
+                                {{g.dia | date: 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                                {{g.ini}}
+                            </td>
+                            <td >
+                                {{g.lapsed?g.lapsed:'Sense acabar'}}    
+                            </td>
+                            <td>
+                               <span ng-class="g.idAssignment>0?'glyphicon glyphicon-star':'glyphicon glyphicon-star-empty'" title="Assignment {{g.idAssignment}}"> </span> 
+                               {{g.idActivity}}. {{g.activity}} {{g.resource}}
+                            </td>
+                            <td>
+                                <span ng-if='g.idActivity && !g.video'>Practice: </span>
+                                <span ng-if='!g.idActivity && !g.video'>Resource: </span>
+                                <span ng-if='g.video'>Video: </span>
+                                {{g.score?g.score:0}}
+                                <span ng-if='g.idActivity && !g.video'>%</span>
+                            </td> 
+                            <td>
+                                <div>
+                                    <img ng-if="g.idKahoot" src="assets/img/kahoot-icon.png" height="25px"/>
+                                    <button class='glyphicon glyphicon-eye-open' ng-click='detall(g)' ng-if='g.idActivity && !g.video'> </button> 
+                                    <span ng-if='g.video'>
+                                            <span class='glyphicon glyphicon-facetime-video' title="Video"> </span>
+                                            <a href="" ng-if="g.nq" class='glyphicon glyphicon-question-sign' title="Quizz" ng-click="quizzDetail(g)"> </a>
+                                    </span>
+                                    <span class='glyphicon glyphicon-paperclip'  title="Video" ng-if='!g.idActivity && !g.video'> </span>
+                                 </div> 
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                    
+                    
+                    <ul class="pull-left" uib-pagination items-per-page="tableParams.params.count" total-items="tableParams.params.total" ng-model="tableParams.params.page" max-size="tableParams.params.maxSize" 
+                        class="pagination-sm" boundary-links="true" force-ellipses="true" ng-change="tableParams.paginate()"></ul>
+                    <div class="btn-group pull-right">
+                            <button ng-repeat="b in tableParams.params.counts" type="button" class="btn" ng-class="b===tableParams.params.count?'btn-primary':'btn-default'" ng-click="tableParams.setCount(b)">{{b}}</button>
+                    </div>
+
+                </div>
+                    
+             </uib-tab>
+        
+            
+             <uib-tab index="1"  select="lazy(1)">
+                  <uib-tab-heading>
+                    <i class="glyphicon glyphicon-bell"></i> LOGINS
+                  </uib-tab-heading>
+                 <div loading-container="tableParams2.$loading">
+                     <!--<p>Total time in piWorld: {{loginData.totalTime | timeDHM }}</p>
+                     <div id="loginChart" style="width:300px;height:260px">
+                     </div>-->
+                     <table class="table table-responsive table-hover table-responsive" >
+                         <thead>
+                         <tr>
+                           <th ng-click="tableParams2.sortBy('login')" class="cursor-hand"> Login <b ng-class="tableParams2.params.classes.login"></b></th>
+                           <th ng-click="tableParams2.sortBy('sec')" class="cursor-hand"> Ellapsed <b ng-class="tableParams2.params.classes.sec"></b></th>
+                           <th ng-click="tableParams2.sortBy('ip')" class="cursor-hand"> Ip <b ng-class="tableParams2.params.classes.ip"></b></th>
+                         </tr>
+                         </thead>
+                         <tbody >
+                         <tr ng-repeat="e in tableParams2.$data">
+                           <td >{{e.login | date: 'dd-MM-yyyy HH:mm'}}</td>
+                           <td>{{e.sec | timeHMS}}</td>
+                           <td>{{e.ip}}</td>
+                         </tr>  
+                         </tbody>
+                     </table>
+                       
+                    <ul class="pull-left" uib-pagination items-per-page="tableParams2.params.count" total-items="tableParams2.params.total" ng-model="tableParams2.params.page" max-size="tableParams2.params.maxSize" 
+                        class="pagination-sm" boundary-links="true" force-ellipses="true" ng-change="tableParams.paginate()"></ul>
+                    <div class="btn-group pull-right">
+                            <button ng-repeat="b in tableParams2.params.counts" type="button" class="btn" ng-class="b===tableParams2.params.count?'btn-primary':'btn-default'" ng-click="tableParams2.setCount(b)">{{b}}</button>
+                    </div>
+
+                     
+                 </div>
+                 <!--<div class="col-md-4">
+                     <h5>SCORE EVOLUTION</h5>
+                     <div id="summaryChart" style="width:300px;height:260px"></div>
+                 </div>  
+                 -->
+            </uib-tab>
+                
+            <uib-tab index="2" select="lazy(2)"> 
+                  <uib-tab-heading>
+                    <i class="glyphicon glyphicon-bell"></i> SCORES
+                  </uib-tab-heading>     
+                
+                  <div loading-container="tab2$loading">
+                          <table class="table table-responsive">
+                                    <tr>
+                                        <td style="font-weight: bold;">
+                                             
+                                            <span translate="ACTIVITIES"></span>: {{myScores.score || 0}}<br>
+                                            <span translate="VISUALIZATION"></span>: {{myScores.vscore || 0}}<br>                                            
+                                            <span translate="UPLOADS"></span>: {{myScores.uscore || 0}}<br>
+                                            <span translate="BADGES"></span>: {{myScores.rscore || 0}}
+                                          
+                                        </td>
+                                        <td style="text-align: right"><h4><span translate="TOTAL"></span>: {{myScores.vscore + myScores.score + myScores.rscore+ myScores.uscore}}</h4></td>                                       
+                                    </tr>
+                                </table>
+                   </div>   
+                  
+                  
+                    <div style="border-top: 1px solid #eee">
+                        <a href="badges.html" target="_blank"><h3 translate="BADGES"></h3></a>
+
+                        <ul class="list list-unstyled list-inline">
+                            <li ng-repeat="badge in myScores.badges track by badge.id">
+                                <img width="48" ng-src="assets/img/badge-{{badge.type}}.png" 
+                                     uib-tooltip-html="badge.html"
+                                     tooltip-placement="right-top"
+                                     tooltip-trigger="'mouseenter'"
+                                     />
+                            </li>
+                        </ul>
+
+                        <span ng-if="!myScores.badges.length"><em>No s'han trobat insígnies</em></span>
+                    </div>
+
+            <uib-tab>
+            </uib-tabset>
+                
+        </div>
+            
+    </div>
+ 

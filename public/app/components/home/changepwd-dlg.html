@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <h3 class="modal-title">Canvi de contrasenya a piWorld de {{username}}</h3>
+</div>
+<div class="modal-body">
+    <div ng-hide="hideoldpwd">
+    <p>Introduïu la contrasenya antiga:</p>    
+      <input style="width: 90%;" type="password" ng-model="oldpwd" class="form-control-static"/>
+    </div>   
+    <p>Introduïu la nova contrasenya:</p>
+     <input style="width: 90%;" type="password" ng-model="newpwd" class="form-control-static"/>
+    <p>Repetiu-la:</p>
+    <input style="width: 90%;" type="password" ng-model="newpwd2" class="form-control-static"/>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning glyphicon glyphicon-remove" ng-click="cancel()"><span translate="CANCEL"></span></button>
+    <button class="btn btn-primary glyphicon glyphicon-ok" ng-click="ok()"><span translate="ACCEPT"></span></button>    
+</div>

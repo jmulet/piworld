@@ -1,0 +1,140 @@
+<div class="quick-search">
+    <pwc-quick-search></pwc-quick-search>
+</div>
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top" style="min-height: 60px;" ng-class="amStudent?'':'navbar-highlight'">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a href="" ng-click="go('home')" title="{{user.fullname}}">
+                <img style="display:inline;max-width:41px; margin-top: 4px;" src="assets/img/logo.png" width="40" height="40"/>                
+            </a>           
+            <strong>&#960;World</strong>            
+          
+        </div>
+        
+        <div class="navbar-collapse collapse" uib-collapse="navCollapsed">          
+            <ul class="nav navbar-nav navbar-right">
+                <li><a ng-click="go('home')"><span class="glyphicon glyphicon-home"></span> <span class="navbar-label" translate='HOME'></span></a></li>
+ 
+                <li ng-if="amStudent">
+                    <a href="#" ng-click="" ui-sref="home.activitysearch">
+                        <span class="glyphicon glyphicon-edit"></span> 
+                        <span class="navbar-label" translate="ACTIVITIES"></span></a>
+                </li>
+                
+                <li ng-if="!amStudent" title="Seguiments matèries">
+                    <a href="#" ng-click="" ui-sref="home.parents">
+                        <span class="glyphicon glyphicon-signal"></span> 
+                        <span class="navbar-label" translate="SEGUIMENT"></span></a>
+                </li>
+ 
+                 <li ng-if="!amStudent" title="Activitat a piworld.es">
+                    <a href="#" ng-click="" ui-sref="home.pwprogress">
+                        <span class="glyphicon" style="font-size:110%;"><b>&pi;</b></span> 
+                        <span class="navbar-label" translate="PIWORLD"></span></a>
+                </li>
+                
+                
+                <li ng-if="amStudent" uib-dropdown>
+                            <a href="#" uib-dropdown-toggle>
+                                <span class="glyphicon glyphicon-paperclip"></span>
+                                 <span class="navbar-label" translate="TOOLS"></span>
+                                <b class="caret"></b>
+                            </a>
+                            <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                <!--<li><a ui-sref="home.kahootit({kahootId: 0})"> <span class="glyphicon glyphicon-bookmark"></span>Kahoot it!</a></li>-->
+                                <!-- <li><a ui-sref="home.notebook"><span class="glyphicon glyphicon-book" translate="NOTEBOOK"></span></a></li>-->
+                                 <li><a ui-sref="home.forum"> <span class="glyphicon glyphicon-comment" translate="FORUM"></span> </a></li>                              
+                                 <li><a href="#" ng-click="" ui-sref="home.tools"> <span class="glyphicon glyphicon-wrench">Geogebra WEB 5</span> </a></li>                            
+                            </ul>
+                </li>
+                 
+                <li><a href="#" ng-click="" ui-sref="home.help">
+                        <span class="glyphicon glyphicon-question-sign"></span> <span class="navbar-label" translate="HELP"></span></a>
+                </li>
+ 
+                <li uib-dropdown>
+                    <a href="#" uib-dropdown-toggle>
+                        <img class="pw-avatar-{{user.uopts.avatar||0}}" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAQMAAACQp+OdAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAA9JREFUeNpjYBgFo4B8AAACQAAB4E0dRAAAAABJRU5ErkJggg==" title="{{user.id}} - {{user.fullname}}" width="40" height="40" style="display:inline;max-width:40px; margin-top: -12px;"/>
+                        <span class="navbar-label" ng-bind="user.username"></span>
+                        <b class="caret"></b>                        
+                    </a>
+                    <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                        <li><span style="display:table; margin:auto;">{{amStudent? user.username : 'Familia de '+user.username}}</span></li>                 
+                        <li role="separator" class="divider"></li>
+                        <li ng-if="amStudent"><a ng-click="changeAvatar()"><span class="glyphicon glyphicon-apple" translate="AVATAR"></span></a></li>
+                        <li ng-if="!amStudent"><a href="" ng-click="configDlg()"><span class="glyphicon glyphicon-cog"></span> <span translate="CONFIGURATION"></span> </a></li>
+                        <li><a ng-click="changePwd()"><span class="glyphicon glyphicon-user"></span> <span translate="CHANGE_PASSWORD"></span></a></li>
+                        <li class="separator"></li>
+                        <li><a ng-click="logout()"><span class="glyphicon glyphicon-off"></span> <span translate="EXIT"></span> </a></li>    
+                        <li role="separator" class="divider"></li>
+                        <li class='text-center'>
+                            <button class='btn btn-xs' ng-click="changeLanguage('ca')"><img src='assets/img/ca.png'/></button>
+                            <button class='btn btn-xs' ng-click="changeLanguage('es')"><img src='assets/img/es.png'/></button>
+                            <button class='btn btn-xs' ng-click="changeLanguage('en')"><img src='assets/img/en.png'/></button>
+                        </li>
+                    </ul>
+                   
+                </li>     
+            </ul>
+        </div>
+        
+         
+    </div>
+</nav>
+
+<div growl reference="home"></div>
+
+
+<div id="homeDashboard">
+    
+     <div class='container-fluid' style="padding: 2px">
+        <div class='row-fluid' >
+         
+            
+            <div ng-class="leftClass" style="padding: 4px; margin: 0px">
+
+                <pwc-welcome id="pwc-welcome" class="prow" user="user" group="selectedGroup"></pwc-welcome>
+ 
+                <pwc-scores id="pwc-scores" class="prow" user="user" group="selectedGroup"></pwc-scores>
+
+                <pwc-online id="pwc-online" class="prow" user="user" group="selectedGroup"></pwc-online>
+
+            </div> <!--end left column-->
+
+
+            <div id="maincol" ng-class="mainClass" style="padding: 4px; margin: 0px">
+
+                <pwc-group-enroll ng-if="amStudent" id="pwc-group-enroll" ng-show="tgs.groups" class="prow" user="user"></pwc-group-enroll>
+                
+                <pwc-units id="pwc-units" class='prow' user="user"></pwc-units>
+            </div> <!--end center column-->
+
+            <div ng-class="rightClass" style="padding: 4px; margin: 0px">
+                <div class='prow'>
+                    <button ng-class="rightExpanded?'pull-right btn btn-xs glyphicon glyphicon-resize-small visible-lg  visible-md':'pull-right btn btn-xs glyphicon glyphicon-resize-full visible-lg  visible-md'" ng-click="toggleRight()"></button>
+                    <pwc-chat id="pwc-chat" user="user" group="selectedGroup"></pwc-chat> 
+                </div>
+            
+                <pwc-challenges ng-if="amStudent" class="prow" id="pwc-challenges" user="user" group="selectedGroup" challenge="challenge"></pwc-challenges>
+            
+                <pwc-famous-equation id="pwc-famous-equation" class="prow" equation="randomEqn"></pwc-famous-equation>
+                
+                <pwc-famous-quote id="pwc-famous-quote" class="prow" quote="randomQuote"></pwc-famous-quote>
+            
+            </div> <!--end right column -->
+        </div> <!--end row-->
+    </div> <!--end container-->
+    
+</div>
+
+<div ui-view="" class="fade-animation">
+</div>
+

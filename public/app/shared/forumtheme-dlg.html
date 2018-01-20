@@ -1,0 +1,29 @@
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">
+            <span ng-if="theme.id">Edit theme {{theme.id}}: {{theme.theme}}</span>
+            <span ng-if="!theme.id">Create a new theme</span>
+        </h3>
+    </div>
+    
+    <div class="modal-body">
+        <h4 compile="msg"></h4>
+        <label for="ftitle">Theme title</label>
+        <input id="ftitle" type="text" class="form-control" ng-model="theme.theme"/>
+         <label for="fdescript">Theme description</label>
+         <textarea id="fdescript" rows="3" class="form-control" ng-model="theme.description"></textarea>     
+        <hr/>
+        <h5>Create new entries in theme:</h5>
+        <label for="ctteacher">Teachers</label>
+        <input id="ctteacher" type="checkbox" ng-model="theme.canCreateEntries[USER_ROLES.teacher]"/>
+        <label for="ctneteacher">Non-editing teachers</label>
+        <input id="ctneteacher" type="checkbox" ng-model="theme.canCreateEntries[USER_ROLES.teacherNonEditing]"/>
+        <label for="ctstudent">Students</label>
+        <input id="ctstudent" type="checkbox" ng-model="theme.canCreateEntries[USER_ROLES.student]"/>       
+    </div>
+    
+    <div class="modal-footer">
+        <button class="btn btn-warning glyphicon glyphicon-remove" ng-click="cancel()"><span translate="CANCEL"></span></button>
+        <button class="btn btn-primary glyphicon glyphicon-ok" ng-click="ok()"><span translate="ACCEPT"></span></button>    
+    </div>
+</div>

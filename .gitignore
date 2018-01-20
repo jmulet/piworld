@@ -3,6 +3,12 @@ server/activities/*
 files/*
 node_modules/
 
+public/activities/*
+!public/activities/libs
+
+public/assets/libs/*
+public/assets/css/*.jpeg
+
 # OS generated files #
 ######################
 *.log

@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body">
+    <table>
+     <tr><td>Curs de creació:</td><td>{{year||""}}</td></tr>
+    <tr><td>Nivell:</td><td> <select ng-model="group" ng-options="g for g in groupsAvail"></select></td>
+    <tr><td>Grup:</td><td> <input type="text" ng-model="letter"/> <select ng-model="letterCombo" ng-change="letter=letterCombo;" ng-options="l for l in lettersAvail"></select></td>
+    <tr><td>Matèria: </td><td> <select ng-model="subject" ng-options="s.name for s in subjectsAvail"></select></td>
+    <tr><td>Clau de matricula: </td><td><input type="text" ng-model="enrollpwd"/></td>
+    </table>
+    <hr>
+    Default language: <select ng-model="gopts.lang" ng-options="g for g in langsAvail"></select><br>
+    <input type="checkbox" ng-model="gopts.isGhost"/>Treat as a ghost group (only visible from PDA)<br>
+    <input type="checkbox" ng-model="gopts.sendParentsReport"/>Enable sending summary to parents by email<br>
+    <div ng-if="!gopts.isGhost">
+    <hr/>
+    <input type="checkbox" ng-model="gopts.postcomments"/> Allow users in group to post comments in theory sections<br>
+    <input type="checkbox" ng-model="gopts.postchats"/> Allow users in group to post entries in chats<br>
+    <input type="checkbox" ng-model="gopts.canCreateForums"/> Allow users in group to create new forums<br>
+    <input type="checkbox" ng-model="gopts.requirevideos"/> Require view videos before activity<br>
+    <input type="checkbox" ng-model="gopts.showtools"/> Show tools in menu<br>
+    </div>
+    
+        
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning glyphicon glyphicon-remove" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary glyphicon glyphicon-check" ng-click="ok()">OK</button>    
+</div>

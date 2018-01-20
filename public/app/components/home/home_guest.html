@@ -1,0 +1,148 @@
+<div class="quick-search">
+    <pwc-quick-search></pwc-quick-search>
+</div>
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid" style="padding: 4px">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a ng-click="guestHome()" href="">
+                <img style="display:inline;max-width:40px; margin-top: 5px;" src="assets/img/logo.png" width="40" height="40" title="{{user.fullname}}"/>                
+            </a>           
+            <strong>&#960;World</strong> 
+              
+        </div>
+        <div  class="navbar-collapse collapse" uib-collapse="navCollapsed">          
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="" ng-click="guestHome()"><span class="glyphicon glyphicon-home"></span> <span class="navbar-label" translate='HOME'></span></a></li>
+  
+
+                <li uib-dropdown>
+                     <a href="#" uib-dropdown-toggle>
+                                <span class="glyphicon glyphicon-paperclip"></span>
+                                 <span class="navbar-label" translate="TOOLS"></span>
+                                <b class="caret"></b>
+                     </a>
+                     <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                         <!-- <li><a ui-sref="home.kahootit({kahootId: 0})"><span class="glyphicon glyphicon-bookmark"></span>Kahoot it!</a></li>
+                          <li><a ui-sref="home.notebook"><span class="glyphicon glyphicon-book" translate="NOTEBOOK"></span></a></li>
+                          <li><a ui-sref="home.forum"><span class="glyphicon glyphicon-comment" translate="FORUM"></span> </a></li>  -->                            
+                          <li><a href="#" ng-click="" ui-sref="home.tools"><span class="glyphicon glyphicon-wrench">Geogebra WEB 5</span> </a></li>
+                    </ul>                                          
+                </li>
+                 
+                <li><a href="#" ng-click="" ui-sref="home.help">
+                        <span class="glyphicon glyphicon-question-sign"></span> <span class="navbar-label" translate="HELP"></span></a>
+                </li>
+ 
+                <li uib-dropdown>
+                     <a href="#" uib-dropdown-toggle>
+                        <img ng-src="assets/img/avatar/guest.png" title="{{user.fullname}}" width="40" height="40" style="display:inline;max-width:40px; margin-top: -12px;"/>
+                        <span class="navbar-label" ng-bind="user.username"></span>
+                        <b class="caret"></b>                        
+                    </a>
+                    <ul uib-dropdown-menu role="menu" aria-labelledby="split-button"> 
+                        <li><a href="" ng-click="logout()"><span class="glyphicon glyphicon-off" translate="EXIT"></span> </a></li>    
+                        <li role="separator" class="divider"></li>
+                        <li class='text-center'>
+                            <button class='btn btn-xs' ng-click="changeLanguage('ca')"><img src='assets/img/ca.png'/></button>
+                            <button class='btn btn-xs' ng-click="changeLanguage('es')"><img src='assets/img/es.png'/></button>
+                            <button class='btn btn-xs' ng-click="changeLanguage('en')"><img src='assets/img/en.png'/></button>
+                        </li>
+                    </ul>               
+
+                </li>     
+            </ul>
+        </div>
+
+
+    </div>
+</nav>
+
+<div growl reference="home"></div>
+
+    <div class='container-fluid' style="padding: 2px">
+        <div class='row-fluid'>
+            
+            <div ng-class="leftClass" style="padding: 4px; margin: 0px">
+ 
+                    <div class='prow'>
+                    <div class="panel panel-default panel-transparency bg-warning" style="margin-bottom: 4px;">
+                        <div class="panel-heading">
+                            <h6 class="panel-title">
+                                <button ng-class="tgs.welcome?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.welcome = !tgs.welcome"></button>
+                                <span translate="WELCOME"></span> <b>&#960;World</b>
+                                <button class="pull-right btn btn-xs glyphicon glyphicon-resize-small visible-lg  visible-md" ng-click="toggleMain(true)"></button>
+                            </h6>
+                        </div>
+                        <div class="panel-body" ng-if='tgs.welcome'>
+                            <div class="alert alert-warning">
+                                <span translate="GUEST_MSG"></span>
+                            </div>
+                        </div>
+                         
+                    </div>
+                    </div>
+                
+                
+            
+                <div class='prow'>
+                <div class="panel  panel-default panel-transparency" >
+                    <div class="panel-heading">
+                        <h6 class="panel-title">
+                            <button ng-class="tgs.famouseqn?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.famouseqn = !tgs.famouseqn"></button>
+                            <span translate="FAMOUS_EQN"></span>                                 
+                        </h6>
+                    </div>
+                    <div class="panel-body" ng-if='tgs.famouseqn'>
+                        <div compile="randomEqn"></div>
+                    </div>
+                </div>
+                </div>
+                
+                <div class='prow'>
+                <div class="panel  panel-default panel-transparency">
+                    <div class="panel-heading">
+                        <h6 class="panel-title">
+                            <button ng-class="tgs.quote?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.quote = !tgs.quote"></button>       
+                            <span translate="QUOTE"></span>   
+                    </div>
+                    <div class="panel-body" ng-if="tgs.quote">
+                        <div compile="randomQuote"></div>
+                    </div>
+                </div>
+                </div>
+                
+                <div class='prow'>
+                <div class="panel  panel-default panel-transparency" ng-if='randomProblem'>
+                    <div class="panel-heading">
+                        <h6 class="panel-title">
+                            <button ng-class="tgs.problem?'btn btn-xs glyphicon glyphicon-collapse-down':'btn btn-xs glyphicon glyphicon-collapse-up'" ng-click="tgs.problem = !tgs.problem"></button>
+                            <span translate="PROBLEM_OF_DAY"></span> </h6>
+                    </div>
+                    <div class="panel-body"ng-if="tgs.problem">
+                        <div compile="randomProblem"></div>
+                    </div>
+                </div>
+                </div>
+                   
+            </div> <!--end left column-->
+
+
+            <div id="maincol" ng-class="mainClass" style="padding: 4px; margin: 0px">
+                
+                <div class='row-fluid'>
+                    <div ui-view="" class="fade-animation">   
+                        
+                    </div>
+                </div>
+            </div>
+       </div>
+    </div> <!--end center column-->
+

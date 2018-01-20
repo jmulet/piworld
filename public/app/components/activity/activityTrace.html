@@ -1,0 +1,89 @@
+<div style="padding: 5px">
+    <h4><span class="glyphicon glyphicon-apple"></span>Activity Trace: <img ng-if="info.icon" ng-src="{{info.icon}}" height="50px"> {{info.activity}}</h4>
+    <h5>{{info.description}}</h5>
+    <hr>
+
+<h5>Visualization   
+    <input type="checkbox" ng-model="allgroups" ng-click="reload()"/> All my groups
+    <button class="btn btn-sm"  ng-click="switchMode()" ng-class="vmode?'glyphicon glyphicon-list':'glyphicon glyphicon-blackboard'"> </button>
+    <button class="btn btn-sm" ng-click="expanded=!expanded" ng-if="vmode===0"> + </button>
+    
+    Filter <input class="form-control-static" type="text" ng-model="filterNames"/> 
+</h5>
+    
+<center>
+    <img ng-if="loading" src="assets/img/ajax-loader-squares.gif"/>
+</center>        
+        
+
+<div ng-if="vmode===0">
+<div class="panel panel-default" ng-repeat="t in trace | orderBy:'fullname' | filter:myFilter" style="padding: 0px; margin:1px;">
+    <div class="panel-heading" style="padding: 2px;">        
+        <h5>
+            <table style="width:90%">
+                <tr>
+                    <td width="50%"><img ng-src="assets/img/thm/{{u.username}}.jpg" err-src="assets/img/avatar/{{u.uopts.avatar || 0}}.png"  title="{{t.fullname}}" alt="" height="50"/> {{t.fullname}}</td>
+                    <td width="25%"><span class="picoin"></span> {{t.vscore}}</td>
+                    <td width="25%">Time: {{t.vseconds | timeHMS}}</td>                    
+                </tr>
+            </table>
+        </h5>
+    </div>
+    <div class="panel-body"  ng-if="t.quizz.length>0 && expanded">
+      <table class="table table-striped table-responsive">
+        <tr>
+            <th width="60%">Question</th>
+            <th width="20%">Answer</th>
+            <th width="20%">RightAnswer</th>            
+        </tr>
+        <tr ng-repeat="f in t.quizz track by $index">
+            <th width="60%"><span compile="f.formulation"></span></th>
+            <th width="20%" ng-class="f.isValid?'success':'danger'">
+                <span compile="f.answer"></span></th>
+            <th width="20%"><span compile="f.rightAnswer"></span></th>
+            
+        </tr>
+    </table>
+    </div>
+    <span ng-if="trace.length===0">No s'han trobat dades.</span>
+</div>                
+</div>
+    
+    
+<div ng-if="vmode===1">
+    <table class="table table-responsive table-bordered table-striped table-hover" style="width: 100%">
+        <thead>
+            <td>Name</td>
+            <td><span class="picoin"></span>Score</td>
+            <td>Time</td>
+        </thead>
+           <tbody>
+            <tr ng-repeat="t in trace | orderBy:'fullname' | filter:myFilter">
+                    <td width="50%"><img ng-src="assets/img/thm/{{u.username}}.jpg" err-src="assets/img/avatar/{{u.uopts.avatar || 0}}.png"  title="{{u.fullname}}" height="30"/> {{t.fullname}}</td>
+                    <td width="25%"> {{t.vscore}}</td>
+                    <td width="25%">{{t.vseconds | timeHMS}}</td>                    
+                </tr>
+        </tbody>
+    </table>
+    
+    
+    <table class="table table-bordered table-hover table-responsive">
+        <thead>
+            <tr>
+                <td style="width: 200px" ng-repeat="t in titles track by $index">{{t}}</td>            
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-if="myFilter2(r[0])" ng-repeat="r in matrix track by $index">
+            
+                <td style="width: 200px" ng-class="c.clazz" ng-repeat="c in r track by $index">  
+                    <div compile="c.text"></div>
+                </td>
+            </tr>
+            
+        </tbody>
+    </table>
+    </div>
+</div>
+                
+ 

@@ -1,0 +1,93 @@
+<!--<lazy-style href="assets/libs/angular-ui-tree/angular-ui-tree.min.css"></lazy-style>
+<lazy-style href="assets/css/flaticon/flaticon.css"></lazy-style>
+<lazy-style href="app/components/activity/ace.css"></lazy-style>
+-->
+
+ <!-- Nested node template -->
+<script type="text/ng-template" id="nodes_renderer.html">
+  <div ui-tree-handle class="tree-node tree-node-content">
+    
+        <span class="cursor-hand" ng-class="collapsed?'btn glyphicon glyphicon-chevron-down':'btn glyphicon glyphicon-chevron-right'" ng-if="node.dir && node.nodes" data-nodrag ng-click="toggle(this)"></span>      
+        <span ng-if="!node.dir">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <div class="btn-group" uib-dropdown> 
+        
+                    <button ng-if="node.dir" type="button" class="btn btn-info btn-xs dropdown-toggle"  ng-class="collapsed?'btn btn-xs glyphicon glyphicon-folder-close':'btn btn-xs glyphicon glyphicon-folder-open'" uib-dropdown-toggle>
+                    <button ng-if="!node.dir" type="button" class="btn btn-default btn-xs dropdown-toggle flaticon-blank-file" ng-class="extFileIcon(node)" uib-dropdown-toggle></button>
+            
+                        <ul class="uib-dropdown-menu" uib-dropdown-menu style="overflow:visible;z-index:1000">                        
+                        <li> <a ng-click="deleteFile(node)" ng-if="!node.root">Delete</a></li>
+                        <li> <a ng-click="renameFile(node)" ng-if="!node.root">Rename</a></li>
+                        <li> <a ng-click="newdir(node)" ng-if="node.dir">New directory</a></li>
+                        <li> <a ng-if="node.dir" ngf-select ngf-change="upload($files, node)" ngf-multiple="true"  ngf-max-size="20000000"  ng-disabled="importing">Upload file/s...</a></li>
+                        <li> <a ng-click="unzip(node)"  ng-if="!node.dir && (node.title.endsWith('.zip'))">Unzip</a></li> 
+                        <li> <a ng-click="minify(node)"  ng-if="!node.dir && (node.title.endsWith('.css') || node.title.endsWith('.js'))">Uglify</a></li>    
+                        <li> <a ng-click="copyLink(node)"  ng-if="!node.dir" class="glyphicon glyphicon-link">Copy link</a></li>    
+                    </ul>
+         </div>
+         <a ng-click="openFile(node)" class="cursor-hand"><span style="font-size: 12px; font-weight: normal;" ng-if="!node.dir">{{node.title}}</span></a>
+         <span style="font-size: 12px; font-weight: normal;" ng-if="node.dir">{{node.title}}</span>
+  </div>
+  <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+    <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
+    </li>
+  </ol>
+</script>
+
+
+<div class="container-fluid" style="padding: 10px">
+    <div class="row">
+
+        <div class="col-md-2"> 
+            <!-- group selection -->
+            <div class="btn-group" uib-dropdown>                  
+                    <button type="button" class="btn btn-info btn-sm dropdown-toggle" uib-dropdown-toggle>
+                    <span> {{group.groupYear+"/"+(group.groupYear+1)+": "+group.groupName + ' - ' +group.name}} </span>
+                    <span class="caret"></span>
+                    </button>
+                    <ul class="uib-dropdown-menu"  uib-dropdown-menu style="overflow:visible;z-index:1000">                        
+                        <li role="menuitem" ng-repeat="g in user.groups track by g.idGroup"><a href="" ng-click="setGroup(g)"> {{g.groupYear+"/"+(g.groupYear+1)+": "+g.groupName + ' - ' +g.name}} </a></li>
+                    </ul>
+            </div>
+            
+            
+            <!-- Download progress -->
+            <div style="display: inline" class="dropdown">
+                <button class="btn btn-sm btn-default glyphicon glyphicon-upload dropdown-toggle" type="button" data-toggle="dropdown"><img ng-if="uploading" src="assets/img/ajax-loader-squares.gif"/>
+                <span class="caret"></span></button>
+                <ul style="width: 600px" class="dropdown-menu" >
+                    <li ng-repeat="u in uploads track by u.id"><small> {{u.description}} <span class="pull-right"> {{u.progress}} </span></small></li>                  
+                </ul>
+            </div>
+       
+            <h5>  <button class="btn btn-xs glyphicon glyphicon-refresh" ng-click="reloadClient()"></button>  /files/{{group.idGroup}}/ </h5>
+            <div>
+                <div ui-tree>
+                    <ol ui-tree-nodes="" ng-model="files" id="tree-root1" data-nodrag="true">
+                        <li ng-repeat="node in files track by node.id" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+                    </ol>
+                    <br>
+                    <br>
+                </div>  
+            </div>            
+        </div>
+
+        <div class="col-md-10">
+             <uib-tabset active="tabset.activeTabIndex">
+                <uib-tab index="workspace.index" ng-repeat="workspace in workspaces" select='onTabSelect(workspace)'>
+                    <uib-tab-heading><span ng-if="workspace.modified">*</span> {{workspace.node.title}}<a ng-click="close(workspace)">
+                            <span class="close"> x</span>
+                        </a></uib-tab-heading>
+                    <div ng-switch="workspace.type">  
+                        <!-- text editor -->
+                        <div ng-switch-when="editor" ng-model="workspace.src" ui-ace="{onLoad: aceLoaded}" ng-readonly="true" ></div>
+                        <!-- image preview -->
+                        <img ng-switch-when="img" class="img-responsive img-thumbnail" ng-src="{{workspace.src}}"/>                        
+                        <!-- google view -->
+                        <div ng-switch-default><iframe ng-src="{{workspace.src}}" style="width:95%; height:700px;" frameborder="0"></iframe> </div>                        
+                    </div>     
+                </uib-tab>
+            </uib-tabset>
+             
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h3 class="modal-title">Insígnies de {{student.fullname}} <button class="btn btn-xs btn-success glyphicon glyphicon-plus-sign" ng-click="addBadge()">Create</button> </h3>
+</div>
+<div class="modal-body">
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <td>Dia</td><td>Type</td><td>Score</td><td>Creator</td><td>Actions</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="b in badges">
+                <td>{{b.day | date: 'dd-MM-yyyy'}}</td>
+                <td>                    
+                    <img ng-src="assets/img/badge-{{b.type}}.png" width="40"/>
+                    <select ng-model="b.type" ng-disabled="!b.edit">
+                        <option ng-repeat="item in badgesList track by item.id" ng-value="item.id">{{item.id}} - {{item.label}}</option>     
+                    </select>
+                </td>
+                <td>
+                    <span ng-if="!b.edit">{{b.rscore}}</span>
+                    <input type="number" ng-model="b.rscore" ng-if="b.edit" min="0"/>
+                </td>
+                <td>{{b.idCreator}}</td>
+                <td>                   
+                    <button ng-if="!b.edit && b.idCreator==user.id" class="btn btn-xs btn-danger glyphicon glyphicon-trash" ng-click="deleteBadge(b)"></button>
+                    <button ng-if="!b.edit && b.idCreator==user.id" class="btn btn-xs btn-info  glyphicon glyphicon-pencil" ng-click="editBadge(b)">Edit</button>
+                    <button ng-if="b.edit" class="btn btn-xs btn-warning glyphicon glyphicon-remove" ng-click="cancelEdit(b)">Cancel</button>
+                    <button ng-if="b.edit" class="btn btn-xs btn-success glyphicon glyphicon-ok" ng-click="saveEdit(b)">Save</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+</div>
+<div class="modal-footer">
+     <button class="btn btn-primary glyphicon glyphicon-ok" ng-click="ok()"><span translate="ACCEPT"></span></button>    
+</div>

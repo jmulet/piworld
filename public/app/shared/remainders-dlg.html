@@ -1,0 +1,14 @@
+<div class="modal-header">
+    <h3 class="modal-title">Email to {{list.length}} users</h3>
+</div>
+<div class="modal-body">
+    Subject: <input type="text" class="form-control" ng-model="bean.subject"/>
+    Body:
+    <textarea ui-tinymce="tinymceOpts" ng-model="bean.html"></textarea>
+    Users:
+    <picklist name="remaindersStd" size="10" rows="25" data-picklist="" data-pick-model="bean.selected"  data-pick-options="s.fullname+' ('+s.email+')' for s in list"/>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning glyphicon glyphicon-remove" ng-click="cancel()"><span translate="CANCEL"></span></button>
+    <button class="btn btn-primary glyphicon glyphicon-ok" ng-click="ok()"><span translate="ACCEPT"></span></button>    
+</div>

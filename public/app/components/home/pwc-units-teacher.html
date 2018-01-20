@@ -1,0 +1,195 @@
+<div class="panel panel-default panel-transparency">
+
+    <div class="panel-heading" ng-style="vm.headingStyle">                       
+
+        <button title="refresh" class="btn btn-xs glyphicon glyphicon-refresh" ng-click="vm.reload(true)"></button>
+        <button class="btn btn-xs btn-primary glyphicon" ng-class="vm.tgs.globalCollapse?'glyphicon-collapse-down':'glyphicon-collapse-up'" ng-click="vm.toggleGlobalCollapse()"></button>   
+ 
+        <div class="btn-group" uib-dropdown>
+            <button type="button" class="btn btn-xs btn-default dropdown-toggle" uib-dropdown-toggle >
+                <span style="max-width: 300px"><span ng-style="{'background-color': vm.group.groupYear === vm.currentYear?'lightgreen':'lightsalmon'}">
+                        {{vm.group.groupYear + "/" + (vm.group.groupYear + 1)}}</span>{{": "+vm.group.groupName}}</span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdownnu" uib-dropdown-menu role="menu">
+                <li ng-repeat="g in vm.user.groups | filter: vm.noGhostFilter track by $index">
+                    <a href="" ng-click="vm.group = g; vm.onChangeGrp(true);">
+                        <span  ng-style="{'background-color': g.groupYear === vm.currentYear?'lightgreen':'lightsalmon'}">
+                            {{g.groupYear + "/" + (g.groupYear + 1)}} </span>{{": "+g.groupName}}</a>
+                </li>
+            </ul>
+        </div>  
+
+
+        <a ng-if="vm.user.idRole < vm.USER_ROLES.student" ui-sref="home.groups">
+            <img style="display:inline;width:30px;" src="assets/img/groups.png" width="30" height="30" title="Groups" alt="groups"/>
+        </a>
+
+        <div class="btn-group pull-right">
+            <button class="btn btn-xs btn-warning glyphicon glyphicon-star-empty" ng-click="vm.gotoActiveUnit()"></button>
+
+            <button class="btn btn-xs btn-default" ng-click="vm.onToggleEdition()" ng-if="vm.group.eidRole < vm.USER_ROLES.teacherNonEditing">
+                <span ng-if="vm.tgs.edition" uib-tooltip="Edit ON">ON</span>
+                <span ng-if="!vm.tgs.edition" uib-tooltip="Edit OFF">OFF</span>
+            </button>       
+             
+        </div>
+        
+    </div> <!--End panel-heading -->
+
+
+    <div id='maincol-scroll' class='maincol-scroll' ng-style="{'margin': vm.mobile?'40px 0px 40px':'4px 0px 4px'}">
+
+
+        <div class="panel-body" style="margin:0px; padding:0px">
+            <div class="list-group">
+
+                <div class="list-group-item list-group-item" style='padding: 0px;' ng-repeat="u in vm.units track by u.id">
+                    <div ng-if="$index > 0 || u.assignments.length">
+                        <div ng-class="u.visible?vm.group.currentUnit===u.id?'list-group-item-heading unit-current':'list-group-item-heading unit-visible':'list-group-item-heading list-group-item-default unit-hidden'">
+                            <button style="color:black" ng-click="u.collapsed = !u.collapsed" class="btn btn-xs glyphicon glyphicon-collapse-down" 
+                                    ng-class="u.collapsed?'glyphicon-collapse-up':'glyphicon-collapse-down'"></button>
+                             
+                            
+                            <div class="btn-group" uib-dropdown ng-if="!u.edit">  <!--tgs.edition &&-->
+                                <button type="button" class="btn btn-xs btn-default dropdown-toggle" uib-dropdown-toggle>
+                                    <span class="glyphicon glyphicon-menu-hamburger"></span>
+                                </button>
+                                <ul class="dropdown-menu"  uib-dropdown-menu role="menu">
+                                    <li ng-show="vm.tgs.edition"><a  href="" ng-click="vm.editUnit(u)"><span class="glyphicon glyphicon-pencil"></span> Edit unit title</a></li>
+                                    <li ng-show="vm.tgs.edition"><a  href="" ng-click="vm.addLabelInUnit(u)"><span class="glyphicon glyphicon-plus"></span> Add label entry to unit</a></li>                                              
+                                    <li ng-show="vm.tgs.edition" role="separator" class="divider"></li>
+                                    <li ng-show="vm.tgs.edition"><a  href="" ng-click="vm.setCurrentUnit(u)"><span class="glyphicon glyphicon-star"></span> Select as active</a></li>
+                                    <li ng-show="vm.tgs.edition" class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="">  Change visibility  <span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a tabindex="-1" href="" ng-click="vm.toggleVisibility(u, 0)"><span ng-if="u.visible === 0" class="glyphicon glyphicon-ok"></span> Hidden</a></li>
+                                            <li><a tabindex="-1" href="" ng-click="vm.toggleVisibility(u, 1)"><span ng-if="u.visible === 1" class="glyphicon glyphicon-ok"></span> Collapsed</a></li>
+                                            <li><a tabindex="-1" href="" ng-click="vm.toggleVisibility(u, 2)"><span ng-if="u.visible === 2" class="glyphicon glyphicon-ok"></span> Auto</a></li>
+                                            <li><a tabindex="-1" href="" ng-click="vm.toggleVisibility(u, 3)"><span ng-if="u.visible === 3" class="glyphicon glyphicon-ok"></span> Expanded</a></li>
+                                        </ul>
+                                    </li>
+                                    <li ng-show="vm.tgs.edition"  role="separator" class="divider"></li>
+                                    <li><a href="" ng-click="vm.reportUnit(u)"><span class="glyphicon glyphicon-file"></span> Unit activity report </a></li>
+                                </ul>
+                            </div>  
+
+
+                            <span ng-if="!u.edit" class="unit-title">{{u.unit| uppercase}}</span>
+                            <span ng-if="u.edit"><input type="text" ng-model="u.unit" style="width:70%; color: black"/></span>
+
+                            <div class="pull-right">
+                                <!-- Unit menu button -->
+                                <button title="Discard changes" ng-if="u.edit" ng-click="vm.cancelEditUnit(u)" class="btn btn-xs btn-danger glyphicon glyphicon-remove"></button>
+                                <button title="Save changes"  ng-if="u.edit" ng-click="vm.saveEditUnit(u)" class="btn btn-xs btn-success glyphicon glyphicon-save"></button>
+
+                                <span ng-class="vm.group.currentUnit===u.id?'glyphicon glyphicon-star':''"></span>
+                                <span ng-class="u.visible?'':'text-danger glyphicon glyphicon-eye-close'"></span>
+
+                            </div>
+
+                        </div> <!--end unit title-->
+
+                        <ul class="list-unstyled" ng-hide="u.collapsed" sv-root="unitRoot" sv-part="u.assignments"  sv-on-sort="vm.onSort($item, $partFrom, $partTo, $indexFrom, $indexTo)">
+                            <!--begin assigments in unit-->
+                            <li ng-repeat="a in u.assignments track by a.id" ng-class="a.visible!==1? 'asgn asgn-gray':''" sv-element>
+ 
+                                <div ng-if="vm.group.currentUnit === u.id || $first || u.showAll || u.order == 0" 
+                                     ng-class="a.idActivity===0? 'asgn' : (a.open? (a.doneAttempts? 'asgn asgn-green':'asgn asgn-yellow'): 'asgn asgn-gray')"> 
+                                     
+                                    <span ng-show="vm.tgs.edition" class="glyphicon glyphicon-move" sv-handle></span>
+
+                                    <span ng-if="a.idActivity > 0">    
+                                        <span class="badge">{{a.idActivity}}</span>
+                                        <b>{{a.activity}}</b>       
+                                    </span>
+
+                                    <div class="pull-right">     
+
+                                        <button ng-if="a.ytid"  title="Grades" class="glyphicon glyphicon-apple" ng-click="vm.grades4activity(a)"></button>
+                                        <span ng-if="a.applyToAll" class="badge">ALL</span>
+                                        <span ng-if="a.assigned >= 0 && !a.applyToAll" class="badge">{{a.assigned}}</span>
+
+                                        <button ng-disabled="!vm.tgs.edition"
+                                                title="Toggle visibility" ng-click="vm.asgnVisibility(a)" ng-class="a.visible?'btn btn-xs glyphicon glyphicon-eye-open':'btn btn-xs btn-danger glyphicon glyphicon-eye-close'"></button>
+
+                                        <span ng-if="vm.tgs.edition">
+                                            <button title="Delete" ng-if="a.idActivity > 0" ng-click="vm.removeAsgn(a)" class="btn-danger btn-xs glyphicon glyphicon-trash"></button>
+                                            <button title="Properties" ng-click="vm.editAsgn(a)" class="btn btn-info btn-xs glyphicon glyphicon-cog"></button>    
+                                        </span>
+
+                                        <div style="display:inline">
+                                            <span ng-if="vm.tgs.edition">
+                                                <button ng-if="!a.edit" title="Edit" class="btn btn-xs glyphicon glyphicon-pencil" ng-click="vm.onEditLabel(a)"></button>
+                                                <button ng-if="!a.edit && a.idActivity === 0" title="Delete" class="btn btn-xs btn-danger glyphicon glyphicon-trash" ng-click="vm.onRemoveLabel(a)"></button>
+                                                <button ng-if="a.edit" title="Discard changes" class="btn btn-xs btn-warning glyphicon glyphicon-remove" ng-click="vm.onCancelEditLabel(a)"></button>
+                                                <button ng-if="a.edit" title="Save changes" class="btn btn-xs btn-success glyphicon glyphicon-save"  ng-click="vm.onAcceptEditLabel(a)"></button>
+                                            </span>
+                                        </div>
+
+                                        <button ng-click="vm.goAsgn(a, u.assignments)" ng-if="a.idActivity > 0" class="btn-xs glyphicon glyphicon-play-circle" ng-class="a.open?'btn-success':'btn-default'"></button>
+                                    </div>
+
+
+                                    <div ng-class="a.visible!==1? 'unit-hidden':'asgn-white'">
+
+                                        <table style="width:100%;">
+                                            <tr>
+                                                <td><img class="rborder cursor-hand" ng-if='a.icon' ng-src="{{a.icon}}" width="150px" alt="pic" ng-click="vm.goAsgn(a, u.assignments)"/></td>
+                                                <td style="width:100%">
+                                                    <div ng-if="!a.edit" style="padding-left: 5px" compile='a.instructions'></div>
+                                                    <div ng-if="(a.idActivity > 0 && a.edit)" style="padding-top: 5px;width:100%; height:100%">
+                                                        <textarea style="width:100%; height:100%" rows="5" ng-model="a.instructions"></textarea>
+                                                    </div>
+                                                </td>                                                     
+                                            </tr>
+                                        </table>
+                                        <div ng-if="(a.idActivity === 0 && a.edit)" style="padding-top: 25px">
+                                            <textarea ui-tinymce="vm.tinymceOpts" ng-model="a.instructions"></textarea>
+                                        </div>
+
+
+                                        <div ng-if="a.idActivity > 0 && (a.edit || a.fromDate || a.toDate)" style="border-top: solid; border-color: #aaa;height: 20px">
+                                            <span><i translate='PERIODE'></i>:  
+                                                <span class="input-group input-group-sm" style="display:inline-table">
+                                                    <input type="text"   datetime-picker="dd-MM-yyyy  HH:mm" ng-model="a.fromDate" is-open="a.isOpen1"  ng-disabled="!a.edit" />
+                                                    <span >
+                                                        <button type="button" class="btn btn-xs btn-default"  ng-click="a.isOpen1 = true;" ng-disabled="!a.edit"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                    </span>
+                                                </span>
+
+
+                                                &#8594; 
+                                                <span class="input-group input-group-sm" style="display:inline-table" >
+                                                    <input type="text" datetime-picker="dd-MM-yyyy  HH:mm" ng-model="a.toDate" is-open="a.isOpen2" ng-disabled="!a.edit" />
+                                                    <span >
+                                                        <button type="button" class="btn btn-xs btn-default"  ng-click="a.isOpen2 = true;" ng-disabled="!a.edit"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                            <span ng-if="a.open && a.maxAttempts === 0" class="pull-right" translate="UNLIMITED_ATTEMPTS"></span>
+                                            <span ng-if="a.open && a.maxAttempts > 0" class="pull-right" translate="YOU_HAVE_ATTEMPTS" translate-values="{remains: (a.maxAttempts-a.doneAttempts)}"></span>                                                                                                                    
+                                            <span ng-if="!a.open" class="pull-right" translate="CLOSED" style='color: red;'></span>                                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </li> 
+
+                            <div ng-if="vm.group.currentUnit !== u.id && u.assignments.length > 1 && !u.showAll && u.order != 0" class="text-center">
+                                <button class="glyphicon glyphicon-menu-down form-control" ng-click="u.showAll=true;"> <span translate="SHOW_MORE"></span></button>
+                            </div>
+
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div> <!--end panel-body-->
+
+         
+
+    </div> <!--end main-sroll-->
+ </div> <!--end panel>

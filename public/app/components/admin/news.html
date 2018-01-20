@@ -1,0 +1,46 @@
+
+<div class="container-fluid" style="padding: 20px">
+<h4>News panel administration
+<button class="btn btn-success glyphicon glyphicon-plus-sign" ng-click="newscreate()"/></h4>
+
+ 
+
+ 
+ <ul class="list list-unstyled" sv-root  sv-on-sort="onSort($item, $partFrom, $partTo, $indexFrom, $indexTo)">
+    <div sv-part="news"> 
+    <li  sv-element ng-repeat="n in news" style="border-style: solid; border: lavender; margin-bottom: 5px">
+             
+        <div class="row" style="background: lavender">  
+            <div class="col-md-7">
+            <span class="glyphicon glyphicon-move cursor-hand" sv-handle></span>  
+            ID={{n.id}}.
+            <button ng-if="!n.edit" class="btn btn-danger btn-xs glyphicon glyphicon-trash" title="delete" ng-click="newsdelete(n)"/>
+            <button ng-if="!n.edit" class="btn btn-default btn-xs glyphicon glyphicon-pencil" title="Edit" ng-click="newsEdit(n)"/>
+            <button ng-if="n.edit" class="btn btn-warning btn-xs glyphicon glyphicon-remove" title="Cancel Edit" ng-click="newsCancelEdit(n)"/>
+            <button ng-if="n.edit" class="btn btn-success btn-xs glyphicon glyphicon-save-file" title="Save" ng-click="newsUpdate(n)"/>
+            <span ng-if="!n.edit">{{n.title}}</span>
+            <input ng-if="n.edit" type="text" class="form-control-static" ng-model="n.title"/>
+            
+            <span>Expires: </span>
+            </div>
+            <div class="col-md-3">
+                <span ng-if="!n.edit"> {{n.expires | date: 'dd-MM-yyyy'}}</span>
+                 <span ng-if="n.edit" class="input-group">
+                <input type="text" class="form-control" datetime-picker="dd-MM-yyyy  HH:mm" ng-model="n.expires" is-open="n.isOpen"  />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="n.isOpen=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+                </span>        
+            </div>
+            
+               
+        </div>
+            
+        <div ng-if="!n.edit" compile="n.html">            
+        </div>
+        <textarea ng-if="n.edit" ng-model="n.html" cols="50" style="width:90%" rows="5">            
+        </textarea>
+    </li>
+     </div>
+</ul>
+</div>

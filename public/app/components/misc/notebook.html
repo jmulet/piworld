@@ -1,0 +1,102 @@
+<lazy-style href="app/components/activity/ace.css"></lazy-style>
+<div  style="position: absolute; padding:5px; width: 100%; height: 92%;">
+    
+<div class="row" style=" height: 100%; ">
+    <div class="col-md-2">
+        <h3><span>PiTeX</span> <small>LaTeX editor</small></h3>
+        PROJECTS <button ng-click="create()" class="btn btn-success btn-sm glyphicon glyphicon-plus-sign"></button>  
+        <ul class="list list-unstyled">
+            <li ng-repeat="p in projs track by $index">
+                  
+                <div class="btn-group" uib-dropdown>
+                    <button type="button" class="btn btn-default btn-xs" uib-dropdown-toggle>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                        <li role="menuitem"><a href="" ng-click="renameProject(p)">Rename project</a></li>
+                        <li role="menuitem"><a href="" ng-click="cloneProject(p)">Clone project</a></li>
+                        <li class="divider"></li>
+                        <li role="menuitem"><a href="" ng-click="removeProject(p)">Remove project</a></li>                    
+                    </ul>
+                </div>
+               
+                <a href="" ng-click="forceOpenProject(p)">{{p}}</a>
+            </li>
+        </ul>
+        <hr>
+        <div ng-if="currentProject">
+            DOCUMENTS IN {{currentProject}} 
+            <button ng-click="createTeX()" class="btn btn-success btn-sm glyphicon glyphicon-plus-sign"></button>  
+            <div style="display: inline-block" class="btn btn-sm btn-primary glyphicon glyphicon-upload" title="Upload file into project" ngf-select ngf-change="upload($file)" ngf-max-size="20000000"  ng-disabled="importing"><img ng-if="importing" src="assets/img/ajax-loader-squares.gif"/> {{uploadPercent}}</div>
+            <ul class="list list-unstyled">
+                <li ng-repeat="d in docs.files track by $index">
+                  <button class="btn btn-xs btn-danger glyphicon glyphicon-remove" ng-disabled="d==='source.tex' || d==='template.tex'" ng-click="removeDoc(d)"></button> <img height="30" width="30" data-ng-src="{{docs.images[d]}}"> <a href="" ng-click="openDoc(d)">{{d}}</a>
+                </li>
+            </ul>
+        </div>
+            
+    </div>
+    
+    <div class="col-md-10" style="height: 100%;">
+        <strong>EDITOR</strong>
+        <button ng-disabled="!currentProject" class="btn btn-sm btn-success glyphicon glyphicon-save" ng-click="save()">Save</button>     
+        <button ng-disabled="!currentProject" class="btn btn-sm btn-primary glyphicon glyphicon-download" ng-click="pdf()">PDF</button>        
+        <button ng-disabled="!currentProject" class="btn btn-sm btn-info glyphicon glyphicon-download" ng-click="pandoc('odt')">ODT</button>        
+        <button ng-disabled="!currentProject" class="btn btn-sm btn-primary glyphicon glyphicon-download" ng-click="pandoc('docx')">DOCX</button>   
+        <button ng-disabled="!currentProject" class="btn btn-sm btn-info glyphicon glyphicon-download" ng-click="project()">ZIP</button>        
+        
+        <span ng-if="tabset.activeTab.type==='tex'">
+            
+            <div class="btn-group" uib-dropdown>
+                <button type="button" class="btn btn-default btn-small" uib-dropdown-toggle>
+                    Formula <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                    <li role="menuitem"><a href="" ng-click="insertFormula('system2')">Sistema 2x2</a></li>
+                    <li role="menuitem"><a href="" ng-click="insertFormula('system3')">Sistema 3x3</a></li>
+                    <li role="menuitem"><a href="" ng-click="insertFormula('matrix3')">Matriu 3x3</a></li>
+                    <li role="menuitem"><a href="" ng-click="insertFormula('det3')">Determinant 3x3</a></li>
+                    <li class="divider"></li>
+                    <li role="menuitem"><a href="" ng-click="insertFormula('picelikewise')">Funció a trossos</a></li>
+                    <li role="menuitem"><a href="" ng-click="insertFormula('limit')">Límit</a></li>
+                    <li role="menuitem"><a href="" ng-click="insertFormula('derivate')">Derivada</a></li>                    
+                    <li role="menuitem"><a href="" ng-click="insertFormula('integral')">Integral</a></li>                    
+                </ul>
+            </div>
+            
+            <button type="button" class="btn btn-default btn-small" ng-click="insertTable()">Table</button>
+        </span>
+        
+         <uib-tabset ng-if="currentProject" active="tabset.activeTabIndex" style="height: 92%; ">
+               <uib-tab index="-2" select="tabset.activeTab = logw">
+                   <uib-tab-heading>
+                       <span>Log</span>                        
+                    </uib-tab-heading>
+                    <div ng-model="logw.src" ng-readonly="true" ui-ace="{onLoad: aceLoaded}"  style="position: absolute; width:100%; bottom: 5px; height: 90%; top: 72px"></div>                    
+                </uib-tab>
+               
+                <uib-tab index="-1" select="tabset.activeTab = outw">
+                   <uib-tab-heading>
+                       <span>Output</span>                        
+                    </uib-tab-heading>
+                    <iframe ng-src="{{outw.src}}" frameborder="0" style="position: absolute; width:100%; bottom: 5px; height: 90%; top: 72px"></iframe>
+                </uib-tab>
+             
+                <uib-tab ng-repeat="w in workspaces" index="w.index" select="onTabSelect(w)" style="height: 100%;">
+                    <uib-tab-heading><span ng-if="w.modified">*</span>{{w.title}}
+                        <a ng-click="closeTab(w)">
+                            <span class="close"> x</span>
+                        </a>
+                    </uib-tab-heading>
+                    <div ng-switch="w.type">         
+                        <div ng-switch-when="tex" ng-model="w.src" ui-ace="{onLoad: aceLoaded}" style="position: absolute; width:100%; bottom: 5px; height: 90%; top: 72px" ng-readonly="false" ></div>
+                        <div ng-switch-when="pdf"> <iframe ng-if="w.src" ng-src="{{w.src}}" style="position: absolute; width:100%; bottom: 5px; height: 90%; top: 72px" frameborder="0"></iframe> </div>
+                        <div ng-switch-when="img"> <img class="img-responsive" data-ng-src="{{w.src}}"/></div>
+                    </div>     
+                </uib-tab>
+        </uib-tabset>
+        
+    </div>
+</div>
+
+</div>

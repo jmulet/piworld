@@ -1,0 +1,16 @@
+<div class='bg-alien'>
+    <div class="modal-header">
+        <h3 class="modal-title"><span style="color: white;">{{title}}</span></h3>
+    </div>
+    <div class="modal-body">
+        <h4 ><span compile="msg" style="color: white;"></span></h4>
+        <hr>
+
+        <p ng-if="!isGuest" style="color: white;">La meva valoració <span uib-rating ng-model="activity.rating" readOnly="false" max="5" state-on="'glyphicon-star orange'" state-off="'glyphicon-star gray'"
+                                                                          ng-change="updateRating()"></span></p> 
+
+    </div>
+    <div class="modal-footer">      
+    <button class="btn btn-primary glyphicon glyphicon-ok" ng-click="ok()"><span translate="ACCEPT"></span></button>    
+    </div>
+</div>

@@ -1,0 +1,211 @@
+ 
+
+<div class="container-fluid" style="padding: 10px" ui-view="">
+    
+<!--
+<h4>ASSIGNMENTS
+    <button ng-click="goActivitySearch()" class="btn btn-info">Choose activity and assign</button>
+    <button ng-click="assignlabel()" class="btn btn-primary btn-tooltip">Assign a label</button>
+</h4>
+
+Student: <input type="text" ng-model="filter.student"/>
+ 
+Postdate:  <datetimepicker show-weeks="true" hour-step="1" minute-step="5" ng-model="filter.fromDate" 
+                show-meridian="false" date-format="dd-MMM-yyyy" date-options="dateOptions" 
+                date-disabled="disabled(date, mode)" readonly-time="false"></datetimepicker>
+<button class="btn glyphicon glyphicon-filter" ng-click="reload()">Filter</button>
+-->
+
+ 
+<div class="row">
+<!--
+<div class="col-md-4">
+    
+    <div class="list-group">
+        <h5>{{gselected.groupName}} - {{gselected.name}}</h5>
+        <div class="list-group-item list-group-item" ng-repeat="u in currentunits">
+            <div ng-if="$index>0 || u.assignments.length">
+                <div class="list-group-item-heading list-group-item-info">
+                    <h5><button ng-click="u.collapsed = !u.collapsed" ng-class="u.collapsed?'btn btn-xs glyphicon glyphicon-collapse-up':'btn btn-xs glyphicon glyphicon-collapse-down'"></button>
+                        <span translate="UNIT"></span> {{$index}}. {{u.unit | uppercase}}
+                    </h5>
+                </div>
+
+                
+                <ul class="list-unstyled" ng-hide="u.collapsed">
+                    <li ng-repeat="a in u.assignments">
+
+                        <div ng-class="a.idActivity===0? 'asgn' : (a.open? (a.doneAttempts? 'asgn asgn-green':'asgn asgn-yellow'): 'asgn asgn-gray')"> 
+                            <span ng-if="a.idActivity > 0">                                                        
+                                <b>{{a.activity}}</b>       
+                            </span>
+                            <div class="pull-right">
+                                <span ng-if="a.applyToAll" class="badge">ALL</span>
+                                <span ng-if="a.assigned>=0 && !a.applyToAll" class="badge">{{a.assigned}}</span>
+
+                                <button ng-click="removeAsgn(a)" class="btn-danger btn-xs glyphicon glyphicon-trash"></button>
+                                <button ng-click="editAsgn(a)" class="btn-info btn-xs glyphicon glyphicon-pencil"></button>    
+                                <button ng-if="a.idActivity>0" ng-click="select_detail(a)" class="btn-info btn-xs glyphicon glyphicon-eye-open"></button>    
+                             </div>
+                            
+                            <div style="border-radius: 6px; border: 1px solid #aaa; background-color: white">
+                                 
+                                <div compile='a.instructions' ng-if="!a.edit"></div>
+                                <div ng-if="a.idActivity > 0" style="border-top: solid; border-color: #aaa; height: 25px">
+                                    <span ng-if="a.fromDate || a.toDate"><i translate='PERIODE'></i>: {{a.fromDate| date:"dd-MM-yyyy" }} &#8594; {{a.toDate| date:"dd-MM-yyyy"}}</span>
+                                    <span ng-if="a.open && a.maxAttempts===0" class="pull-right" translate="UNLIMITED_ATTEMPTS"></span>
+                                    <span ng-if="a.open && a.maxAttempts>0" class="pull-right" translate="YOU_HAVE_ATTEMPTS" translate-values="{remains: (a.maxAttempts-a.doneAttempts)}"></span>                                                                                                                    
+                                    <span ng-if="!a.open" class="pull-right" translate="CLOSED" style='color: red;'></span>                                                            
+                                </div>
+                            </div>
+                        </div>
+
+                    </li> 
+
+                </ul>
+
+            </div>
+        </div>
+    </div>
+         
+</div>
+-->    
+    
+   
+<div class="col-md-12">
+    <div ng-if="detail">
+    <h4><button ng-click="selectedit(detail)" class="btn-info btn-xs glyphicon glyphicon-pencil"></button>   Report of assignment {{detail.id}}</h4>
+
+    <div ng-if="detail.idActivity>0">
+        <h5>On activity {{detail.idActivity}}: {{detail.activity}} <button class='btn btn-xs btn-success glyphicon glyphicon-pencil' title='Edit' ng-if='!detail.edit' ng-click='detail.edit=!detail.edit'>Edit marks</button>
+        <button class='btn btn-xs btn-warning glyphicon glyphicon-remove' title='Cancel' ng-if='detail.edit' ng-click='onCancelEdit()'></button>
+        <button class='btn btn-xs btn-success glyphicon glyphicon-save' title='Save' ng-if='detail.edit' ng-click='onAcceptEdit()'></button></h5> 
+        <table class="table-hover table-scroll table-responsive">
+            <thead>
+                <td style="width:60%" class="mythead">Nom</td><td style="width:20%" class="mythead">Max Score</td><td style="width:20%" class="mythead">Visualization</td>
+            </thead>
+        </table><br>
+        <div ng-repeat="u in detailData" style="border: solid; border-color: #888; border-width: 1px">
+            <table class="table-hover table-scroll" style="border-collapse: separate; border-spacing: 5px;vertical-align: top;margin-bottom: 5px">
+                
+                <tr>
+                    <td style="width:60%"><span ng-if="u.attempts.length"  ng-class="u.expand?'cursor-hand  glyphicon glyphicon-collapse-up':'cursor-hand glyphicon glyphicon-collapse-down'" ng-click="u.expand=!u.expand"></span>
+                        {{u.fullname}}</td> <td style="width:20%">{{u.maxscore || 0}}% </td><td style="width:20%"> {{u.vscore}} </td>
+                </tr></table>
+            <br>
+            <br>
+            <table ng-if="u.attempts.length && !u.expand">
+                <thead>
+                    <td style="width:5%"></td>
+                    <td style="width:10%" class="mythead"></td>
+                    <td style="width:10%" class="mythead">Started</td><td style="width:10%"  class="mythead"> Lapsed </td><td style="width:10%" class="mythead"> Score</td><td style="width:10%" class="mythead"> Level</td><td style="width:10%" class="mythead"> Done</td>
+                </thead>
+                    
+                <tr ng-repeat="a in u.attempts">
+                    <td style="width:5%"></td>
+                    <td style="width:10%"><button ng-click="details(a)">Details</button> </td>
+                    <td style="width:10%">{{a.attemptStart}}</td><td style="width:10%">{{a.lapsed | timeHMS}} </td><td style="width:10%"> 
+                        <span ng-if="!detail.edit"> {{a.score || 0}}% {{a.feedback}}</span>
+                        <span ng-if="detail.edit"> <input type="spinner" ng-model="a.score" ng-change="a.changed=true">% 
+                             <input type="text" ng-model="a.feedback" ng-change="a.changed=true"></span>
+                    </td><td style="width:10%"> {{a.level}} </td><td style="width:10%">  <span compile="a.done | correct"></span></td>
+                </tr> 
+            </table>
+            <br ng-if="u.attempts.length">
+
+
+        </div>
+    
+    <p ng-if="detail.idActivity==0">This is a label assignment. Nothing to report</p>
+        
+</div>
+ </div>
+    
+<div ng-if="asgn">
+    <h4><button ng-click="select_detail(asgn)" class="btn-tooltip btn-xs glyphicon glyphicon-eye-open"></button>   Edit assignment {{asgn.id}}
+        <button class="btn btn-xs btn-success glyphicon glyphicon-save" ng-click="save()">Save</button></h4>
+    
+<p style="background-color: lightgoldenrodyellow">
+    <span ng-hide="cbm.isLabel">ACTIVITY:  id={{asgn.idActivity}} : {{asgn.activity}}</span>
+    <span ng-show="cbm.isLabel">LABEL</span>
+</p>
+        Description
+<br>
+<p>
+    <textarea ui-tinymce="tinymceOpts" ng-model="asgn.instructions" style="height: 500px"></textarea>
+</p>
+
+
+<p>
+    Post Date:
+       <span class="input-group">
+                <input type="text" class="form-control" datetime-picker="dd-MM-yyyy  HH:mm" ng-model="asgn.postDate" is-open="asgn.isOpen1"  />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="asgn.isOpen1=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+       </span>    
+     
+</p>
+
+<div ng-if="!cbm.isLabel">
+
+    <p>
+        Max Attempts: <input type="number" ng-model="asgn.maxAttempts" min="0"/>
+    </p>    
+    
+<p>
+    Period:<br>
+<input type="checkbox" ng-model="cbm.isStartOpen"/>Without start date 
+<input type="checkbox" ng-model="cbm.isEndOpen"/>Without deadline date 
+
+<br>
+<p ng-if="!cbm.isStartOpen">
+Start Date :
+   <span class="input-group">
+                <input type="text" class="form-control" datetime-picker="dd-MM-yyyy  HH:mm" ng-model="asgn.fromDate" is-open="asgn.isOpen2"  />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="asgn.isOpen2=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+       </span>    
+</p>
+
+<br>
+
+
+<p ng-if="!cbm.isEndOpen">
+Deadline Date:
+
+   <span class="input-group">
+                <input type="text" class="form-control" datetime-picker="dd-MM-yyyy  HH:mm" ng-model="asgn.toDate" is-open="asgn.isOpen3"  />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="asgn.isOpen3=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+       </span>    
+</p>
+<br>
+
+</div> 
+Units:
+<select ng-model="selunit.id"  ng-change="onChangeUnit()">
+    <option ng-repeat="u in units" value="{{u.id}}" selected="{{selunit.id===u.id}}">{{u.unit}}</option>
+</select> 
+<br>
+
+Parameters:<br>
+<textarea ng-model="asgn.params" rows="4" cols="60"></textarea><br>
+
+Apply to students: 
+<input type="checkbox" ng-model="asgn.applyToAll" ng-true-value="1" ng-false-value="0"/> Assign to all students in group
+<br>
+<div ng-if="!asgn.applyToAll">
+    Filter <input type="text" ng-model="filter.name"  ng-keypress="($event.which===13) && reloadAsgnPicklist()" /><button ng-click="reloadAsgnPicklist()" class="btn btn-xs glyphicon glyphicon-search"></button>
+    <picklist ng-if="!asgn.applyToAll" name="pktest" size="10"  data-picklist="" data-pick-model="uselected" data-pick-options="v.fullname for v in myusers"/>
+</div>
+
+
+<br>
+<br>
+
+</div>
+</div>
+</div>

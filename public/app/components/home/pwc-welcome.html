@@ -1,0 +1,37 @@
+
+<div class="panel panel-default panel-transparency bg-warning" style="padding: 4px; margin: 2px">
+    <div class="panel-heading">
+        <h6 class="panel-title">
+            <button ng-if="!vm.mobile"  class="btn btn-xs glyphicon" ng-class="vm.collapsed?'glyphicon-collapse-down':'glyphicon-collapse-up'" 
+                    ng-click="vm.collapsed = !vm.collapsed"></button>
+            <span translate="WELCOME"></span> <b>&#960;World</b>            
+        </h6>
+    </div>
+    <div class="panel-body" ng-if="!vm.collapsed">
+     <span ng-bind="vm.user.fullname"></span> 
+        - <span style="font-size: 11px">{{vm.user.idRole| rolename}}</span>    
+        @ <span style="font-size: 11px">{{vm.user.schoolName}}</span>    
+        <br>
+        <p ng-if="!vm.teacher">
+            Professor: {{vm.group.creatorFullname}}
+        </p>
+        
+        <center ng-if="!vm.amParent"> 
+            <a ui-sref="home.activitysearch">
+                <img style="display:inline;max-width:40px;" src="assets/img/play.png" width="40" height="40" alt="activities" uib-tooltip="Activity search"/>
+            </a>
+            <!--<button ng-click="tgs.groups = !tgs.groups" class="btn btn-sm btn-info"><span translate="GROUPS"></span> </button>-->
+                       
+            <a ng-if="vm.teacher" ui-sref="home.students">
+                <img  style="display:inline;max-width:40px;" src="assets/img/students.png" width="40" height="40" alt="students" uib-tooltip="Manage students"/>
+            </a>
+            <a ng-click="vm.toggleCenterGroups()">
+                <img  style="display:inline;max-width:40px;" src="assets/img/groups.png" width="40" height="40" alt="groups" uib-tooltip="Enroll groups"/>
+            </a>
+            <a ui-sref="home.forum">
+                <img style="display:inline;max-width:40px;" src="assets/img/forum.png" width="40" height="40" alt="forum" uib-tooltip="Forums"/>
+            </a>
+        </center>
+    </div>
+</div>
+        
