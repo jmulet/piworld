@@ -79,7 +79,7 @@ function($scope, $rootScope, $state, $http, USER_ROLES, $translate, Session, gro
     $scope.newCenter = function(){
         //$scope.tableParams.reload();
         var u ={id:0, schoolName:"", professorName:"", professorEmail:"", language:"ca", edit: true, enrollpassword: Math.random().toString(36).substring(4), canEnroll: 1, canPublish: 1};
-        $scope.tableParams0.data.push(u);
+        $scope.tableParams0.$data.push(u);
         $scope.edit0(u);
     };  
       
@@ -87,7 +87,7 @@ function($scope, $rootScope, $state, $http, USER_ROLES, $translate, Session, gro
     $scope.newTeacher = function(){
         //$scope.tableParams.reload();
         var u ={id:0, fullname:"", username:"", password:"", email:"", idRole:100, schoolId: $scope.selection.id, edit: true};
-        $scope.tableParams.data.push(u);
+        $scope.tableParams.$data.push(u);
         $scope.edit(u);
     };  
     

@@ -334,7 +334,7 @@ window.pw.app.register.filter('mathlex', function(){
 window.app.register.directive('mathquill', ['Session', '$timeout', '$interval', function (Session, $timeout, $interval) {
     
     var MQ = MathQuill.getInterface(2);
-    Session.addCss("assets/libs/mathquill-0.10.1/mathquill.min.css");
+    Session.addCss(pw.MATHQUILLCSS);
     
     return {
         restrict: 'E',
@@ -767,7 +767,7 @@ window.app.register.directive('autoGrow', function () {
            replace: false,
            scope: {disabled: '=ngDisabled', imFillMathGaps: "=imFillMathGaps", id: "=id" },
            link: function(scope, element, attrs){     
-               Session.addCss("assets/libs/mathquill/mathquill.css");
+               Session.addCss(pw.MATHQUILLCSS);
                var update = function(value){                    
                     var id = scope.id;
                     scope.imFillMathGaps = value;

@@ -7,6 +7,7 @@ window.pw = window.pw || {};
 
 window.pw.GEOGEBRA_ROOT = 'https://www.geogebratube.org/';
 window.pw.KATEXCSS = "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css";
+window.pw.MATHQUILLCSS = "/activities/libs/math/mathinput/mathquill/mathquill.css";
 
 //Removed dependency on bootstrap of uibootstrap
 //Removed automatic loading of creatine
@@ -46,9 +47,9 @@ require.config({
 
         mqEdtPalette: 'activities/libs/math/mathinput/mathquill-editor-palette.html',
         mqEdtCss: 'activities/libs/math/mathinput/mathquill-editor',
-        'jquery-draggable': "assets/libs/jquery/jquery-draggable",
-        'mobile-dnd': "assets/libs/DragDropTouch",
-        rateyo: 'assets/libs/jquery/jquery.rateyo.min',
+        'jquery-draggable': "assets/js/jquery-draggable",
+        'mobile-dnd': "assets/js/jquery/DragDropTouch",
+        rateyo: 'assets/libs/js/jquery/jquery.rateyo.min',
         katex: "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.2/katex.min",
         katexauto: "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.2/contrib/auto-render.min",
         jsxgraph: "https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore",
@@ -76,17 +77,16 @@ require.config({
         'angularSortable': ['https://cdnjs.cloudflare.com/ajax/libs/angular-sortable-view/0.0.15/angular-sortable-view.min', 'assets/libs/angular-sortable-view.min'],
         'angularanimate': 'assets/libs/angular-animate/angular-animate.min',
         'datetimepicker': 'assets/libs/angular-ui-bootstrap-datetimepicker/datetimepicker',
-        'moment': 'assets/libs/bootstrap-datetimepicker/moment-with-locales.min',
-        'fxpicklist': 'assets/libs/picklist', //***
-        'multiple_select': 'assets/libs/multiple-select/multiple-select.min', //***
-        'angular_tree': 'assets/libs/angular-ui-tree/angular-ui-tree.min',
-        'angular-split-pane': 'app/shared/split-pane/angular-split-pane', //??
-        'nztoggle': 'assets/libs/nz-toggle/nz-toggle.min',
+        'fxpicklist': 'assets/js/picklist',  
+        'multiple_select': 'assets/libs/multiple-select/multiple-select',  
+        'angular_tree': 'assets/libs/angular-ui-tree/dist/angular-ui-tree.min',
+        'angular-split-pane': 'assets/js/split-pane/angular-split-pane',
+        'nztoggle': 'assets/libs/nz-toggle/dist/nz-toggle.min',
         'fileupload': 'assets/libs/ng-file-upload/ng-file-upload.min',
-        'ngJSPanel': 'assets/libs/jsPanel/angular-jspanel',
-        'jqJSPanel': 'assets/libs/jsPanel/jquery.jspanel.min',
-        'jqui': 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min',
-        'mobile_detect': 'assets/libs/mobile-detect.min',
+        'ngJSPanel': 'assets/js/jsPanel/angular-jspanel',
+        'jqJSPanel': 'assets/js/jsPanel/jquery.jspanel.min',
+        'jqui': ['assets/libs/jquery-ui/jquery-ui.min', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min'],
+        'mobile_detect': 'assets/js/mobile-detect.min',
 
         'app': 'app/app',
         'routes': 'app/app.routes',
@@ -108,8 +108,8 @@ require.config({
 
 
         'mathjax': ['https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML?noext', 'assets/libs/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML'],
-        'mathlex': 'assets/libs/mathlex/mathlex.min',
-        'mathwrapper': 'assets/libs/mathquill-0.10.1/mathwrapper',
+        'mathlex': 'activities/libs/math/mathlex/mathlex.min',
+        //'mathwrapper': 'assets/js/mathquill-0.10.1/mathwrapper',
 
         //Geogebra includes
         'geogebra': window.pw.GEOGEBRA_ROOT + 'scripts/worksheet/general',
@@ -129,20 +129,21 @@ require.config({
         'tinymce': 'assets/libs/tinymce/tinymce.min',
         'ng_tinymce': 'assets/libs/angular-ui-tinymce/dist/tinymce.min', //'assets/libs/tinymce/ng-tinymce.min',
 
-        'highlight': 'assets/libs/angular-highlight/highlight.pack',
-        'ng_highlight': 'assets/libs/angular-highlight/angular-highlight',
+        'hljs': 'assets/js/highlightjs/highlight.pack',
+        'ng_highlight': 'assets/libs/angular-highlight/build/angular-highlightjs.min',
 
-        'easeljs': ['https://code.createjs.com/easeljs-0.8.2.min', 'assets/libs/createjs/easeljs-0.8.2.min'],
+        'easeljs': 'https://code.createjs.com/easeljs-0.8.2.min',
         'tweenjs': 'https://code.createjs.com/tweenjs-0.6.2.min',
         'soundjs': 'https://code.createjs.com/soundjs-0.6.2.min',
         'preloadjs': 'https://code.createjs.com/preloadjs-0.6.2.min',
-        'createjs': ['https://code.createjs.com/createjs-2015.11.26.min', 'assets/libs/createjs/createjs-2015.11.26.min'], //This is the whole packet
-        'creatine': 'assets/libs/createjs/creatine-1.0.0.min',
+        'createjs': 'https://code.createjs.com/createjs-2015.11.26.min', //This is the entire packet
+        'creatine': 'assets/js/creatine/creatine-1.0.0.min',
 
         'filesaver': 'assets/js/FileSaver.min',
-        'markermanager': 'assets/libs/markermanager.min',
-        'gmaps': 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBQpymLIcE26vpzgp3u6w90OO_aVT1d1R8&noext' 
-
+        'markermanager': 'assets/js/markermanager.min',
+        'gmaps': 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBQpymLIcE26vpzgp3u6w90OO_aVT1d1R8&noext',
+        'ng_idle': 'assets/libs/ng-idle/angular-idle.min'
+        
     },
     shim: {
         mathjax: {
@@ -196,7 +197,7 @@ require.config({
             deps: ['tinymce']
         },
         ng_highlight: {
-            deps: ['highlight']
+            deps: ['hljs']
         },
         markermanager: {
             deps: ['gmaps']
@@ -230,7 +231,7 @@ require.config({
         angular_locale1: { deps: ['angular'] },
         angular_locale2: { deps: ['angular'] },
         videojs: { deps: ['videojs_core'] },
-
+        video_embed: {deps: ['videojs']},
         underscore: {
             exports: '_'
         },

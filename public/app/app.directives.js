@@ -114,7 +114,7 @@ var katexServerDir = function(Session, $http, $compile){
                 
                 var contents;
                 var unwatch;
-                Session.addCss("https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css");
+                Session.addCss(pw.KATEXCSS);
                  
                 var prerender = function(contents){
                     contents = contents.replace(/katex-server=""/g, '').replace(/ng-cloak/g,'');

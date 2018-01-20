@@ -7,7 +7,7 @@ define([], function(){
     function ($http, $scope, $rootScope, $filter, $transition$, $uibModal, growl, $translate,
                 Session, PwTable, $state) {
         
-        Session.addCss('assets/libs/angular-jsx-graph/jsxgraph.css');
+        //Session.addCss('assets/libs/angular-jsx-graph/jsxgraph.css');
         $scope.user = Session.getUser(); 
        
         

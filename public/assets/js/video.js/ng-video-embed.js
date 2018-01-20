@@ -139,11 +139,11 @@ window.pw.app.register.directive('videoEmbed', ['videoEmbedUtils', '$compile', '
                 poster: '=?'
             },
             replace: true,
-            templateUrl: 'assets/libs/video.js/pw-video.html',
+            templateUrl: 'assets/js/video.js/pw-video.html',
             link: function (scope, element, attrs) {
 
-                Session.addCss("/assets/libs/video.js/5.14/video-js.min.css");
-                Session.addCss("/assets/libs/video.js/5.14/videojs-markers.min.css");
+                Session.addCss("/assets/js/video.js/5.14/video-js.min.css");
+                Session.addCss("/assets/js/video.js/5.14/videojs-markers.min.css");
 
                 element.css({'max-width': '80%', margin: 'auto'});
 

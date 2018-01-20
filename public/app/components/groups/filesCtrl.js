@@ -12,9 +12,9 @@ window.pw.app.register.controller('FilesCtrl', ['$http', '$scope', '$rootScope',
     function ($http, $scope, $rootScope, $state, $filter, $uibModal, $translate, Session, PwTable, growl, Upload, Modals, USER_ROLES, $sce, $timeout, clipboard, CONFIG, Idle) {   
         
  
-        Session.addCss("assets/libs/angular-ui-tree/angular-ui-tree.min.css");
+        Session.addCss("assets/libs/angular-ui-tree/dist/angular-ui-tree.min.css");
         Session.addCss("assets/css/flaticon/flaticon.css");
-        Session.addCss("app/components/activity/ace.css");
+        Session.addCss("assets/css/ace.css");
         
             $scope.files = [];
             $scope.uploads = [];

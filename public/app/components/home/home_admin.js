@@ -330,6 +330,7 @@ define([], function(){
             
             $scope.showEquations = function(){
                 $http.post("/rest/oftheday/eqns").then(function(r){
+                   $state.go("home");
                    $scope.eqns = r.data;
                 });
             };

@@ -7,7 +7,7 @@ window.pw.app.register.controller('HelpCtrl', ['$http', '$scope', '$filter',
                 Session, PwTable, $location, $anchorScroll, USER_ROLES) {
          
         $scope.contentURL = "app/components/misc/help/home.html";
-        Session.addCss("assets/libs/angular-highlight/styles/default.css");
+        Session.addCss("assets/js/highlightjs/styles/default.css");
          
         $scope.user = Session.getUser();
         $scope.USER_ROLES = USER_ROLES;

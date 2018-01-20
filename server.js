@@ -46,7 +46,7 @@ const memoryStore = new MemoryStore({
 
 app.use(session({
     name: "pwCookie",
-    secret: 'ñkj3499m_!EF',
+    secret: 'aj2!_fgk49imbF',
     resave: false,
     saveUninitialized: true,
     cookie: {

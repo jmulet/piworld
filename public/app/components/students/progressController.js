@@ -7,7 +7,7 @@ window.pw.app.register.controller('ProgressController', ['$http', '$scope', '$ro
         
         $scope.grpID = $transition$.params().id;
         $scope.userID = $transition$.params().idUser; 
-        Session.addCss('assets/libs/angular-jsx-graph/jsxgraph.css');
+       // Session.addCss('assets/libs/angular-jsx-graph/jsxgraph.css');
         
         //Carrega tots els usuaris dins del grup per poder canviar alumnes
         $http.post("/rest/students/list",{idGroup: $scope.grpID, edit: 0}).
