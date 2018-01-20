@@ -9,7 +9,7 @@ Main repository for the project piworld.es
 
 # Installation
 1. Install latest node and npm.
-2. Install mysql5.x. Import database file imaths_blank.sql. Create a user with enough privilegies to remotely connect this database.
+2. Install mysql5.x. Import database file piworld_blank.sql. Create a user with enough privilegies to remotely connect this database.
 3. Dowload or clone this repository to your computer.
 4. `cd piworld`
 5. Install dependencies `npm install`

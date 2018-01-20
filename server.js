@@ -1,7 +1,6 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * piWorld server
+ * by Josep Mulet (pep.mulet@gmail.com)
  */
 var config = require('./server/server.config'),
     path = require('path'),
@@ -95,10 +94,10 @@ app.APIS = {};
 
 winston.add(winston.transports.File, {
     name: 'info-log',
-    filename: './log/imaths-server.log',
+    filename: './log/piworld-server.log',
     json: false,
     level: config.logLevel || 'verbose'
-}  //Replace 'debug' by 'verbose'
+}
 );
 
 
@@ -143,7 +142,7 @@ d.run(function () {
     require('./server/activity/pda')(app);
     require('./server/activity/trace')(app);
     require('./server/activity/video')(app);
-    //require('./server/activity/kahoot')(app);
+
     require('./server/fs/fs')(app);
     require('./server/attempt/attempt')(app);
     require('./server/assignments/assignments')(app);
@@ -156,16 +155,17 @@ d.run(function () {
     require('./server/units/units')(app);
     require('./server/plotting/plotting')(app);
 
+
+    //require('./server/activity/kahoot')(app);
     //var bckUtils = require('./server/misc/backupUtils')(app);
     //bckUtils.mysqlDump(app.config);
-
     //require('./server/misc/dbcheck')(app);
 
     //Check if the root user is created in the database
     var testSql = "SELECT id FROM users WHERE id=0";
     var sql = "INSERT INTO users (idRole,username,fullname,password,email,schoolId,valid,uopts) VALUES("
-     + app.config.USER_ROLES.admin + ",'" + app.config.adminUser + "','Administrator','" 
-     + app.config.adminPassword + "','" + app.config.adminEmail + "',0,1,'{}')";
+        + app.config.USER_ROLES.admin + ",'" + app.config.adminUser + "','Administrator','"
+        + app.config.adminPassword + "','" + app.config.adminEmail + "',0,1,'{}')";
     var success = function (d) {
         app.db.query("UPDATE users SET id=0 WHERE id=" + d.result.insertId)();
     };
