@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>KAS tests</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="underscore.js"></script>
+        <script src="KAS.js"></script>
+       <!-- Include KAS 
+        <script src="latexParser/latex2js.js"></script>
+        <script src="KAS/parser.js"></script>
+        <script src="KAS/unitparser.js"></script>
+        <script src="KAS/nodes.js"></script>
+        <script src="KAS/compare.js"></script>
+        -->
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
+        <script src="mathinput/mathquill/mathquill.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" type="text/javascript"></script>  
+        <link rel="stylesheet" type="text/css" href="mathinput/mathquill/mathquill.css"/>
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                
+        
+    <style>
+         
+        </style>
+    </head>
+    <body>
+        <input type="text" id="input"></input>
+        <div style="width:200px;"><span id="mqtest2"></span></div>
+        <div style="width:200px;background:yellow"><span id="mqtest1"></span></div>
+        
+        <div id="output"></div>
+        <script>
+            
+            require.config({
+        baseUrl: '/',
+        waitSeconds : 30,
+        paths : {
+            underscore: 'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min',
+            text: 'assets/libs/requirejs/require-text',
+            css: 'assets/libs/requirejs/require-css',
+            async: 'assets/libs/requirejs/require-async',
+            font: 'assets/libs/requirejs/require-font',
+            image: 'assets/libs/requirejs/require-image',
+            json: 'assets/libs/requirejs/require-json',
+            noext: 'assets/libs/requirejs/require-noext',
+            mathjs: 'activities/libs/math/mathjs',
+            fraction: 'activities/libs/math/fraction',
+            KAS: 'activities/libs/math/KAS',
+            canvaspaint: 'activities/libs/math/mathinput/canvas-painter',
+            mathquill: 'activities/libs/math/mathinput/mathquill/mathquill',
+            mathquilleditor: 'activities/libs/math/mathinput/mathquill-editor',
+            mathpaint: 'activities/libs/math/mathinput/mathpaint',
+            mathinput: 'activities/libs/math/mathinput/mathinput',
+            mathblanks: 'activities/libs/math/mathinput/mathblanks',
+            
+            'activity-quizz': 'activities/libs/activity-quizz',
+            'activity-bakejson': 'activities/libs/activity-bakejson',
+            'quizzrenderer-input': 'activities/libs/quizzrenderer-input',
+            'quizzrenderer-blanks': 'activities/libs/quizzrenderer-blanks',
+            'quizzrenderer-checkbox': 'activities/libs/quizzrenderer-checkbox',
+            'quizzrenderer-kahoot': 'activities/libs/quizzrenderer-kahoot',
+            'quizzrenderer-mathinput': 'activities/libs/quizzrenderer-mathinput',
+            'quizzrenderer-radio': 'activities/libs/quizzrenderer-radio',
+            'quizzrenderer-roots': 'activities/libs/quizzrenderer-roots',
+            
+            mqEdtPalette: 'activities/libs/math/mathinput/mathquill-editor-palette.html',
+            mqEdtCss: 'activities/libs/math/mathinput/mathquill-editor',
+            'jquery-draggable': "assets/libs/jquery/jquery-draggable",
+            'mobile-dnd': "assets/libs/DragDropTouch",
+            rateyo: 'assets/libs/jquery/jquery.rateyo.min',
+            katex: "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.2/katex.min",
+            katexauto: "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.2/contrib/auto-render.min"
+        },
+        shim:{ 
+            underscore: {
+                exports: '_'
+            }, 
+            katexauto: {
+                deps: ["katex"]
+            },
+            KAS: {
+                deps: ['underscore']                  
+            },
+            mathpaint:{
+                deps: ['canvaspaint']
+            }, 
+            mathquilleditor: {
+                deps: ['mathquill'],
+                exports: 'MQ'
+            },
+            mathinput: {
+                deps: ['mathquilleditor', 'mathpaint']
+            },
+            "activity-quizz":{
+                deps: ["activity-bakejson", "mobile-dnd"]
+            }
+        }
+    });
+            
+            window.onload = function() {
+                
+                require(["mathinput/mathquill-input.js"], function(){
+                 
+        
+                  var api2 = $("#mqtest2").pwMathquillInput({onChanges: function(ev){console.log("MQ2 ",api2.latex());} });
+                  var api1 = $("#mqtest1").pwMathquillInput({onChanges: function(ev){console.log("MQ1 ",api1.latex());} });
+                   
+                });
+                
+                
+                var input = document.getElementById("input");
+                var out = document.getElementById("output");
+                if ("oninput" in input) {
+                    input.addEventListener("input", reprocess, false);
+                } else {
+                    input.attachEvent("onkeyup", reprocess);
+                }
+                function addInfo(el, label, value) {
+                    el.innerHTML += "<div>"
+                        + "<div class='label'>" + label + "</div>"
+                        + "<div class='value'>" + value + "</div>"
+                        + "</div>";
+                }
+                
+                var fixKAS = function(latex){
+                         return (latex || "").replace(/\\sqrt\{/g, "\\sqrt[2]{");
+                };
+                 
+                function reprocess() {
+                    out.innerHTML = "";
+                    var parse = KAS.parse(fixKAS(input.value), {});
+                    console.log(parse);
+                    var parsed = parse.expr;
+                    console.log(parsed);
+                    if (input.value === "") { return; }
+                    if (parsed === undefined) { return; }
+                    try{
+                        addInfo(out, "AST Representation:", parsed.repr());
+                    } catch(Ex){
+                       console.log(Ex);
+                    }
+                     try{
+                    addInfo(out, "Printed Representation:", parsed.normalize().print());
+                     } catch(Ex){
+                       console.log(Ex);
+                    }
+                     try{
+                    addInfo(out, "TeX Representation:", parsed.tex());
+                     } catch(Ex){
+                       console.log(Ex);
+                    }
+                     try{
+                    addInfo(out, "Simplified?", parsed.isSimplified() ? "Yes" : "No");
+                     } catch(Ex){
+                       console.log(Ex);
+                    }
+                     try{
+                    addInfo(out, "Simplified", parsed.simplify().normalize().print());
+                     } catch(Ex){
+                       console.log(Ex);
+                    }
+                     try{
+                    addInfo(out, "JSON Representation:", "<pre class='code'>"
+                        + JSON.stringify(parsed, null, 2)
+                        + "</pre>");
+                     } catch(Ex){
+                       console.log(Ex);
+                    }
+                     try{
+                    addInfo(out, "Compiled", parsed.compile().toString());
+                     } catch(Ex){
+                       console.log(Ex);
+                    }
+                }
+            };
+        </script>
+    </body>
+   
+</html>

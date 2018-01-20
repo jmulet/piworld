@@ -1,0 +1,45 @@
+{
+    "activity": {
+        "author": "jmulet",
+        "levels": "1 ESO, 2 ESO",
+        "title": {
+            "en": "Addition and substraction",
+            "ca": "Suma i resta",
+            "es": "Suma y resta"
+        },
+        "description": {
+            "en": "Practice basic operations",
+            "ca": "Practica les operacions bàsiques",
+            "es": "Practica las operaciones básicas"
+        },
+        "category": "ARITMETICA",
+        "type": 0
+    },
+    "config": {
+        "randomOrder": false,
+        "browsable": false,
+        "timeout": 0,
+        "allowerrors": 2,
+        "canAskTheory": false,
+        "canAskHelp": false
+    },
+    "questions": [
+        {
+            "title": "i18n.get('head')",
+            "parameters": {
+                "range": "200",
+                "template": "['N+N','N-N','N*N','{N_1*N}/N_1'].random()"
+            },
+            "repeat": 10,
+            "steps": [
+                {
+                    "type": "integer.operations",
+                    "tips": []
+                }
+            ]
+            
+        }
+    ]
+}
+
+ 

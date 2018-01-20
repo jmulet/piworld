@@ -1,0 +1,4 @@
+[
+    { "formulation": "Què val 2^0?", "answer":"1", "options":["1","2","3","4"], "tips":""},
+    { "formulation": "Què podem dir de l'equació <katex>x^2+2x+1=0</katex>?", "answer":["Els pitagòrics","Pitàgores"], "options":["Fermat","Pitàgores","Euler","Els pitagòrics"], "tips":""}
+]

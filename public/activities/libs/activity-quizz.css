@@ -1,0 +1,31 @@
+.simple-quizz-optscontainer{
+    margin: 40px;
+}
+
+.simple-quizz-optionbtn{ 
+    cursor: pointer;
+    height: 100px;
+    font-size: 1.2em;
+    color: white;
+    text-align: center;
+    width: 33%;
+    display: inline-block;
+    margin-bottom: 2px;
+    border-radius:5px;
+}
+
+
+.simple-quizz-optiontext{ 
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+  font-weight: bold;
+  padding-top: 10px;
+}
+ 
+
+.simple-quizz-optionselected{
+    -webkit-box-shadow:inset 0px 0px 0px 10px orange;
+    -moz-box-shadow:inset 0px 0px 0px 10px orange;
+    box-shadow:inset 0px 0px 0px 10px orange;
+}

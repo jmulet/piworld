@@ -1,12 +1,15 @@
 server/server.config.js
 server/activities/*
+!server/activities/.gitkeep
 files/*
 node_modules/
 
 public/activities/*
 !public/activities/libs
+!public/activities/templates
 
 public/assets/libs/*
+!public/assets/libs/.gitkeep
 public/assets/css/*.jpeg
 
 # OS generated files #
