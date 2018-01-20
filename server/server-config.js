@@ -65,6 +65,8 @@ if (platform.indexOf('win') === 0) {
             tmp: 'c:\\imaths-tmp\\',
             mysqldump: ''
         },
+        
+        serveStatic: true,
 
         express: {
             port: 3000
@@ -99,7 +101,7 @@ else if (platform === 'darwin') {
         express: {
             port: 3000
         },
-
+        serveStatic: true,
         logLevel: 'debug'
 
     };
@@ -132,6 +134,7 @@ else if (platform === 'linux') {
             port: 3000
         },
 
+        serveStatic: false,
         logLevel: 'warn'
 
 

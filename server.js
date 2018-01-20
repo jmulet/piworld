@@ -17,7 +17,9 @@ var config = require('./server/server.config'),
     session = require('express-session'),
     MemoryStore = require('memorystore')(session),
     helmet = require('helmet'),
-    domain = require('domain');
+    domain = require('domain'),
+    ejs = require('ejs'),
+    findLang = require('./server/langInspector');
 
 var d = domain.create();
 d.on('error', function (err) {
@@ -57,12 +59,25 @@ app.use(session({
     store: memoryStore
 }));
 
+app.set('view engine', 'ejs');
+const viewsPath = __dirname + '/server/views';
+console.log('Mounting views:: ', viewsPath);
+app.set('views', viewsPath);
+
 // Basic security middleware:: Only checks if the user is authenticated
 // except for anonymousRoutes
 var anonymousRoutes = ["/rest/i18n/lang", "/rest/news/list",
     "/rest/users/login", "/rest/users/auth", "/rest/auth/bookmgr"];
 
+var TRANSLATIONS = {
+    es: require('./server/i18n/es.json'),
+    ca: require('./server/i18n/ca.json'),
+    en: require('./server/i18n/en.json')
+};
+
+
 app.use(function (req, res, next) {
+
     var p = req.path;
     if (p[0] !== '/') {
         p = '/' + p;
@@ -73,6 +88,13 @@ app.use(function (req, res, next) {
         //Not logged in.
         return res.status(401).send();
     }
+    // find current lang
+    const lang = findLang(req);
+    res.locals.lang = lang;
+    res.locals.prefixUrl = function (url) {
+        return url;
+    };
+    res.locals.translations = TRANSLATIONS[lang] ||  {};
     next();
 });
 
@@ -102,27 +124,7 @@ winston.add(winston.transports.File, {
 
 
 
-app.parseCookies = function (request) {
-    var list = {},
-        rc = request.headers ? request.headers.cookie : request;
-
-    rc && rc.split(';').forEach(function (cookie) {
-        var parts = cookie.split('=');
-        list[parts.shift().trim()] = decodeURI(parts.join('='));
-    });
-
-    var parser = function () {
-        this.get = function (key) {
-            var cookie = list[key];
-            if (cookie) {
-                return cookie.replace(/["']/g, '');
-            }
-            return null;
-        };
-    };
-
-    return new parser();
-};
+app.parseCookies = require('./server/parseCookies');
 
 //Resolve paths
 global.__publicDir = path.resolve(__dirname, "./public");
@@ -171,13 +173,56 @@ d.run(function () {
     };
     app.db.queryIfEmpty(testSql, sql, success)();
 
-    if (app.config.platform !== 'linux') {
+    if (app.config.serveStatic) {
         var staticPath = path.resolve(__dirname, 'public');
         app.use(express.static(staticPath, { lastModified: true }));
     }
 
     //Sockets
     require('./server/sockets')(io, app.db);
+
+
+    //Error routes
+    app.use(function (error, request, response, next) {
+        if (!response.headersSent) {
+            let lang = response.locals.lang;
+            if (!lang) {
+                lang = findLang(request, response);            
+            }  
+            if (request.headers.accept && request.headers.accept.indexOf('application/json') >= 0) {
+                // respond with json
+                response.status(404).send({msg: this.i18n.i18nTranslate("404")});
+                return;
+            }            
+            else if (request.headers.accept && request.headers.accept.indexOf('text/html') >= 0) {
+                // respond with html page
+                response.status(404).render("errors/404", {translations: translations, lang: lang});
+                return;
+            }            
+        }
+        next();
+    });
+
+    app.use(function (error, request, response, next) {
+        if (!response.headersSent) {
+            let lang = response.locals.lang;
+            if (!lang) {
+                lang = findLang(request, response);
+            } 
+
+            if (request.headers.accept && request.headers.accept.indexOf('application/json') >= 0) {
+                console.log(error);
+                 // respond with json
+                const httpCode = ( error || {} ).httpCode;
+                response.status(httpCode || 500).send(error || { msg: this.i18n.i18nTranslate("500")});
+            }            
+            else if (request.headers.accept && request.headers.accept.indexOf('text/html') >= 0) {
+                // respond with html page
+                response.status(500).render("errors/500", {error: error, translations: translations, lang: lang});
+            }            
+        }
+    });
+
 
 
     server.listen(config.express.port, function () {

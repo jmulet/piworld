@@ -47,7 +47,7 @@ require.config({
 
         mqEdtPalette: 'activities/libs/math/mathinput/mathquill-editor-palette.html',
         mqEdtCss: 'activities/libs/math/mathinput/mathquill-editor',
-        'jquery-draggable': "assets/js/jquery-draggable",
+        'jquery-draggable': "assets/js/jquery/jquery-draggable",
         'mobile-dnd': "assets/js/jquery/DragDropTouch",
         rateyo: 'assets/libs/js/jquery/jquery.rateyo.min',
         katex: "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.2/katex.min",

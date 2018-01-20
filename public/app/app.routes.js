@@ -133,7 +133,7 @@
                          promise.then(function(isA){
                              if(!isA){
                                   //I want to access app and not authorized....
-                                 console.log("Authorized. Going to login ...");
+                                 console.log("Not authenticated. Going to login ...");
                                  //localStorage.setItem("cachedRouteTo", $state.getCurrentPath());
                                  $state.go("login");
                              }

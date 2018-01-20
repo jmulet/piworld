@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="<%=lang%>">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="piWorld site">
+    <meta name="author" content="Josep Mulet">
+    <link rel="icon" href="/favicon.ico">
+    <title>piWorld 500</title>
+    <link href="<%-prefixUrl('/assets/libs/bootstrap/dist/css/bootstrap.min.css')%>" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-signin">
+            <center>
+                <img src="<%-prefixUrl('/assets/img/logo2.png')%>" style="width:100px" />
+            </center>
+            <div class="alert alert-danger" style="text-align:center">
+                <h1>500</h1>
+                <h3>
+                    <%=translations["500"]%>
+                </h3>
+                <%-error%>
+            </div>
+        </div>
+     
+  <footer class="main-footer">
+        <center>
+          <a class="btn btn-lg btn-default btn-block" href="/">
+            <%=translations["HOME"]%>
+              <i class="glyphicon glyphicon-home"></i>
+          </a>
+        </center>
+      </footer>
+
+</body>
+
+</html>
