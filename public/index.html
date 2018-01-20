@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <!--manifest="app.manifest"-->
+    <head>
+        <title>piWorld</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+         <link rel="stylesheet" type="text/css" href="app_2018-01-20.min.css">                
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            window.jQuery || document.write(unescape("%3Cscript src='assets/libs/jquery/jquery-3.2.1.min.js' type='text/javascript'%3E%3C/script%3E"));                
+        </script>      
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="main_2018-01-20.min.js"></script>              
+        <script type="text/javascript">
+            window.HELP_IMPROVE_VIDEOJS = false; 
+            var ua = window.navigator.userAgent;
+            var bowser = {MSIE : false,Firefox : false,Chrome : false,Safari : false,version : 0,mobile: /iPhone|iPad|iPod|Android/i.test(ua)};
+            
+            var browserNames = ["Firefox", "Chrome", "Safari", "MSIE", "EDGE"];
+            for(var i=0; i<5; i++){
+                    var reg = new RegExp(browserNames[i]+"\/(.*)$", "i");
+                    var uMatch = ua.match(reg);
+                    if (uMatch && uMatch.length > 1) {
+                        bowser[browserNames[i]] = true;
+                        var matches = ua.match(/Version\/(.*)$/);
+                        var v = uMatch[1];
+                        if(matches && matches.length > 1){
+                            v = matches[1];
+                        }
+                        try{                           
+                            bowser.version = parseInt(v.split(".")[0]); 
+                        } catch(Ex){}
+                        break;
+                    }
+            }
+            
+            
+            window.pw = {errors: 0, grave: 0, PW_VERSION: '20180117', DEBUG: false, bowser: bowser};
+            window.pw.hangTimeout = window.setTimeout(function(){ 
+                setErrorMode();
+                logErr("Sembla que l'aplicació està tardant massa temps en engegar-se.");
+            }, 10000);
+            
+            window.requirejs || document.write(unescape("%3Cscript src='assets/libs/requirejs-2.2.0.js' data-main='main_2018-01-20.min.js' type='text/javascript'%3E%3C/script%3E"));               
+           
+            
+            
+            jQuery(document).ready(function(){     
+                var err = "";
+                if(!window.sessionStorage || !window.localStorage){
+                    err += "sessionStorage";
+                };
+                if(bowser.MSIE || bowser.EDGE){
+                    err += "msie";
+                    window.pw.grave += 1;
+                };
+                if((bowser.Firefox && bowser.version<30)){
+                    err += "firefox "+bowser.version;
+                };
+                if((bowser.Chrome && bowser.version<40)){
+                    err += "chrome "+bowser.version;
+                }; 
+                if((bowser.Safari && bowser.version<8)){
+                    err += "safari "+bowser.version;
+                }
+                
+                if(err){
+                    var msg ="<center> <div uib-alert class=\"alert-danger\">"+
+                        err+"! Your browser is not supported. Please, update to Chrome, Firefox or Safari."+
+                        "<button class='pull-right btn btn-xs' onClick=\"jQuery('#bowser-alert').remove();\">x</button>"+
+                        "</div></center>";    
+                    
+                    jQuery("#bowser-alert").html(msg);
+                    document.getElementById("logger").style.display = 'block';
+                    logErr(err);                    
+                } else {
+                    jQuery("#bowser-alert").remove();
+                     
+                }
+                
+            });
+             
+            function logErr(msg){
+                var elem = document.getElementById("logger");
+                if(elem){
+                    var para = document.createElement("P");    
+                    var t = document.createTextNode(msg);      
+                    para.style.color = 'red';
+                    para.appendChild(t);              
+                    elem.appendChild(para);
+                }
+            }
+            
+            function setStyle(id, prop, style){
+                var elem = document.getElementById(id);
+                if(elem){
+                    elem.style[prop] = style;
+                }
+            }
+            
+            function setErrorMode(){
+                setStyle("upps", "display", "block");
+                setStyle("pwtext", "display", "none");
+                setStyle("logger", "display", "block");
+               
+                var elem = document.getElementById("pwlogo");
+                elem && (elem.src = 'assets/img/logo2.png');
+            }
+            
+            
+            //Capture console.err and redirect to div id=logger
+            if(!pw.DEBUG){
+                    window.pw.olderr = console.error;
+
+                    console.error = function(msg){
+                        window.pw.olderr(msg);
+
+                        if( window.pw.errors === 0){
+                            setErrorMode();
+                        }
+                        window.pw.errors += 1;
+                        logErr(msg);
+                    };
+
+
+
+                    window.onerror = function(msg, url, lineNumber){
+                        if( window.pw.errors === 0){
+                           setErrorMode();
+                        }
+                        window.pw.errors += 1;
+                        logErr(msg+"; "+url+"; ("+lineNumber+")");
+                    };
+            }
+    
+            
+        </script>
+    </head>
+    <body>
+        <div growl></div> 
+        <div id="bowser-alert"></div>
+        <div id="viewloader" class="pw-loader">
+            <div class="pw-loader-bounce">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
+        <div id="mainview" ui-view="" class="fade-animation">    
+            <br>
+            <br>            
+            <center>
+                <img id="pwlogo" src="assets/img/logo.png" alt="Logo">
+            </center>
+            <h1 id="pwtext" class="text-center">&#960;World loading ...</h1>
+           
+            <div id="upps" style="display: none; margin: 5px">
+                <center>
+                <h2 class="text-center"><b>Houston, tenim un problema!</b></h2>
+                    <h4>Recomanacions:</h4>
+                    
+                        <ul>
+                            <li><h5>Comproveu la connexió a internet.</h5></li>
+                            <li><h5>Netejeu per complet l'historial de l'explorador.</h5></li>
+                            <li><h5>Actualitzeu l'explorador a la darrera versió. <b>No funciona en Internet Explorer.</b></h5></li>
+                        </ul>
+                    
+                    <h4>Necessitau més ajuda?</h4>
+                    <h5>
+                        Si seguiu sense poder iniciar piWorld, escriviu un correu a 
+                        piworld.es@gmail.com amb els errors que us apareixin tot seguit.
+                    </h5>
+                </center>
+            </div>
+            
+            
+            <div id="logger" style="display: none; background: gainsboro; margin: 5px ">    
+                <h4><b>Llistat d'errors:</b></h4>
+            </div>            
+        </div>                   
+    </body>
+</html>

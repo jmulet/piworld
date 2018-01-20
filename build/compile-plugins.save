@@ -1,0 +1,33 @@
+#! /usr/bin/env bash
+./compile-css
+
+DATE=$(date +"_%Y-%m-%d")
+
+#generate
+java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --angular_pass --js public/activities/libs/imDirectives.js --js_output_file public/activities/libs/imDirectives.min.js
+#java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/activities/libs/rgen-algebra.js --js_output_file public/activities/libs/rgen-algebra.min.js
+#java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/activities/libs/rgen-arithmetics.js --js_output_file public/activities/libs/rgen-arithmetics.min.js
+#java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/activities/libs/rgen-func-elemental.js --js_output_file public/activities/libs/rgen-func-elemental.min.js
+#java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/activities/libs/rgen-g2d.js --js_output_file public/activities/libs/rgen-g2d.min.js
+#java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/activities/libs/rgen-g3d.js --js_output_file public/activities/libs/rgen-g3d.min.js
+
+java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/app/main-ext.js public/app/main.js --js_output_file public/main$DATE.min.js
+
+java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/assets/libs/video/angular-youtube-embed.js --js_output_file public/assets/libs/video/angular-youtube-embed.min.js
+
+java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/app/components/home/home.js --js_output_file public/app/components/home/home.min.js
+java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/app/components/home/home_guest.js --js_output_file public/app/components/home/home_guest.min.js
+java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/app/components/home/home_teacher.js --js_output_file public/app/components/home/home_teacher.min.js
+java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/app/components/home/home_admin.js --js_output_file public/app/components/home/home_admin.min.js
+
+
+#public/app/components/home/home.js
+java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --angular_pass --js  public/app/app.js public/app/app.directives.js public/app/app.factories.js public/app/app.filters.js public/app/app.routes.js public/app/app.translations.js public/app/components/login/login.js  public/app/components/activity/activitySearch.js public/app/components/activity/ActivitySrv0.js public/app/components/activity/ActivitySrv.js public/app/components/activity/ActivityBase.js public/app/components/activity/ActivityPreCtrl.js --js_output_file public/app.compiled.js
+  
+
+#modify generated file
+echo "define([],function(){" >  public/app.min.js
+cat public/app.compiled.js >> public/app.min.js
+echo "});" >> public/app.min.js
+rm public/app.compiled.jsY
+

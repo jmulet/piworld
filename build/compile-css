@@ -1,0 +1,8 @@
+#! /usr/bin/env bash
+#minify css and concatenate css files
+
+DATE=$(date +"_%Y-%m-%d")
+COMPILER=./node_modules/yuicompressor/build/yuicompressor-2.4.8.jar
+
+java -jar $COMPILER --type css public/index.css -o public/index.min.css 
+cat public/assets/libs/bootstrap/dist/css/bootstrap.min.css public/assets/libs/bootstrap/dist/css/bootstrap-theme.min.css public/assets/css/pw-avatar.min.css public/assets/js/angular-growl/angular-growl.min.css public/assets/libs/angular-print/angularPrint.css public/assets/libs/nz-toggle/dist/nz-toggle.min.css public/index.min.css  >  public/app$DATE.min.css 

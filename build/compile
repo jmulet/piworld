@@ -1,0 +1,24 @@
+#! /usr/bin/env bash
+pwd
+./build/compile-css
+DATE=$(date +"_%Y-%m-%d")
+COMPILER=./node_modules/node-minify/lib/binaries/google_closure_compiler-v20151216.jar
+
+java -jar $COMPILER --js public/app/main-ext.js public/app/main.js --js_output_file public/main$DATE.min.js
+
+java -jar $COMPILER --js public/assets/js/video.js/ng-video-embed.js --js_output_file public/assets/js/video.js/ng-video-embed.min.js
+java -jar $COMPILER --js public/app/components/home/home.js --js_output_file public/app/components/home/home.min.js
+java -jar $COMPILER --js public/app/components/home/home_guest.js --js_output_file public/app/components/home/home_guest.min.js
+java -jar $COMPILER --js public/app/components/home/home_teacher.js --js_output_file public/app/components/home/home_teacher.min.js
+java -jar $COMPILER --js public/app/components/home/home_admin.js --js_output_file public/app/components/home/home_admin.min.js
+java -jar $COMPILER --angular_pass --js  public/app/app.js  public/app/app.directives.js public/app/app.factories.js public/app/app.filters.js public/app/app.routes.js public/app/app.translations.js public/app/components/login/login.js  --js_output_file public/app.compiled.js
+  
+
+#modify generated file
+echo "define([],function(){" >  public/app.min.js
+cat public/app.compiled.js >> public/app.min.js
+echo "});" >> public/app.min.js
+rm public/app.compiled.js
+
+sed "s/{VERSION}/$DATE/g" public/index.tpl.html > public/index.html
+ 

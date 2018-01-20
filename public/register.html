@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html ng-app="register">
+    <head>
+        <title>piWorld user validation</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body ng-controller="motor">
+        <h1>{{title}}</h1>
+        
+             <alert type="danger" close="msg=null" ng-if="msg">{{msg}}</alert>
+       
+        
+        <script type="text/javascript" src="assets/libs/angular.js/angular.min.js"></script>
+        <script type="text/javascript">
+            
+            var app = angular.module('register', []);
+            app.controller('motor', ['$scope', '$http', '$location', function($scope, $http, $location){
+                console.log($location);
+                $scope.title = "User validation";
+                $http.post("/rest/auth/validate",{q: $location.search().q || ""}).success(function(d){
+                    if(d.ok)
+                    {
+                         alert("El vostre usuari ja està habilitat. Podeu accedir a piWorld");
+                         var url = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"; 
+                         console.log(url);
+                         window.location.href= url;
+                    }
+                    else
+                    {
+                         $scope.msg = d.msg;
+                    }
+                });
+            }]);
+        
+        </script>
+    </body>
+</html>

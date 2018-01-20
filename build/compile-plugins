@@ -1,0 +1,2 @@
+#! /usr/bin/env bash
+java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/assets/libs/video.js/dist/videojs-plugins-all.js --js_output_file public/assets/libs/video.js/dist/videojs-plugins-all.min.js  --language_in ECMASCRIPT5

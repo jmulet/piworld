@@ -1,0 +1,100 @@
+<div>
+    
+    <script type="text/ng-template" charset="utf-8" id="/assets/libs/video.js/pw-questions.html">
+    <div class="vjs-questions-container">
+    <div>
+        <div>            
+          
+            <span class="pull-left">
+            <button class="btn btn-primary  glyphicon glyphicon-resize-small" ng-click="toggleQuestion()"></button>
+            <button class="btn btn-primary glyphicon glyphicon-remove" ng-click="closeQuestions()"></button>             
+            </span>
+            <center>
+                <span class="pw-video-questions-title">{{question.title}}</span>
+                <button ng-if="pg.tgsQuestion && isMobile" style="width:100px; background: green;" class="{{question.check? 'btn btn-success glyphicon glyphicon-hand-right' : 'btn btn-success glyphicon glyphicon-ok'}}" title="Check me" ng-click="doCheck()"></button>
+            </center>
+            <button ng-disabled="!soundSupported" class="pull-right btn btn-sm glyphicon glyphicon-music" ng-class="soundEnabled?'btn-info':'btn-default'" ng-click="toggleSound()"></button>            
+            
+        </div>
+        <div ng-if="pg.tgsQuestion">            
+            <center>           
+                <h4 compile="question.formulation"></h4>
+            </center>
+          
+            <div ng-if="question.type==='input'">                                  
+                    <center>
+                        <input class="form-control pw-video-questions-input" type="text" ng-model="question.input"/>      
+                        <span ng-if="question.check === 1" class="glyphicon glyphicon-check" style="color: lime; font-size: x-large"></span>
+                        <span ng-if="question.check === -1"  class="glyphicon glyphicon-remove" style="color:red; font-size: x-large"></span>  
+                    </center>
+                    <hr>
+                   
+            </div>
+            
+            
+            <div ng-if="question.type==='multiple'">  
+                <ol class="list list-unstyled" style="margin:0px"  ng-repeat="opt in question.options track by $index" ng-click="toggleOpt(opt);">     
+                    <div ng-style="{'background': opt.selected?'rgba(100,100,0,0.7)':'none'}" style="border-style: solid; padding:3px; margin:0px" class="cursor-hand">                    
+                    <center>        
+                        <span class="pw-video-questions-option" compile="opt.title"></span>      
+                        <span ng-if="opt.check === 1" class="glyphicon glyphicon-check" style="color: lime; font-size: large"></span>
+                        <span ng-if="opt.check === -1"  class="glyphicon glyphicon-remove" style="color:red; font-size: large"></span>                      
+                    </center>
+                    </div>
+                </ol>
+                    
+            </div>
+            
+            <h4 ng-if="question.check<0">
+                <p>{{question.feedback}}</p>
+                <p>Resposta: <span compile="question.answer"></span> </p>
+            </h4>
+        </div>
+            
+        <div ng-if="pg.tgsQuestion && !isMobile">
+            <center>
+                <button style="width:100px; background: green;" class="{{question.check? 'btn btn-lg btn-success glyphicon glyphicon-hand-right' : 'btn btn-lg btn-success glyphicon glyphicon-ok'}}" title="Check me" ng-click="doCheck()"></button>
+            </center>
+        </div>
+    </div>    
+    </div>   
+</script>
+
+<script type="text/ng-template" charset="utf-8" id="/assets/libs/video.js/pw-endposter.html">
+    <div class="vjs-questions-container">
+    <div> 
+        <br>
+        <br>
+        <br>
+        <div>            
+            <center>
+                <span>VALORA EL VÍDEO</span>
+            </center>
+         </div>
+         <br>
+         <center>
+             <span uib-rating ng-model="videoRating" max="5" read-only="false" ng-click="onRateVideo()" aria-labelledby="video-rating"></span>
+        </center>    
+    </div>    
+    </div>   
+</script>
+
+ <script type="text/ng-template" charset="utf-8" id="/assets/libs/video.js/pw-picoin.html">
+     <div class="vjs-picoin">
+        <span class='picoin lcd orange' style="position: absolute; right: -15px; top: 0px; opacity: 0.75" title='Visualization score' 
+ng-bind="activity.vscore + activity.vscorenow>0? activity.vscore + activity.vscorenow : 0">             
+        </span>    
+     <div>
+ </script>
+
+<div class="embed-responsive embed-responsive-16by9">
+    <div id="{{playerId}}">     
+    </div>    
+</div>
+<div>
+    <span  ng-if="idActivity>0" class="pull-right" style="font-size:12px; font-family: sans-serif"><a href="" ng-click="gotoSource()"><span class="glyphicon glyphicon-link"></span>Problemes? Prova aquí.</a></span>
+</div>
+ 
+</div>
+
+ 

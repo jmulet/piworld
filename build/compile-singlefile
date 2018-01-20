@@ -1,0 +1,2 @@
+#! /usr/bin/env bash
+java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/app/components/parents/progress_parents.js --js_output_file public/app/components/parents/progress_parents.min.js

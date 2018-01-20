@@ -1,0 +1,5 @@
+java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/activities/libs/activity-bootstrap.js  public/activities/libs/activity-autorender.js public/app/main-ext.js --js_output_file public/activities/libs/activity-bootstrap.min.js
+java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/activities/libs/activity-quizz.js --js_output_file public/activities/libs/activity-quizz.min.js
+java -jar node_modules/node-minify/lib/google_closure_compiler-v20130411.jar --js public/activities/libs/activity-bakejson.js --js_output_file public/activities/libs/activity-bakejson.min.js
+java -jar node_modules/node-minify/lib/yuicompressor-2.4.8.jar --type css public/activities/libs/activity-bootstrap.css -o public/activities/libs/activity-bootstrap.min.css
+java -jar node_modules/node-minify/lib/yuicompressor-2.4.8.jar --type css public/activities/libs/activity-quizz.css -o public/activities/libs/activity-quizz.min.css
