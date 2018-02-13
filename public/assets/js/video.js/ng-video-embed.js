@@ -694,6 +694,11 @@ window.pw.app.register.directive('videoEmbed', ['videoEmbedUtils', '$compile', '
                         var picoinDiv = jQuery(html);
                         $compile(picoinDiv.contents())(scope);
                         videoWrapper.append(picoinDiv);
+                    } else {
+                        console.log("Not showing picoin because:: ");
+                        console.log("isGuest: ", isGuest);
+                        console.log("idActivity: ", scope.idActivity);
+                        console.log("playerVars.preview: ", scope.playerVars.preview);
                     }
 
                     scope.questions && player.userActive(false);

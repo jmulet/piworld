@@ -10,7 +10,7 @@ var config = require('./server/server.config'),
     io = require('socket.io')(server),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
-    mysql = require('mysql2'),
+    mysql = require('mysql'),
     winston = require('winston'),
     expressWinston = require('express-winston'),
     compression = require('compression'),
@@ -67,7 +67,8 @@ app.set('views', viewsPath);
 // Basic security middleware:: Only checks if the user is authenticated
 // except for anonymousRoutes
 var anonymousRoutes = ["/rest/i18n/lang", "/rest/news/list",
-    "/rest/users/login", "/rest/users/auth", "/rest/auth/bookmgr"];
+    "/rest/users/login", "/rest/users/auth", "/rest/auth/bookmgr",
+    "/rest/fs/uploads/bonificador"];
 
 var TRANSLATIONS = {
     es: require('./server/i18n/es.json'),
@@ -75,6 +76,7 @@ var TRANSLATIONS = {
     en: require('./server/i18n/en.json')
 };
 
+const bypassSecurity = process.argv.indexOf("--public") >= 0;
 
 app.use(function (req, res, next) {
 
@@ -82,12 +84,16 @@ app.use(function (req, res, next) {
     if (p[0] !== '/') {
         p = '/' + p;
     }
-    var found = (anonymousRoutes.indexOf(p) >= 0);
-    if (!found && p.indexOf("/rest/") >= 0 && !req.session.user) {
-        //console.log(req.path);     
-        //Not logged in.
-        return res.status(401).send();
+    
+    if(!bypassSecurity) {
+        var found = (anonymousRoutes.indexOf(p) >= 0);
+        if (!found && p.indexOf("/rest/") >= 0 && !req.session.user) {
+            //console.log(req.path);     
+            //Not logged in.
+            return res.status(401).send();
+        }
     }
+
     // find current lang
     const lang = findLang(req);
     res.locals.lang = lang;

@@ -32,16 +32,16 @@ var nodemailer = require('nodemailer');
 var mysql = require('mysql');
 var winston = require('winston');
 var async = require('async');
+var fs = require('fs');
 
 function addDays(theDate, days) {
     return new Date(theDate.getTime() + days*24*60*60*1000);
 }
 function mysqlDate(theDate){
-    return theDate.toISOString().split("T")[0];
+    return theDate.getFullYear()+"-"+(theDate.getMonth()+1)+"-"+theDate.getDate();
 }
-function localDate(theDate){
-    var arr = theDate.toISOString().split("T")[0].split("-");
-    return arr[2]+"/"+arr[1]+"/"+arr[0];
+function localDate(theDate){     
+    return theDate.getDate()+"/"+(theDate.getMonth()+1)+"/"+theDate.getFullYear();
 }
 
 //Refractor database
@@ -94,7 +94,7 @@ var i18n = {
         SUBJECTEMAIL: "Seguiment. Setmana",
         FURTHERINFO: "Recordau que podeu consultar en qualsevol moment la informació a través del portal <a href='https://piworld.es'>https://piworld.es</a>. Des d'aquí, també podeu configurar les opccions d'enviament de missatges. " + 
                      "Consultau el professor si no disposau de les credencials d'accés",
-        FURTHERINFO2: "Recordau que podeu consultar en qualsevol moment la informació a través del portal https://piworld.es. Des d'aquí, també podeu configurar les opccions d'enviament de missatges. " + 
+        FURTHERINFO2: "Recordau que podeu consultar en qualsevol moment la informació a través del portal https://piworld.es. Des d'aquí, també podeu configurar les opcions d'enviament de missatges. " + 
                 "Consultau el professor si no disposau de les credencials d'accés",
         SUMMARY: "Resum",
         SUBJECT: "Matèria",
@@ -110,7 +110,7 @@ var i18n = {
         NOHOMEWORK: "No duu els deures",
         NOCLASSWORK: "No fa feina a classe",
         BADBEHAVIOUR: "Mal comportament",
-        GRADE0: "No avaluat o nota neutre",
+        GRADE0: "No avaluat o nota neutra",
         GRADEN: "Nota negativa",
         GRADEP: "Nota positiva"
     },
@@ -205,9 +205,11 @@ var mw = parseInt(process.argv[2] || "0") || 0;      //minus weeks
 var containsFilter = process.argv[3] || "";     //only send to users with fullnames containing this filter
 
 var testMode;
+var logger;
 process.argv.forEach(function(arg){
     if(arg==="-test"){
         testMode = true;
+        logger = fs.createWriteStream('friday-dump.html')
     }
 })
 
@@ -317,6 +319,7 @@ function processGroups(user, userGroups, callback){
             //First is to load badges
             var loadBadges = function(cb3){
                 var sql = "SELECT * FROM badges WHERE day>='"+mondaySql+"' AND day<='"+fridaySql+"' AND type>=200 AND idUser='"+user.id+"' AND idGroup='"+group.id+"'";
+	 
                 var success3 = function(d){
                     group.badges = d.result;
                     cb3();
@@ -326,7 +329,8 @@ function processGroups(user, userGroups, callback){
             
             var loadChats = function(cb3){
                 var sql = "SELECT c.`when`, c.msg, u.fullname as desde FROM chats as c INNER JOIN users as u ON u.id=c.idUser WHERE c.`when`>='"+mondaySql+
-                        "' AND c.`when`<='"+fridaySql+"' AND c.idGroup="+group.id+" AND c.isFor="+user.id+" AND c.parents=1";
+                        "' AND c.`when`<='"+fridaySql+"' AND c.idGroup="+group.id+" AND (c.isFor="+user.id+" OR c.isFor=0) AND c.parents=1";
+		 
                 var success3 = function(d){
                     group.chats = d.result;
                     cb3();
@@ -336,7 +340,7 @@ function processGroups(user, userGroups, callback){
             
             var loadActivities = function(cb3){
                 var sql = "SELECT pa.*, pag.grade FROM pda_activities as pa INNER JOIN pda_activities_grades as pag ON pa.id=pag.idActivity WHERE pag.idUser='"+
-                        user.id+"' AND pa.idGroup='"+group.id+"' AND pa.visible > 0";
+                        user.id+"' AND pa.idGroup='"+group.id+"' AND pa.visible > 0 GROUP BY pa.id";
                 
                 var success3 = function(d){
                     group.activities = d.result;
@@ -366,7 +370,7 @@ function processGroups(user, userGroups, callback){
                 "<p>"+geti18n("AYWF", lang)+" <b>"+group.subject+" "+group.groupName+"</b>.</p>"+
                 '<p>'+geti18n("FURTHERINFO", lang)+'.</p>'+
                 "<p>"+geti18n("BESTWISHES", lang)+",</p>"+
-                "<p>"+group.creatorName+" ("+group.creatorEmail+") </p>"+  
+                "<p>"+group.creatorName+" </p>"+  
                 "<p>"+group.schoolName+ "</p>"+  
                 "<br/>";  
                 
@@ -376,7 +380,7 @@ function processGroups(user, userGroups, callback){
                 geti18n("AYWF", lang)+" "+group.subject+" "+group.groupName+".\n"+
                 geti18n("FURTHERINFO2", lang)+'.\n'+
                 geti18n("BESTWISHES", lang)+",\n"+
-                group.creatorName+" ("+group.creatorEmail+") \n"+  
+                group.creatorName+" \n"+  
                 group.schoolName+ "\n"+  
                 +"\t"+geti18n("AUTOEMAIL") +"\n\n" +
                 geti18n("SUMMARY", lang).toUpperCase() + " "+mondayStr+" - " + fridayStr+ ". "+geti18n("SUBJECT", lang)+": " +group.subject+" "+group.groupName+" \n\n";
@@ -395,13 +399,15 @@ function processGroups(user, userGroups, callback){
                 var faltesStr= ""; retardsStr= ""; classeStr= ""; deuresStr= ""; comportamentStr = "";
                 
                 //Filtra els badges per dies
-                var mondayDay = monday.getDate();
+               
                 for(var day = 0; day<5; day++){
-                    
-                    var fbadges = group.badges.filter(function(e){
-                        return e.day.getDate()=== (mondayDay+day);
+                    var currentDay = addDays(monday, day);
+                    var currentDayTxt = mysqlDate(currentDay);
+                                         
+                    var fbadges = group.badges.filter(function(e){                    
+                        return mysqlDate(e.day)=== currentDayTxt;
                     });
-                    
+
                     var containsFA = false;
                     var containsRE = false;
                     var deures = 0;
@@ -642,6 +648,13 @@ async.series([listUsers, listGroups], function(){
                     console.log(JSON.stringify(mailOptions.to));
                     console.log(JSON.stringify(mailOptions.subject));
                     console.log(JSON.stringify(mailOptions.html));
+                    logger.write("</hr>");
+                    logger.write("<h3>"+mailOptions.to+"</h3>");
+                    logger.write("<h4>"+mailOptions.subject+"</h4>");
+                    logger.write(mailOptions.html);
+                    // Generate an html dump file to rapidly inspect the result
+
+
                     user.uopts.parentsMailLast = TODAY;
                     cb();
         } else {
@@ -685,6 +698,9 @@ async.series([listUsers, listGroups], function(){
        //Release pool
        pool.end(function (err) {
            winston.log("info",">> Done pw-friday.");
+           if (testMode) {
+            logger.end();
+           }
           // all connections in the pool have ended
         });
     });

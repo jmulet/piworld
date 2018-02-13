@@ -37,7 +37,7 @@
     "katex": "^0.9.0-beta",
     "memorystore": "^1.6.0",
     "method-override": "^2.3.10",
-    "mysql2": "^1.5.1",
+    "mysql": "^2.15.0",
     "node-google-translate-skidz": "^1.1.1",
     "node-minify": "^2.4.1",
     "node-uuid": "^1.4.8",
@@ -48,7 +48,8 @@
     "request": "^2.83.0",
     "socket.io": "^2.0.4",
     "winston": "^2.4.0",
-    "ejs": "^2.5.7"
+    "ejs": "^2.5.7",
+    "xlsx": "^0.11.18"
   },
   "devDependencies": {
     "buildify": "^0.4.0",

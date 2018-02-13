@@ -519,6 +519,7 @@ module.exports = function(app){
         var success1 = function(d){
             d.result.forEach(function(row){
                 if(map[row.idUser]){
+                   
                     map[row.idUser].vscore = row.vscore;
                 }
             });            
@@ -561,7 +562,7 @@ module.exports = function(app){
             });                 
             //Sort array based on total score score+vscore+rscore+uscore
             scores.sort(compare);
-            //console.log(scores);
+            
             res.send(scores);
         };
 

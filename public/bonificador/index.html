@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <!--manifest="app.manifest"-->
+    <head>
+        <title>piWorld</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href=" https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">   
+        <style>
+            @media print
+            {    
+                .no-print, .no-print *
+                {
+                    display: none !important;
+                }
+            }
+        </style>             
+    </head>
+    <body ng-app="ngApp">
+        <div ng-controller="ctrl" class="container">
+            <h1>Bonificador d'avisos</h1>
+            <div class="no-print">
+                <h3>Instruccions</h3>
+                <p>
+                    Des de el menú del Gestib aneu a 
+                    llistes / faltes i sancions de l'alumnat / sancions
+                    
+                </p>
+                <p>
+                    Trieu l'opció sanció grup interval i marqueu detallat
+                </p>
+                <p>
+                    Trieu l'opció Document Excel (XLS)
+                </p>
+                
+                <div class="btn btn-primary" ngf-select="upload($file)">
+                    Pujeu el fitxer .xls que heu obtingut
+                </div>
+            </div>
+
+            <div ng-if="file" class="alert alert-info">
+                <span class="pull-left">{{file}}</span>
+                <span class="pull-right">{{avui | 'dd-mm-yyyy'}}</span>
+            </div>
+
+            <h4>Opcions:</h4>
+            <p>Període de bonificació (dies lectius): <input type="number" ng-model="periodeBonificacio"/></p>
+            <p> <input type="checkbox" ng-model="onlyOne"/> Només bonifica 1 avís entre avisos</p>
+
+            <div ng-if="alumnesProcessed">
+                <div ng-repeat = "f in alumnesProcessed">
+                    <hr/> 
+                <table class="table table-responsive table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Alumne</th>
+                            <th>Total avisos</th>
+                            <th>Total avisos amb bonificació</th>
+                            <th>Detall</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="o in f">
+                                <th>{{o.nom}}</th>
+                                <th>{{o.total}}</th>
+                                <th>{{o.bonificat}}</th>
+                                <th>
+                                    <ul class="list list-unstyled list-inline">
+                                        <li ng-repeat="e in o.log track by $index">{{e}}</li>
+                                    </ul>                                    
+                                </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            <footer>
+                J. Mulet (2018)
+            </footer>
+            
+        </div>
+
+        <script src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+        <script src="/assets/libs/angular-1.6.1/angular.min.js"></script>
+        <script src="/assets/libs/angular-file-upload-12.0.0/ng-file-upload-all.min.js"></script>
+        <script>
+            var app = angular.module('ngApp', ['ngFileUpload']);
+            app.controller("ctrl", function($scope, Upload){
+                $scope.periodeBonificacio = 10;
+                $scope.onlyOne = false;
+                $scope.avui = new Date();
+                  // upload on file select or drop
+                $scope.upload = function (file) {
+                    $scope.file = file;
+                    Upload.upload({
+                        url: '/rest/fs/uploads/bonificador',
+                        data: {file: file, 'periodeBonificacio': $scope.periodeBonificacio, 'onlyOne': $scope.onlyOne}
+                    }).then(function (resp) {
+                        $.each(resp.data, function(i, x) {
+                            x = x.sort(function(a, b){
+                                return a.nom.localeCompare(b.nom);
+                            });
+                        });
+                        $scope.alumnesProcessed = resp.data;
+                        console.log(JSON.stringify(resp.data));
+                    }, function (resp) {
+                        console.log('Error status: ' + resp.status);
+                    }, function (evt) {
+                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                    });
+                };
+            });
+        </script>
+    </body>
+</html>
