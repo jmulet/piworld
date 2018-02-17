@@ -175,9 +175,9 @@ window.pw = window.pw || {};
 
 
 
-    app.config(['$ocLazyLoadProvider', '$qProvider', 'growlProvider', '$stateProvider',
+    app.config(['$ocLazyLoadProvider', '$qProvider', 'growlProvider', 'growl', '$stateProvider',
         '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$httpProvider',
-        function ($ocLazyLoadProvider, $qProvider, growlProvider, $stateProvider, $controllerProvider,
+        function ($ocLazyLoadProvider, $qProvider, growlProvider, growl, $stateProvider, $controllerProvider,
                 $compileProvider, $filterProvider, $provide, $httpProvider) {
 
 
@@ -362,6 +362,7 @@ window.pw = window.pw || {};
                                 //console.log("Intercepted", res);
                                 // Server assumes unathenticated user, then must logout
                                 // Remove localstore and redirect to login
+                                growl.warning("Session expired!");
                                 localStorage.removeItem("pwSession");
                                 window.location.href="/";
                             } else if (res.status === 403) {

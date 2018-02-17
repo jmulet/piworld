@@ -15,7 +15,8 @@ var config = require('./server/server.config'),
     expressWinston = require('express-winston'),
     compression = require('compression'),
     session = require('express-session'),
-    MemoryStore = require('memorystore')(session),
+    //MemoryStore = require('memorystore')(session),
+    MemCachedStore = require('connect-memcached')(session),
     helmet = require('helmet'),
     domain = require('domain'),
     ejs = require('ejs'),
@@ -37,9 +38,14 @@ app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.text({ limit: '100mb' }));
 app.use(methodOverride());
 
-const memoryStore = new MemoryStore({
-    checkPeriod: 86400000 // prune expired entries every 24h    
+//const memoryStore = new MemoryStore({
+//    checkPeriod: 86400000 // prune expired entries every 24h    
+//});
+
+const memoryStore = new MemCachedStore({
+    hosts: ['127.0.0.1:11211']
 });
+  
 
 /*dispose: function (key, value) {
         console.log("About to dispose memory session store", key, value);
@@ -53,7 +59,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         secure: false,
-        maxAge: 86400000,
+        maxAge: 86400000,  //1 day
         httpOnly: false
     },
     store: memoryStore
